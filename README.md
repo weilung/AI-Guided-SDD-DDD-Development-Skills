@@ -1,0 +1,148 @@
+# AI-Guided SDD/DDD Development Skills
+
+AI 引導的規格驅動開發（SDD）與領域驅動設計（DDD）工作流程規範，設計用於 Claude Code 協作開發。
+
+## 這是什麼
+
+這套 Skill 讓 AI 在開發過程中擔任**流程守衛（Workflow Guardian）**的角色。開發者不需要熟悉 SDD 或 DDD 的所有細節——AI 會在對的時機問對的問題，引導開發者自然地產出規格文件、領域模型、和技術債記錄。
+
+適用場景：
+- 團隊導入 SDD/DDD 但成員經驗不一
+- 希望在開發過程中保持架構紀律
+- ASP.NET WebForms 專案準備遷移到 ASP.NET Core
+- 學習 DDD 並透過模擬專案練習
+
+## 目錄結構
+
+```
+├── sdd-ddd-webforms-skill/        # WebForms 版 Skill（英文，供 AI 使用）
+├── sdd-ddd-webforms-skill-tw/     # WebForms 版（繁體中文，供人閱讀）
+├── sdd-ddd-core-skill/            # ASP.NET Core 版 Skill（英文，供 AI 使用）
+├── sdd-ddd-core-skill-tw/         # ASP.NET Core 版（繁體中文，供人閱讀）
+└── README.md
+```
+
+### 為什麼有英文和中文兩套？
+
+- **英文版**是給 AI 讀取和執行的 Skill 檔案，AI 以英文處理指令效果較佳
+- **中文 `-tw` 版**是給團隊成員閱讀的，內容完全相同，方便理解流程和規範
+
+---
+
+## 兩套 Skill 的差異
+
+| | WebForms Skill | Core Skill |
+|---|---|---|
+| **適用階段** | 目前：在運行中的 WebForms 專案開發 | 未來：ASP.NET Core 新專案 / 模擬練習 |
+| **架構** | Domain 層 + Code-Behind（兩層） | Clean Architecture 四層 |
+| **DDD 深度** | 準備性——術語表、Context 識別、基本抽離 | 完整戰術模式——Aggregate、Domain Events、CQRS |
+| **核心引導** | 「Code-Behind 盡量薄」 | 「每一層各司其職，業務邏輯只在 Domain」 |
+| **遷移意識** | 每次開發都產出可遷移的資產 | 從頭設計乾淨架構 |
+| **附加內容** | — | DDD 建模指南、Aggregate 設計工作表、模擬練習計畫 |
+
+---
+
+## WebForms Skill 檔案說明
+
+### SKILL.md — 主文件
+AI 的決策樹和核心規範。定義了五個核心原則、流程嚴謹度對照表、專案目錄結構、各階段引導問題、Domain 層規範。
+
+### references/ — 流程參考
+| 檔案 | 內容 |
+|---|---|
+| `new-feature-flow.md` | 新功能 8 步驟流程：需求理解 → Context 識別 → 概念發掘 → 撰寫規格 → 實作規劃 → 分支 → 實作 → 完成 |
+| `modify-existing-flow.md` | 修改既有功能流程，重點在趁機從 Code-Behind 抽離業務邏輯到 Domain 層 |
+| `git-flow-integration.md` | Git Flow 分支對應 SDD 階段，每個 gate 有具體檢查項目 |
+| `pr-review-checklist.md` | PR 審查時的合規檢查和遷移準備度 A~F 評分 |
+
+### templates/ — 模板
+| 檔案 | 用途 |
+|---|---|
+| `feature-spec.md` | 完整功能規格模板（含 Given/When/Then） |
+| `lightweight-spec.md` | Bug 修復用的輕量規格模板 |
+| `context-definition.md` | 新 Bounded Context 定義模板 |
+| `CLAUDE.md` | 放在專案根目錄的 AI 協作規範模板 |
+
+---
+
+## Core Skill 檔案說明
+
+### SKILL.md — 主文件
+在 WebForms 版基礎上新增：Clean Architecture 四層架構圖、各層不可妥協的規範、DDD 戰術模式的引導問題。
+
+### references/ — 流程參考
+| 檔案 | 內容 |
+|---|---|
+| `new-feature-flow.md` | 新功能流程，新增逐層實作順序（Domain → Application → Infrastructure → Presentation） |
+| `modify-existing-flow.md` | 修改流程，新增 Aggregate 設計重新評估 |
+| `ddd-modeling-guide.md` | **核心新增**：DDD 建模完整指南，涵蓋 Aggregate 設計規則、Value Object、Domain Events、Specification、Domain Service、Bounded Context 關係、常見錯誤 |
+| `git-flow-integration.md` | Git Flow，閘門檢查新增 Aggregate 設計和 Domain Events |
+| `pr-review-checklist.md` | PR 審查，四層各自的檢查項目 |
+
+### templates/ — 模板
+| 檔案 | 用途 |
+|---|---|
+| `feature-spec.md` | 功能規格模板，新增 Domain Events 和逐層實作計畫 |
+| `lightweight-spec.md` | 輕量規格模板 |
+| `context-definition.md` | Bounded Context 定義模板 |
+| `aggregate-design.md` | **核心新增**：Aggregate 設計工作表（不變條件、狀態變更方法、Events、引用關係） |
+| `CLAUDE.md` | ASP.NET Core 專案的 AI 協作規範模板 |
+
+### PRACTICE_PLAN_tw.md — 模擬練習計畫
+7 個 Phase 的 DDD 學習路線，使用費用報銷系統作為模擬專案，預估 15-22 小時：
+
+| Phase | 內容 | 學到的 DDD 概念 |
+|---|---|---|
+| 1 | 建立基礎、識別 Bounded Context | Context Map、Ubiquitous Language |
+| 2 | 第一個 Aggregate + Value Objects | Aggregate Root、不變條件、Private Setter |
+| 3 | Domain Events | 事件驅動、最終一致性 |
+| 4 | 第二個 Aggregate + 跨 Aggregate 溝通 | Reference by ID、狀態機 |
+| 5 | CQRS + Application 層 | Command/Query 分離 |
+| 6 | Infrastructure 整合 | EF Core 設定、Repository、Event Dispatching |
+| 7 | 回顧 + Skill 檢視 | 流程改善 |
+
+---
+
+## 如何使用
+
+### 在 Claude Code 中使用 Skill（WebForms 專案）
+
+1. 將 `sdd-ddd-webforms-skill/` 放到專案目錄中
+2. 將 `templates/CLAUDE.md` 的內容複製到專案根目錄的 `CLAUDE.md`
+3. 啟動 Claude Code，開始開發時 AI 會自動依照 Skill 引導流程
+
+### 在 Claude Code 中進行 DDD 模擬練習
+
+1. 將 `sdd-ddd-core-skill/` 放到工作目錄中
+2. 啟動 Claude Code，輸入：
+```
+請讀取 sdd-ddd-core/SKILL.md 以及 references/ 和 templates/ 下所有檔案。
+我要開始一個 DDD 模擬練習專案：員工費用報銷系統（ExpenseTracker）。
+請依照 Skill 中定義的流程引導我，從 Phase 1 開始。
+```
+
+### 團隊成員閱讀規範
+
+閱讀對應的 `-tw` 目錄下的繁體中文版本，了解流程和規範。
+
+---
+
+## 設計理念
+
+### Spec Before Code（先規格、後程式碼）
+每一次程式碼變更都應該有對應的規格文件。規格不是額外的負擔，而是思考的工具——在寫程式之前先想清楚要做什麼。
+
+### AI 作為流程守衛
+AI 不只是回答問題的工具，它主動引導開發流程：在你開分支前確認規格存在、在你寫 Code-Behind 時提醒業務邏輯應該在 Domain 層、在 PR 時檢查架構合規性。
+
+### 漸進式 DDD
+不需要一次到位。WebForms 階段先累積術語表和領域知識，ASP.NET Core 階段再完整落地 DDD 戰術模式。現在寫的每一份規格和每一段 Domain 層程式碼，都是未來遷移的資產。
+
+### 三份資產
+每次開發循環都產出：**規格文件**（未來的需求文件）、**Domain 層程式碼**（可直接遷移）、**技術債記錄**（遷移指南）。
+
+---
+
+## 授權
+
+供團隊內部使用。
