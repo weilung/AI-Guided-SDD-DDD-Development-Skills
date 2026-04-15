@@ -9,6 +9,8 @@
 
 ## 背景
 
+本文件由Claude.AI分析，雖然與目前在Claude Code CLI做重複的事情，但目的是可以在Claude Code CLI分析後重新檢視是否有盲點。
+
 本評估針對 SDD/DDD Workflow Skill 的 7 份改進提案進行整合分析。這些提案主要來自兩個方向：
 
 1. **P001**：解決 Skill 自然語言驅動設計帶來的流程不透明問題（獨立於 OpenSpec 比較）
