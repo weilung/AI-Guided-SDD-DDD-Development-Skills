@@ -1,5 +1,25 @@
 # PR Review Checklist — ASP.NET Core
 
+`/dflow:pr-review` enters this checklist starting from **Step 0**. Do not skip Step 0 — reviewing code without first understanding spec intent breaks the SDD feedback loop (all the upstream spec work loses its verification mechanism).
+
+## Step 0: Understand the Change Intent (before code review)
+
+Ground yourself in the spec *before* looking at the diff:
+
+- [ ] Read the spec referenced by this PR (`specs/features/active/{id}-*.md` or an accompanying lightweight/bug spec)
+- [ ] If the spec has a `行為變更（Delta）` section (modify-existing), read **ADDED / MODIFIED / REMOVED / RENAMED** — pay attention to any Aggregate state transitions and Domain Events listed in the Delta; note any **UNCHANGED** scope declaration
+- [ ] State in one sentence: "This PR intends to {change} because {reason}." (If you can't, pause and ask the author.)
+- [ ] Cross-reference `specs/domain/{context}/behavior.md` if it exists — confirm the Delta has been reflected or is scheduled to be (draft vs finalized)
+- [ ] Only then proceed to the code-review sections below
+
+If the PR has no spec:
+```
+"I don't see a spec for this PR. Before I review the code, can you
+point me to it, or create a lightweight spec (`templates/lightweight-spec.md`)
+capturing problem / behavior change (Delta) / reason? SDD relies on the
+spec being the review anchor."
+```
+
 ## Spec Compliance
 
 - [ ] Spec exists for this change

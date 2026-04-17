@@ -13,21 +13,18 @@ branch: bugfix/BUG-{NUMBER}-{short-description}
 
 {什麼東西壞了？或什麼行為不正確？}
 
-## 現有行為
+## 行為變更（Delta）
 
-```gherkin
-Given {目前的狀態}
-When {操作}
-Then {目前的（錯誤）結果}
-```
+> 精簡 delta 格式：bug fix 多數只需 MODIFIED；若確實是新增規則可改用 ADDED、移除用 REMOVED、改名用 RENAMED。多項變更時照類別列。
 
-## 預期行為
+### MODIFIED — 修改的行為
+#### 規則：BR-NN {規則名稱}
+**原本**：Given {目前的狀態} When {操作} Then {目前的（錯誤）結果}
+**改為**：Given {相同狀態} When {相同操作} Then {正確的結果}
+**原因**：{為什麼改 — bug / 需求澄清 / 對齊 spec}
 
-```gherkin
-Given {相同狀態}
-When {相同操作}
-Then {正確的結果}
-```
+<!-- 若需要 ADDED / REMOVED / RENAMED / UNCHANGED 請比照 references/modify-existing-flow.md 的 Delta 格式 -->
+
 
 ## 根因
 

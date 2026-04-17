@@ -1,6 +1,13 @@
 # New Feature Workflow
 
-Step-by-step guide for when a developer says "I need to add a new feature."
+Step-by-step guide for when a developer triggers `/dflow:new-feature` (or natural language implying a new-feature task — see SKILL.md § Workflow Transparency for the auto-trigger safety net behavior).
+
+**Phase Gates** in this flow (stop-and-confirm before proceeding):
+- Step 4 → Step 5 (spec written → plan implementation)
+- Step 6 → Step 7 (branch ready → start implementation)
+- Step 7 → Step 8 (implementation done → completion)
+
+All other step transitions are **step-internal**: announce "Step N complete, entering Step N+1" and proceed without waiting. See SKILL.md § Workflow Transparency for the full transparency protocol and confirmation signals.
 
 ## Step 1: Intake — Understand the Request
 
@@ -18,6 +25,8 @@ Then check existing assets:
 Share what you found: "I see we already have [X] documented. This new feature seems to extend
 that — is that right?"
 
+**→ Transition (step-internal)**: Step 1 complete. Announce "Step 1 complete (intake). Entering Step 2: Identify the Bounded Context." and continue.
+
 ## Step 2: Identify the Bounded Context
 
 Guide the developer to place this feature in the right context:
@@ -33,6 +42,8 @@ If no matching context exists:
 2. Create `specs/domain/{new-context}/context.md` using the context-definition template
 3. Get developer confirmation before proceeding
 
+**→ Transition (step-internal)**: Step 2 complete. Announce "Step 2 complete (BC identified). Entering Step 3: Domain Concept Discovery." and continue.
+
 ## Step 3: Domain Concept Discovery
 
 Walk through these questions:
@@ -47,6 +58,8 @@ For each new concept:
 1. Check glossary — add if missing
 2. Check if it already exists in models.md — extend if needed
 3. If entirely new, add to the appropriate context's models.md
+
+**→ Transition (step-internal)**: Step 3 complete. Announce "Step 3 complete (domain concepts captured). Entering Step 4: Write the Spec." and continue.
 
 ## Step 4: Write the Spec
 
@@ -86,6 +99,13 @@ Specifically ask about:
 - Currency/decimal precision (if financial)
 - Date/timezone boundaries
 - Character encoding (CJK, special characters)
+
+**→ Phase Gate: Step 4 → Step 5**
+
+Announce to developer:
+> "Spec is drafted — behavior scenarios, business rules, and edge cases are captured. Ready to plan the implementation (Domain layer design, interfaces, thin Code-Behind)? `/dflow:next` or reply 'OK' to continue, or tell me if the spec needs another iteration first."
+
+Wait for confirmation (`/dflow:next`, verbal OK, or implicit — see SKILL.md § Confirmation Signals) before entering Step 5.
 
 ## Step 5: Plan the Implementation
 
@@ -132,6 +152,29 @@ public interface IExpenseRepository
 }
 ```
 
+### Generate Implementation Tasks List
+
+After the plan is agreed, AI generates a concrete task list and writes it into the spec's `實作任務` section (see feature-spec template). Each task follows the format `[LAYER]-[NUMBER]：description`:
+
+- `DOMAIN` — Domain classes, VOs, Services, Interfaces
+- `PAGE`    — Code-Behind / ASPX changes
+- `DATA`    — Table schema or Repository impl
+- `TEST`    — Test cases
+
+Example seed (replace with feature-specific tasks):
+
+```markdown
+- [ ] DOMAIN-1：Create Money value object with currency conversion
+- [ ] DOMAIN-2：Define IExchangeRateService interface
+- [ ] PAGE-1：Thin ExpenseForm.aspx.cs to call domain service
+- [ ] DATA-1：Add ExchangeRate table + Repository
+- [ ] TEST-1：Money equality and conversion unit tests
+```
+
+The list becomes the execution punch-list for Step 7 and the completion checklist in Step 8.
+
+**→ Transition (step-internal)**: Step 5 complete. Announce "Step 5 complete (implementation plan + task list ready). Entering Step 6: Git Branch." and continue.
+
 ## Step 6: Git Branch
 
 After the spec is written and reviewed:
@@ -143,6 +186,13 @@ Example: feature/EXP-001-jpy-currency-support
 
 The spec ID links the branch to its specification document.
 
+**→ Phase Gate: Step 6 → Step 7**
+
+Announce to developer:
+> "Branch `feature/{SPEC-ID}-{description}` is created. Ready to start implementation? `/dflow:next` to proceed, or discuss implementation order / scope first."
+
+Wait for confirmation before entering Step 7.
+
 ## Step 7: Implementation
 
 During implementation, continuously check:
@@ -152,11 +202,57 @@ During implementation, continuously check:
 - [ ] Are interfaces used for external dependencies?
 - [ ] Did we discover any tech debt? → Record in tech-debt.md
 
+**→ Phase Gate: Step 7 → Step 8**
+
+Announce to developer:
+> "Implementation appears complete. Ready to run the completion checklist (verify against spec, update domain docs, archive the spec)? `/dflow:next` to proceed."
+
+Wait for confirmation before entering Step 8. This phase gate is where the completion checklist is triggered — do not skip.
+
 ## Step 8: Completion
 
-When the feature is done:
-1. Update spec status to `completed`
-2. Move spec from `active/` to `completed/`
-3. Verify all new terms are in glossary
-4. Verify domain models.md and rules.md are updated
-5. Record any tech debt discovered during implementation
+Triggered by the Step 7 → Step 8 Phase Gate. AI runs the completion checklist in the order below; do **not** skip a section.
+
+### 8.1 Verification — AI runs independently
+
+AI reports `✓` / `✗` for every item before touching docs. Items marked *(post-8.3)* are re-verified after the documentation merge in 8.3 lands:
+
+- [ ] Every `Given/When/Then` scenario in the spec is covered by implementation or tests
+- [ ] Every `BR-*` business rule is covered by implementation or tests
+- [ ] Every `EC-*` edge case is handled
+- [ ] Domain layer has **no** `System.Web` references (grep `src/Domain/`)
+- [ ] `實作任務` section: all tasks checked, or unchecked items explicitly labelled as follow-up (linked to spec / tech-debt entry)
+- [ ] *(post-8.3)* `specs/domain/{context}/behavior.md` contains a section anchor for every `BR-*` introduced by this spec (mechanical input for `/dflow:verify`)
+- [ ] *(post-8.3)* `specs/domain/{context}/behavior.md` `last-updated` is later than this spec's `created` date (mechanical drift guard)
+
+If any item fails, report the gap and pause — don't proceed to 8.2.
+
+### 8.2 Verification — needs developer confirmation
+
+AI lists findings one at a time and waits for the developer to confirm each:
+
+- [ ] Does the implementation faithfully express the **intent** of each BR? (AI lists BR → impl location; developer judges fit)
+- [ ] Are the edge case handling decisions appropriate? (AI lists EC → handling; developer judges)
+- [ ] Did we miss any tech debt worth recording? (AI lists what it saw; developer adds misses)
+- [ ] Do the scenarios merged into `behavior.md` faithfully express the intended behavior? (AI lists merged anchors; developer judges)
+- [ ] Should the `實作任務` section in the spec be collapsed / removed now that it's complete? (team convention — developer decides)
+
+Ask these one-by-one; do not dump all five at once.
+
+### 8.3 Documentation updates
+
+- [ ] `specs/domain/glossary.md` — new terms added
+- [ ] `specs/domain/{context}/models.md` — model definitions updated
+- [ ] `specs/domain/{context}/rules.md` — business rules updated
+- [ ] `specs/domain/{context}/behavior.md` — merge completed spec's Given/When/Then scenarios into consolidated behavior. Sub-steps:
+      - Promote any Phase 3 draft sections (from B3 mid-sync) to formal sections
+      - Update the corresponding `rules.md` anchor's `last-updated` date (B4)
+- [ ] `behavior.md` draft cleanup — if the spec was abandoned mid-way, keep the `## 提案中變更` section's history or explicitly REMOVE it
+- [ ] `specs/migration/tech-debt.md` — tech debt discovered during implementation recorded
+
+### 8.4 Archival
+
+- [ ] Spec `status` field changed to `completed`
+- [ ] Spec file moved from `specs/features/active/` to `specs/features/completed/`
+
+Only announce "feature complete" after 8.4 is done.

@@ -1,12 +1,14 @@
 ## PROPOSAL-007: Brownfield 強化與 Review 改善
 
-**狀態**: `draft`
+**狀態**: `superseded`
 
 **提出日期**: 2026-04-11
 
 **優先級**: `低`
 
 **來源**: OpenSpec 比較分析（S8-1 逆向文件化 + S6-1 PR Review + S2-2 CLAUDE.md 合併）
+
+**superseded-by**: `PROPOSAL-007a-brownfield-reverse-documentation.md`、`PROPOSAL-007b-pr-review-spec-intent.md`、`PROPOSAL-007c-claude-md-segmentation.md`
 
 ---
 

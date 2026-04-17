@@ -1,5 +1,25 @@
 # PR 審查檢查清單 — ASP.NET Core
 
+`/dflow:pr-review` 進入本 checklist 時第一步就是 **Step 0**。不可略過 Step 0——沒先理解 spec 意圖就去看 diff，SDD 的回饋迴路就斷了（前面所有規格工作就失去驗證機制）。
+
+## 步驟 0：理解變更意圖（先於 Code Review）
+
+在看 diff 之前，先用 spec 定錨：
+
+- [ ] 讀本次 PR 對應的 spec（`specs/features/active/{id}-*.md` 或隨附的輕量/bug spec）
+- [ ] 如果 spec 有「行為變更（Delta）」段落（modify-existing 流程），讀 **ADDED / MODIFIED / REMOVED / RENAMED**——特別留意裡面的 Aggregate 狀態轉換和 Domain Events；注意有沒有 **UNCHANGED** 範圍宣告
+- [ ] 用一句話陳述：「這個 PR 想要 {改什麼}，因為 {原因}。」（如果寫不出來，暫停並詢問 author）
+- [ ] 如果 `specs/domain/{context}/behavior.md` 存在，交叉確認 Delta 是否已反映到 behavior.md（或排程為草稿待定稿）
+- [ ] 然後才進入下面的 code review 段落
+
+如果這個 PR 沒有 spec：
+```
+「我沒看到這個 PR 有對應的 spec。在 review 程式碼之前，你
+能指給我看嗎，或是先用 `templates/lightweight-spec.md` 開一份
+輕量 spec 記錄『問題 / 行為變更（Delta）/ 原因』？SDD 需要
+spec 當作 review 的錨點。」
+```
+
 ## 規格合規性
 
 - [ ] 這次變更有對應的規格

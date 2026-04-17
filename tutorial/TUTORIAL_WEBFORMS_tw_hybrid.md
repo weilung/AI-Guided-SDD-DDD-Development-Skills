@@ -1,19 +1,24 @@
-# SDD/DDD Workflow Skill 使用教學 — WebForms 版（Hybrid 設計｜P001 實作後）
+# SDD/DDD Workflow Skill 使用教學 — WebForms 版（P001–P008 實作後）
 
-> 本文件展示 **P001 Hybrid 設計實作後** 的使用體驗。
-> 核心差異：指令化為主入口、auto-trigger 作為安全網、流程狀態完全透明。
+> 本文件展示 **P001 Hybrid 設計 + P002–P008 後續強化** 實作後的使用體驗。
+> 核心面向：指令化主入口、auto-trigger 安全網、流程狀態透明、Delta 規格格式、behavior.md / rules.md A+C 結構、`實作任務` 段、四層完成 checklist、`/dflow:verify` 漂移防線、Brownfield 基準線補寫。
 > 每個情境從開發者的一句話（或一個指令）開始，完整呈現 AI 引導的對話過程和最終產出物。
 
 ---
 
 ## 先看這張表：原版 vs 新版的差別
 
-| 面向 | 原版（純 auto-trigger） | 新版（Hybrid） |
+| 面向 | 原版（純 auto-trigger） | 新版（P001–P008） |
 |---|---|---|
-| **入口** | 只靠自然語言被動觸發，容易沒觸發或觸發錯 | 可用 7 個 slash command 明確叫用 |
+| **入口** | 只靠自然語言被動觸發，容易沒觸發或觸發錯 | 可用 8 個 slash command 明確叫用（新增 `/dflow:verify`）|
 | **判斷流程** | AI 默默決定，猜錯了才能事後救 | AI 判斷後**停下來讓你背書**，避免走錯 |
 | **進度感** | 做到一半不知道自己在哪 | 隨時 `/dflow:status` 可查；階段轉換會告知 |
 | **離開流程** | 不明確，只能「自由發揮」 | `/dflow:cancel` 明確退出 |
+| **修改既有功能** | 重寫整段描述，看不出 before/after | Delta 格式（ADDED / MODIFIED / REMOVED / RENAMED） |
+| **規格結構** | 單一檔案，情境和規則混在一起 | A+C 結構：`rules.md` 宣告索引 + `behavior.md` 情境細節 |
+| **完成檢查** | AI 憑記憶跑 checklist | 四層分工（AI 可獨立驗證 / 需開發者確認 / 文件更新 / 歸檔）|
+| **文件漂移** | 只能人工比對 | `/dflow:verify` 機械檢查 |
+| **既有系統補寫** | 沒有引導 | Brownfield 基準線補寫路徑 |
 | **對新成員** | 「Skill 是不是啟動了？」心理摩擦 | 可預測、可驗證，心理負擔小 |
 
 ---
@@ -23,9 +28,10 @@
 | 指令 | 用途 |
 |---|---|
 | `/dflow:new-feature` | 進入新功能流程 |
-| `/dflow:modify-existing` | 進入修改現有功能流程 |
+| `/dflow:modify-existing` | 進入修改現有功能流程（Delta 格式：ADDED / MODIFIED / REMOVED / RENAMED）|
 | `/dflow:bug-fix` | 進入 Bug 修復流程（modify-existing 的輕量版）|
-| `/dflow:pr-review` | 進入 PR 審查流程 |
+| `/dflow:pr-review` | 進入 PR 審查流程（Step 0 先讀 spec intent）|
+| `/dflow:verify` | 機械 drift 檢查——比對 spec / rules / behavior / 實作是否一致（P008）|
 | `/dflow:status` | 查看目前流程、所在 step、已完成與待完成項 |
 | `/dflow:next` | 確認進入下一階段 |
 | `/dflow:cancel` | 中止目前流程，回到自由對話 |
@@ -41,6 +47,7 @@
 - [情境二：新功能 — 支援日幣報銷（自然語言 + auto-trigger 安全網）](#情境二新功能--支援日幣報銷自然語言--auto-trigger-安全網)
 - [情境三：PR Review — 審查同事的程式碼（`/dflow:pr-review` 指令）](#情境三pr-review--審查同事的程式碼pr-review-指令)
 - [情境四：開分支但沒 spec（auto-trigger 安全網示範）](#情境四開分支但沒-specauto-trigger-安全網示範)
+- [情境五：Brownfield — 既有功能的基準線補寫（P007a）](#情境五brownfield--既有功能的基準線補寫p007a)
 - [Skill 觸發速查表（更新版）](#skill-觸發速查表更新版)
 
 ---
@@ -113,11 +120,11 @@ Claude：收到，進入 bug-fix 流程。
 
        ┌─── Bug Fix Flow ───┐
        │ Step 1: 評估變更 ← 現在這裡
-       │ Step 2: 捕捉現有行為
+       │ Step 2: 捕捉現有行為（輕量規格或 Delta）
        │ Step 3: 分析根因（含可選抽離）
        │ Step 4: 實作修復
        │ --- Phase gate ---
-       │ Step 5: 更新文件與歸檔
+       │ Step 5: 完成 checklist（5.1 AI / 5.2 Dev / 5.3 Docs / 5.4 Archive）
        └────────────────────┘
 
        先釐清幾件事：
@@ -323,18 +330,39 @@ Claude：已中止 bug-fix 流程（未完成 Step 5 文件更新）。
 
 ```
 Claude：偵測到 BUG-042-rounding-inconsistency.md 為 in-progress，
-       接續進度。目前在 Step 5 的入口。
+       接續進度。目前在 Step 5 的入口。依四層完成 checklist 逐段跑：
 
-       開始更新文件：
+       ─── 5.1 AI 可獨立驗證（一次秀完 ✓/✗）───
+       ✓ Delta 段（輕量規格裡對應「預期行為」）每條都有實作或測試覆蓋
+       ✓ 修復在正確的層（Domain 層：Money.Round()）
+       ✓ 沒有業務邏輯洩漏回 Code-Behind
+       ✓ 實作任務段：本次為輕量規格，N/A
+       （標 *(post-5.3)* 的 behavior.md anchor 檢查延後到 5.3 後再跑）
 
+       ─── 5.2 需開發者確認（一次問一項）───
+       - 這次修復有忠實表達四捨五入規則嗎？（AI 列出 Money.Round() 對 BR-R01 的對應）
+
+你：對
+       Claude：—— 有沒有發現需要記錄的技術債？
+
+你：另一個頁面 ExpenseApproval.aspx 好像也用了 Math.Floor，但我先不改
+       Claude：好，這條記到 tech-debt.md
+
+       ─── 5.3 文件更新 ───
        ✅ specs/domain/glossary.md — 新增「Money」和「Currency」術語
        ✅ specs/domain/expense/models.md — 新增 Money Value Object 定義
-       ✅ specs/domain/expense/rules.md — 新增四捨五入規則 BR-R01
-       ✅ specs/migration/tech-debt.md — 記錄發現的重複計算邏輯
-       ✅ 規格狀態改為 completed
-       ✅ 規格檔移到 specs/features/completed/
+       ✅ specs/domain/expense/rules.md — 新增四捨五入規則 BR-R01（宣告索引）
+       ✅ specs/domain/expense/behavior.md — 新增 BR-R01 的情境 section anchor（A+C 結構）
+       ✅ specs/migration/tech-debt.md — 記錄 ExpenseApproval.aspx 的 Math.Floor 殘留
 
-       Bug-fix 流程完成。
+       ─── 5.1 post-5.3 補驗（剛剛標 *(post-5.3)* 的項）───
+       ✓ behavior.md 對 BR-R01 有 section anchor
+       ✓ behavior.md 的 last-updated（2026-02-12）晚於 spec 的 created 日期
+
+       ─── 5.4 歸檔 ───
+       ✅ 規格狀態改為 completed，檔案移到 specs/features/completed/
+
+       Bug-fix 流程完成。如需再次確認 spec 與實作沒漂移，可用 `/dflow:verify`。
 ```
 
 ### 這個情境的產出物
@@ -345,15 +373,17 @@ Claude：偵測到 BUG-042-rounding-inconsistency.md 為 in-progress，
 | Domain 程式碼 | `src/Domain/Expense/ValueObjects/Money.cs` |
 | 術語表更新 | `specs/domain/glossary.md`（+2 筆） |
 | 模型文件更新 | `specs/domain/expense/models.md` |
-| 規則文件更新 | `specs/domain/expense/rules.md`（+1 條） |
+| 規則宣告（A 側） | `specs/domain/expense/rules.md`（+BR-R01） |
+| 行為情境（C 側） | `specs/domain/expense/behavior.md`（+BR-R01 section anchor） |
 | 技術債記錄 | `specs/migration/tech-debt.md`（+3 筆） |
 
 ### 重點回顧
 
-P001 Hybrid 設計在這情境帶來三個改變：
-1. **指令明確**：`/dflow:bug-fix` 讓進入流程不用靠 AI 猜測。
-2. **可中斷可續作**：`/dflow:cancel` 讓你可以跳出去跑測試，回來 `/dflow:bug-fix` 就接續進度，不用從頭解釋。
-3. **進度透明**：`/dflow:status` 任何時候都能知道自己在哪。
+P001–P008 在這情境帶來四個改變：
+1. **指令明確**：`/dflow:bug-fix` 讓進入流程不用靠 AI 猜測（P001）。
+2. **可中斷可續作**：`/dflow:cancel` 讓你可以跳出去跑測試，回來 `/dflow:bug-fix` 接續進度（P001）。
+3. **進度透明**：`/dflow:status` 隨時可查；Step 5 的 5.1–5.4 分層避免 AI「一口氣倒完」（P005a/b）。
+4. **A+C 結構自動維護**：`rules.md` 和 `behavior.md` 同步，`behavior.md` 的 anchor 和 `last-updated` 由 5.1 機械檢查（P003 / P005b）。
 
 > 💡 這裡用到了兩個 DDD 觀念：**行為放在 Entity 裡**（Money.Round() 而不是到處寫 Math.Round）和 **Value Object 不只是 DTO**（Money 在建構時就確保合法狀態）。詳見 [DDD 觀念指引](DDD_MINDSET_SHIFT_tw.md) 的觀念一和觀念三。
 
@@ -399,14 +429,18 @@ Claude：進入 new-feature-flow。
        │ Step 1: 需求理解 ← 現在這裡
        │ Step 2: 識別 Bounded Context
        │ Step 3: 領域概念發掘
-       │ Step 4: 撰寫規格
+       │ Step 4: 撰寫規格（含 Phase markers + 實作任務段）
        │ --- Phase gate ---
        │ Step 5: 實作規劃
        │ Step 6: 開 Git 分支
        │ --- Phase gate ---
        │ Step 7: 實作
        │ --- Phase gate ---
-       │ Step 8: Completion
+       │ Step 8: 完成 checklist
+       │   8.1 AI 可獨立驗證
+       │   8.2 需開發者確認
+       │   8.3 文件更新（glossary / models / rules / behavior / tech-debt）
+       │   8.4 歸檔
        └─────────────────────────┘
 
        讓我先了解背景：這個需求是誰提出的？
@@ -524,9 +558,18 @@ Claude：很好，這是一個重要的業務規則，我記下來。
        來整理目前的情境：
 ```
 
-最終產出的規格摘錄：
+最終產出的規格摘錄（P004 的 Phase markers 會標示目前進度，Step 5 結束後會補上 `實作任務` 段）：
 
 ```markdown
+---
+id: EXP-001
+title: 支援日幣報銷
+status: in-progress
+phase: Phase 3 — Spec 定稿（通過 Step 4 → 5 phase gate）
+bounded-context: Expense
+created: 2026-02-15
+---
+
 ## 行為規格
 
 ### 主要成功情境
@@ -564,6 +607,17 @@ Scenario: 當月匯率尚未設定
 | EC-01 | 日幣金額為 0 | 不允許，顯示驗證錯誤 |
 | EC-02 | 匯率為 0 或負數 | 資料驗證阻擋，不應出現 |
 | EC-03 | 費用發生日在未來 | 不允許 |
+
+## 實作任務（Step 5 規劃後由 AI 自動生成）
+
+- [ ] DOMAIN-01：擴展 `Currency` 加入 JPY、定義 DecimalPlaces
+- [ ] DOMAIN-02：新增 `ExchangeRate` Value Object（不可變、建構時驗證）
+- [ ] DOMAIN-03：`Money.ConvertTo(targetCurrency, rate)` 方法 + 單元測試
+- [ ] DOMAIN-04：`IExchangeRateRepository` 介面
+- [ ] DATA-01：`ExchangeRate` EF Fluent 對應 + Repository 實作
+- [ ] PAGE-01：`ExpenseEntry.aspx` 幣別下拉、換算顯示
+- [ ] PAGE-02：匯率未設定時的錯誤訊息
+- [ ] TEST-01：整合測試涵蓋 BR-01 ~ BR-03 + EC-01 ~ EC-03
 ```
 
 ### Phase gate：spec 完成 → 實作規劃
@@ -685,26 +739,98 @@ Claude：分支名稱依照規範：
 你：好，開始
 ```
 
+### Step 7 完成 → Step 8：四層完成 checklist
+
+實作完成後進入 Step 8。AI 會依四層分工跑 checklist，不可略過：
+
+```
+Claude：實作完成，所有 DOMAIN-01 ~ TEST-01 任務都已勾選。
+
+       --- Phase gate: Step 7 → Step 8 ---
+
+       進入完成 checklist。先跑 8.1（AI 可獨立驗證）：
+
+       ─── 8.1 AI 可獨立驗證（一次秀完 ✓/✗）───
+       ✓ 每個 BR / EC 都有實作或測試覆蓋
+       ✓ Domain 層零 NuGet 依賴（檢查 `Expense.Domain.csproj`）
+       ✓ Code-Behind 沒有業務邏輯（三件事：parse → call Domain → display）
+       ✓ 新增 Domain Event 在實作裡都有 raise（本次無 Domain Event，N/A）
+       ✓ 實作任務段：全部勾選
+       （*(post-8.3)* 項：behavior.md anchor 檢查與 last-updated 比對，等 8.3 完成後補跑）
+
+       ─── 8.2 需開發者確認（一次問一項）───
+       Claude：— 合併進 `behavior.md` 的情境有忠實表達 BR-01 ~ BR-03 的預期行為嗎？
+
+你：有
+       Claude：— 實作過程有發現需要記下的技術債嗎？
+
+你：ExpenseList.aspx 還有一段硬編碼的匯率計算，目前沒改
+       Claude：好，記到 tech-debt.md
+
+       Claude：— 本次是完整 spec，`實作任務` 段要摺疊 / 移除嗎？
+
+你：保留，方便日後查
+       Claude：好。
+
+       ─── 8.3 文件更新 ───
+       ✅ specs/domain/glossary.md — 新增 ExchangeRate、ReportDate
+       ✅ specs/domain/expense/models.md — 擴展 Money、新增 ExchangeRate
+       ✅ specs/domain/expense/rules.md — 新增 BR-01 ~ BR-03（宣告索引）
+       ✅ specs/domain/expense/behavior.md — 把 Phase 3 draft 段落轉為正式段落；
+          對應 rules.md anchor 的 last-updated 更新為 2026-02-17
+       ✅ specs/migration/tech-debt.md — 新增 ExpenseList.aspx 硬編碼匯率
+
+       ─── 8.1 post-8.3 補驗 ───
+       ✓ behavior.md 對 BR-01 / BR-02 / BR-03 都有 section anchor
+       ✓ behavior.md 的 last-updated（2026-02-17）晚於 spec 的 created（2026-02-15）
+
+       ─── 8.4 歸檔 ───
+       ✅ spec 狀態 → completed；移到 specs/features/completed/
+
+       new-feature-flow 完成。
+```
+
+### Step 8 後用 `/dflow:verify` 做漂移複檢（P008）
+
+```
+你：/dflow:verify
+```
+
+```
+Claude：執行 drift verification（機械層檢查）：
+
+       ✓ specs/features/completed/EXP-001 對應的 BR-* 在 rules.md 全部存在
+       ✓ rules.md 的每個 BR 都在 behavior.md 有對應 section anchor
+       ✓ behavior.md last-updated（2026-02-17）晚於所有引用 spec 的 created
+       ✓ 實作碼 (src/Domain/Expense/) 沒有出現 rules.md 沒宣告的 BR-* 標籤
+
+       全部通過。如有需要，可把本次結果貼到 PR 留言。
+```
+
 ### 這個情境的產出物
 
 | 產出物 | 路徑 |
 |---|---|
-| 完整功能規格 | `specs/features/active/EXP-001-jpy-currency-support.md` |
+| 完整功能規格（含 Phase markers + 實作任務段） | `specs/features/completed/EXP-001-jpy-currency-support.md` |
 | 術語表更新 | `specs/domain/glossary.md`（+2 筆：ExchangeRate、ReportDate） |
 | 模型文件更新 | `specs/domain/expense/models.md`（+ExchangeRate VO、擴展 Money） |
-| 規則文件更新 | `specs/domain/expense/rules.md`（+3 條） |
+| 規則宣告（A 側） | `specs/domain/expense/rules.md`（+BR-01~03，含 last-updated） |
+| 行為情境（C 側） | `specs/domain/expense/behavior.md`（+3 個 section anchor） |
 | Domain 程式碼 | `src/Domain/Expense/ValueObjects/ExchangeRate.cs` |
 | Domain 程式碼 | `src/Domain/Expense/Interfaces/IExchangeRateRepository.cs` |
 | Domain 程式碼 | 擴展 `src/Domain/Expense/ValueObjects/Money.cs`（+ConvertTo） |
+| 技術債記錄 | `specs/migration/tech-debt.md`（+ExpenseList.aspx 硬編碼匯率） |
 | Git 分支 | `feature/EXP-001-jpy-currency-support` |
 
 ### 重點回顧
 
-P001 Hybrid 設計在這情境帶來四個改變：
-1. **Auto-trigger 不再冒失前進**：AI 判斷出「new-feature-flow」後停下來讓你背書，避免走錯。
-2. **Step 內轉換輕量化**：Step 1→2、2→3 這類推進只用一行告知，不會每次都問「要繼續嗎」。
-3. **Phase gate 是真正的決策點**：Step 4→5、6→7、7→8 才會停下來等確認——這些才是你可能想暫停的地方。
-4. **跨 session 可續作**：`/dflow:cancel` → 隔天 `/dflow:new-feature` 繼續，AI 會偵測到 in-progress spec 並接續。
+P001–P008 在這情境帶來六個改變：
+1. **Auto-trigger 不再冒失前進**：AI 判斷出「new-feature-flow」後停下來讓你背書（P001）。
+2. **Step 內轉換輕量化 + phase gate 在對的地方**：Step 1→2、2→3 只告知；Step 4→5、6→7、7→8 才等確認（P001）。
+3. **規格內建 Phase markers + 實作任務段**：spec 的 `phase` 欄位會跟著進度推進；Step 5 規劃後自動生成 `實作任務` 段，Step 7 勾選追蹤，Step 8 統計完成率（P004）。
+4. **A+C 結構**：`rules.md` 宣告 + `behavior.md` 情境同步，避免重複/遺漏（P003）。
+5. **四層完成 checklist**：8.1 AI 獨立跑、8.2 一題一題問你、8.3 動文件、8.4 歸檔，分工清楚（P005a/b）。
+6. **機械 drift 防線**：`/dflow:verify` 在完成後補驗（P008）。
 
 ---
 
@@ -793,10 +919,12 @@ if (rate.Rate > 1 || rate.Rate < 0.001m)
 Claude：這段匯率範圍檢查是業務邏輯，應該移到 Domain 層。
        建議在 ExchangeRate 的建構式或工廠方法裡驗證。
 
-       Step 4: 術語一致性
+       Step 4: 術語一致性 + A+C 結構對齊
 
        ⚠️ 程式碼中使用 `exchangeRate` 但 glossary.md 定義的是 `ExchangeRate`（PascalCase）
           變數命名符合 C# 慣例，但類別名稱確認一致 ✅
+       ⚠️ rules.md 有 BR-03，但 behavior.md 找不到對應的 section anchor
+          —— spec 合併後忘了同步 C 側，`/dflow:verify` 會攔截到
 
        Step 5: 技術債
 
@@ -820,8 +948,10 @@ Claude：Step 6: 遷移準備度評分 — C 級
        1. Domain 層有 HttpContext.Current.Cache（嚴重：違反零依賴原則）
        2. 匯率範圍檢查邏輯在 Code-Behind 而不是 Domain 層
        3. 沒用現有的 Money.Round() 而是重寫了一遍
+       4. A+C 結構未對齊：rules.md 新增 BR-03 但 behavior.md 缺對應 anchor
 
-       修完這三項就能到 A 級。要現在把建議貼到 PR 留言，還是先記到 tech-debt？
+       修完這四項就能到 A 級。要現在把建議貼到 PR 留言，還是先記到 tech-debt？
+       （提示：在 PR 被合併前，可請作者先跑 `/dflow:verify` 再複檢一次）
 ```
 
 ### 這個情境的產出物
@@ -831,13 +961,16 @@ Claude：Step 6: 遷移準備度評分 — C 級
 | Review 結果 | 逐項檢查報告，含具體程式碼位置和修改建議 |
 | 遷移準備度評分 | C 級，附改善到 A 級的具體步驟 |
 | 新發現的技術債 | ExpenseList.aspx.cs 的硬編碼匯率 |
+| A+C 結構警示 | behavior.md 缺 BR-03 anchor（可用 `/dflow:verify` 機械覆檢） |
 
 ### 重點回顧
 
-P001 Hybrid 設計在這情境帶來的改變：
-- **Step 0 Spec Intent** 明確列為第一步（呼應 P007 的 PR Review 改進方向）。
+P001–P008 在這情境帶來的改變：
+- **Step 0 Spec Intent** 明確列為第一步（P007b）——先讀 spec 理解意圖，而不是直接跳進程式碼。
 - 六個 review step 清楚條列，你知道 AI 會系統性查哪些面向。
+- Step 4 擴充到包含 **A+C 結構對齊**（rules.md 和 behavior.md 同步）——reviewer 不用自己比對。
 - Phase gate（評分前）讓你可以先暫停討論某一項，再進入評分。
+- 評分後可用 **`/dflow:verify`** 做機械層覆檢，避免漏網之魚。
 
 > 💡 Review 中發現的 HttpContext.Current.Cache 違規，就是 [DDD 觀念指引](DDD_MINDSET_SHIFT_tw.md) 觀念四所講的「Domain 層不依賴任何外部東西」。
 
@@ -951,16 +1084,175 @@ P001 Hybrid 設計在這情境的價值最明顯：
 
 ---
 
+## 情境五：Brownfield — 既有功能的基準線補寫（P007a）
+
+> **觸發的 Skill 檔案**：`modify-existing-flow.md` 的「Brownfield 基準線補寫」分支
+>
+> **背景**：舊系統裡「請假單退回」的邏輯散落在多個 aspx 裡，沒人寫過 spec；這次有需求要調整退回規則，但動手前必須先把「目前行為」記錄下來，否則 Delta 無法對照。
+>
+> **為什麼不是直接 `/dflow:modify-existing`？** 因為要修改的東西沒有對應的 spec / models.md / rules.md。P007a 在 `modify-existing-flow` 的前面加入「基準線補寫路徑」，引導開發者系統性地從程式碼反向文件化。
+
+### 開發者用自然語言描述
+
+```
+❯ claude
+
+你：請假單退回的規則要改，現在只允許主管退回，要加上 HR 也能退回。
+   但我們從來沒寫過請假簽核的 spec，程式碼散在好幾個地方。
+```
+
+### Auto-trigger 判斷為 Brownfield，提出先補基準線
+
+```
+Claude：我判斷這是 **modify-existing-flow** 的任務，但偵測到兩個 Brownfield 信號：
+       1. `specs/features/completed/` 和 `specs/domain/leave/` 都沒有請假簽核的紀錄
+       2. 你自己也說邏輯散在多個地方
+
+       P007a 的 Brownfield 路徑：先做「基準線補寫」再改。流程是：
+
+       ┌─── Brownfield Baseline Capture ───┐
+       │ Step B1: 定位 — 相關程式碼在哪些檔案 / 哪些分支
+       │ Step B2: 抽取 — 逐檔讀取，整理出「目前行為」的 Given/When/Then
+       │ Step B3: 結構化 — 產出 rules.md（宣告）+ behavior.md（情境）草稿
+       │ Step B4: 開發者審閱 — 基準線確認後，作為「MODIFIED 的 BEFORE 側」
+       └────────────────────────────────────┘
+
+       基準線補寫完成後，才進入正常的 modify-existing-flow（Step 2 起用 Delta 格式記錄本次變更）。
+
+       要進 Brownfield 路徑嗎？預估 20–30 分鐘。
+       → 回覆「好」/`/dflow:modify-existing` 進入
+       → 或 `/dflow:cancel` 離開（但沒 spec 就無法有效做 Delta）
+```
+
+```
+你：好
+```
+
+### Claude Code 執行 B1/B2：定位並抽取現有行為
+
+```
+Claude：B1 定位：
+
+       > grep -r "退回" src/
+       > grep -r "RejectLeave" src/
+
+       找到 3 個點：
+       - `LeaveRequestDetail.aspx.cs` 第 245–280 行（主管退回按鈕邏輯）
+       - `LeaveRequestService.asmx.cs` 第 88–112 行（API 退回 endpoint）
+       - `LeaveStatusMachine.vb` 第 56–74 行（狀態機過渡規則）
+
+       B2 抽取：讓我逐檔讀取，整理目前行為...
+
+       > 讀取三個檔案
+
+       抽取到的行為：
+
+       ​```gherkin
+       Scenario: 主管退回已送出的請假單
+         Given 一張「已送出」的請假單
+         And 目前使用者是該員工的直屬主管
+         When 點擊「退回」按鈕並填寫退回原因
+         Then 請假單狀態變為「已退回」
+         And 請假單保留退回原因
+         And 發出退回通知給員工
+
+       Scenario: 非主管嘗試退回（目前會被擋）
+         Given 一張「已送出」的請假單
+         And 目前使用者不是該員工的直屬主管
+         When 嘗試退回
+         Then 顯示錯誤「僅限主管退回」，狀態不變
+       ​```
+
+       這對嗎？或我漏掉什麼情境？
+```
+
+```
+你：對，就這樣。副總以上可以退回任何人的，我差點忘了這條。
+```
+
+### B3/B4：結構化並確認基準線
+
+```
+Claude：好，把副總條款補進來：
+
+       ​```gherkin
+       Scenario: 副總以上可退回任何人的請假單
+         Given 一張「已送出」的請假單
+         And 目前使用者職級為副總以上
+         When 嘗試退回
+         Then 等同主管退回的處理（狀態變為已退回 + 通知 + 保留原因）
+       ​```
+
+       產出基準線文件（標註 `source: baseline-capture` 讓未來知道這批情境是反向補寫的）：
+
+       > 建立 specs/domain/leave/rules.md（宣告索引）
+       >   BR-LV-01 只有主管或副總以上可退回請假單
+       >   BR-LV-02 退回時必須填寫原因
+       >   BR-LV-03 退回後狀態不可再修改，必須由員工重送
+
+       > 建立 specs/domain/leave/behavior.md（情境細節）
+       >   每個 BR 對應一個 section anchor（A+C 結構）
+
+       B4 審閱點：這份基準線對嗎？確認後會鎖定為「MODIFIED 的 BEFORE 側」，
+       接下來進入正常 modify-existing-flow 用 Delta 記錄「HR 也能退回」的變更。
+```
+
+```
+你：對，可以
+```
+
+### 接續進入正常 modify-existing-flow
+
+```
+Claude：基準線鎖定。進入 modify-existing-flow Step 2：用 Delta 格式記錄本次變更。
+
+       > 建立 specs/features/active/LV-008-hr-can-reject-leave.md
+
+       ​```markdown
+       ## 行為變更（Delta）
+
+       ### MODIFIED — 修改的行為
+       #### 規則：BR-LV-01 誰可以退回請假單
+       **原本**：只有「主管」或「副總以上」可退回
+       **改為**：「主管」、「副總以上」、或「HR」皆可退回
+       **原因**：人資部希望在員工離職 / 轉職流程中能主動退回未處理的請假單
+       ​```
+
+       從這裡開始，後續 step 跟一般 modify-existing-flow 一樣：
+       Step 3 評估 DDD 影響 → Step 4 實作 → Step 5 完成 checklist（5.1 ~ 5.4）。
+```
+
+### 這個情境的產出物
+
+| 產出物 | 路徑 | 備註 |
+|---|---|---|
+| 基準線宣告（A 側） | `specs/domain/leave/rules.md` | source: baseline-capture |
+| 基準線情境（C 側） | `specs/domain/leave/behavior.md` | 3 個 section anchor |
+| 術語表更新 | `specs/domain/glossary.md` | Leave、LeaveStatus 等 |
+| 本次變更 spec（Delta）| `specs/features/active/LV-008-hr-can-reject-leave.md` | MODIFIED BR-LV-01 |
+
+### 重點回顧
+
+P007a 對 WebForms 團隊特別有價值：
+- **舊系統常態**：大半功能都沒 spec，直接 Delta 改會沒基準線可對照。
+- **系統化反向補寫**：B1–B4 四步，不是「隨便寫一下」而是定位 → 抽取 → 結構化 → 確認。
+- **補完即融入主流程**：基準線鎖定後接回正常 modify-existing-flow，後續 Delta / verify / PR Review 都能正常運作。
+
+> 💡 這是 SDD 防線在既有系統的延伸——不是強迫一次性補完整個系統的 spec，而是**在觸及某段邏輯時順手補該段的基準線**，逐步把系統從「沒文件」推向「有文件」。
+
+---
+
 ## Skill 觸發速查表（更新版）
 
 ### 明確指令（推薦）
 
 | 指令 | 觸發的流程 | 主要 Skill 檔案 |
 |---|---|---|
-| `/dflow:new-feature` | 新功能流程 | `new-feature-flow.md` + `feature-spec.md` |
-| `/dflow:modify-existing` | 修改現有流程 | `modify-existing-flow.md` + `feature-spec.md` |
+| `/dflow:new-feature` | 新功能流程（含 Phase markers + 實作任務段） | `new-feature-flow.md` + `feature-spec.md` |
+| `/dflow:modify-existing` | 修改現有流程（Delta 格式 / Brownfield 基準線分支） | `modify-existing-flow.md` + `feature-spec.md` |
 | `/dflow:bug-fix` | Bug 修復流程 | `modify-existing-flow.md` + `lightweight-spec.md` |
-| `/dflow:pr-review` | PR 審查 | `pr-review-checklist.md` |
+| `/dflow:pr-review` | PR 審查（Step 0 Spec Intent 開場） | `pr-review-checklist.md` |
+| `/dflow:verify` | drift 機械檢查（spec / rules / behavior / 實作碼對齊） | `SKILL.md` § Drift Verification |
 | `/dflow:status` | 回報目前 flow / step / 未完項 | — |
 | `/dflow:next` | 確認進入下一階段 | — |
 | `/dflow:cancel` | 中止目前流程 | — |
@@ -972,20 +1264,25 @@ P001 Hybrid 設計在這情境的價值最明顯：
 | 「我要加一個新功能」 | new-feature-flow | 判斷後停下，要求你背書 |
 | 「有個 bug 要修」 | bug-fix | 判斷後停下，要求你背書 |
 | 「幫我 review 這個 PR」 | pr-review | 判斷後停下，要求你背書 |
+| 「這段沒 spec 但我要改」 | Brownfield 基準線補寫 | 先走 B1–B4，再進 modify-existing |
 | 「我要開分支」但沒 spec | 攔截到正確 flow | 判斷為 new-feature，引導先補 spec |
+| 「幫我檢查 spec 和實作有沒有脫鉤」 | drift verification | 叫用 `/dflow:verify` |
 | 「X 是什麼意思？」 | 術語查詢 | 查 `glossary.md`，沒有就建議新增 |
 | 「接下來做什麼？」 | Sprint 規劃 | 檢查 `specs/features/backlog/` |
 
 ### Ceremony Scaling 速查
 
-| 改什麼 | Spec 層級 | 要抽 Domain？ | 記技術債？ |
-|---|---|---|---|
-| 新功能 | 完整 spec | 必須 | 視情況 |
-| 業務規則變更 | 標準 spec | 必須 | 必須 |
-| Bug 修復（邏輯） | 輕量 spec | 評估 | 有發現就記 |
-| 純 UI 修改 | 不需要 | 不需要 | 不需要 |
-| 設定/環境 | 不需要 | 不需要 | 不需要 |
-| 效能修復 | 輕量 spec | 評估 | 必須 |
+| 改什麼 | Spec 層級 | 格式 | 要抽 Domain？ | 記技術債？ |
+|---|---|---|---|---|
+| 新功能 | 完整 spec | feature-spec（Phase + 實作任務） | 必須 | 視情況 |
+| 業務規則變更 | 標準 spec | Delta（MODIFIED） | 必須 | 必須 |
+| 新增並存行為 | 標準 spec | Delta（ADDED） | 必須 | 視情況 |
+| 移除既有行為 | 標準 spec | Delta（REMOVED） | 必須 | 必須 |
+| 既有但無 spec 的功能 | Brownfield 基準線 + 標準 spec | 基準線 rules/behavior + Delta | 視情況 | 必須 |
+| Bug 修復（邏輯） | 輕量 spec | lightweight-spec | 評估 | 有發現就記 |
+| 純 UI 修改 | 不需要 | — | 不需要 | 不需要 |
+| 設定/環境 | 不需要 | — | 不需要 | 不需要 |
+| 效能修復 | 輕量 spec | lightweight-spec | 評估 | 必須 |
 
 ---
 

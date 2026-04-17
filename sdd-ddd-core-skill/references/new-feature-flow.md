@@ -2,6 +2,15 @@
 
 Step-by-step guide for adding a new feature with full DDD and Clean Architecture.
 
+Triggered by `/dflow:new-feature` (or natural language implying a new-feature task — see SKILL.md § Workflow Transparency for the auto-trigger safety net behavior).
+
+**Phase Gates** in this flow (stop-and-confirm before proceeding):
+- Step 4 → Step 5 (spec written → plan implementation)
+- Step 6 → Step 7 (branch ready → start implementation)
+- Step 7 → Step 8 (implementation done → completion)
+
+All other step transitions are **step-internal**: announce "Step N complete, entering Step N+1" and proceed without waiting. See SKILL.md § Workflow Transparency for the full transparency protocol and confirmation signals.
+
 ## Step 1: Intake — Understand the Request
 
 Ask naturally:
@@ -13,6 +22,8 @@ Check existing assets:
 - Search `specs/domain/` for related concepts
 - Search `specs/features/` for related features
 - Check `specs/domain/glossary.md` and `context-map.md`
+
+**→ Transition (step-internal)**: Step 1 complete. Announce "Step 1 complete (intake). Entering Step 2: Identify the Bounded Context." and continue.
 
 ## Step 2: Identify the Bounded Context
 
@@ -32,6 +43,8 @@ If it crosses contexts:
 - How does the other context get notified? (Domain Event? Query?)
 - Do we need an Anti-Corruption Layer?"
 ```
+
+**→ Transition (step-internal)**: Step 2 complete. Announce "Step 2 complete (BC identified). Entering Step 3: Domain Modeling." and continue.
 
 ## Step 3: Domain Modeling
 
@@ -69,6 +82,8 @@ Those things form an Aggregate. Everything else is eventually consistent."
 - Service interfaces for external systems
 - Define in Domain layer, implement in Infrastructure
 
+**→ Transition (step-internal)**: Step 3 complete. Announce "Step 3 complete (Aggregate / VO / Events identified). Entering Step 4: Write the Spec." and continue.
+
 ## Step 4: Write the Spec
 
 Create `specs/features/active/{ID}-{feature-name}.md` using feature-spec template.
@@ -87,6 +102,13 @@ Scenario: Submit expense report
   And a ExpenseReportSubmitted event is raised
   And the report can no longer be modified
 ```
+
+**→ Phase Gate: Step 4 → Step 5**
+
+Announce to developer:
+> "Spec is drafted — behavior scenarios, Aggregate state transitions, Domain Events, and CQRS split are captured. Ready to plan the layer-by-layer implementation (Domain → Application → Infrastructure → Presentation)? `/dflow:next` or reply 'OK' to continue, or tell me if the spec needs another iteration first."
+
+Wait for confirmation (`/dflow:next`, verbal OK, or implicit — see SKILL.md § Confirmation Signals) before entering Step 5.
 
 ## Step 5: Plan the Implementation (Layer by Layer)
 
@@ -123,12 +145,46 @@ Scenario: Submit expense report
 3. Swagger documentation
 ```
 
+### Generate Implementation Tasks List
+
+After the layer-by-layer plan is agreed, AI generates a concrete task list and writes it into the spec's `實作任務` section (see feature-spec template). Each task follows `[LAYER]-[NUMBER]：description` and maps to Clean Architecture layers:
+
+- `DOMAIN` — Aggregate / Entity / VO / Domain Event / Domain Service / Repository Interface
+- `APP`    — Command/Query / Handler / Validator / DTO / Event Handler
+- `INFRA`  — EF Configuration / Repository Impl / external adapter / Migration
+- `API`    — Controller / Minimal API / Request/Response / Swagger
+- `TEST`   — Tests per layer
+
+Recommended authoring order mirrors implementation order: `DOMAIN → APP → INFRA → API` (with `TEST` interleaved).
+
+Example seed (replace with feature-specific tasks):
+
+```markdown
+- [ ] DOMAIN-1：ExpenseReport aggregate with Submit() state transition
+- [ ] DOMAIN-2：ExpenseReportSubmitted domain event
+- [ ] APP-1：SubmitExpenseReportCommand + Handler
+- [ ] INFRA-1：EF config + ExpenseReportRepository
+- [ ] API-1：POST /expense-reports/{id}/submit endpoint
+- [ ] TEST-1：Aggregate invariants + handler unit tests
+```
+
+The list becomes the execution punch-list for Step 7 and the completion checklist in Step 8.
+
+**→ Transition (step-internal)**: Step 5 complete. Announce "Step 5 complete (layer-by-layer plan + task list ready). Entering Step 6: Git Branch." and continue.
+
 ## Step 6: Git Branch
 
 ```
 Branch: feature/{SPEC-ID}-{short-description}
 Example: feature/EXP-001-submit-expense-report
 ```
+
+**→ Phase Gate: Step 6 → Step 7**
+
+Announce to developer:
+> "Branch `feature/{SPEC-ID}-{description}` is created. Ready to start layer-by-layer implementation (Domain first)? `/dflow:next` to proceed, or discuss layer order / scope first."
+
+Wait for confirmation before entering Step 7.
 
 ## Step 7: Implementation Checklist
 
@@ -158,10 +214,63 @@ During implementation, continuously verify:
 - [ ] No domain objects exposed to API consumers
 - [ ] Proper HTTP status codes
 
+**→ Phase Gate: Step 7 → Step 8**
+
+Announce to developer:
+> "Implementation appears complete across all four layers. Ready to run the completion checklist (verify against spec, update domain docs + context-map, ensure test coverage, archive the spec)? `/dflow:next` to proceed."
+
+Wait for confirmation before entering Step 8. This phase gate is where the completion checklist is triggered — do not skip.
+
 ## Step 8: Completion
 
-1. Update spec status to `completed`
-2. Move spec to `completed/`
-3. Verify glossary, models, rules, events docs are updated
-4. Verify context-map.md if cross-context interaction was added
-5. Ensure test coverage for domain invariants
+Triggered by the Step 7 → Step 8 Phase Gate. AI runs the completion checklist in the order below; do **not** skip a section.
+
+### 8.1 Verification — AI runs independently
+
+AI reports `✓` / `✗` for every item before touching docs. Items marked *(post-8.3)* are re-verified after the documentation merge in 8.3 lands:
+
+- [ ] Every `Given/When/Then` scenario in the spec is covered by implementation or tests
+- [ ] Every `BR-*` business rule is covered by implementation or tests
+- [ ] Every `EC-*` edge case is handled
+- [ ] Every Domain Event listed in the spec is raised in the implementation
+- [ ] Domain layer project has **no** external NuGet dependencies (check `*.Domain.csproj`)
+- [ ] Aggregate invariants still hold after the change (all state changes go through methods, no public setters)
+- [ ] EF Core configuration uses Fluent API only (no `[Table]`/`[Column]` on Domain entities)
+- [ ] `實作任務` section: all tasks checked, or unchecked items explicitly labelled as follow-up (linked to spec / tech-debt entry)
+- [ ] *(post-8.3)* `specs/domain/{context}/behavior.md` contains a section anchor for every `BR-*` introduced by this spec (mechanical input for `/dflow:verify`)
+- [ ] *(post-8.3)* `specs/domain/{context}/behavior.md` `last-updated` is later than this spec's `created` date (mechanical drift guard)
+
+If any item fails, report the gap and pause — don't proceed to 8.2.
+
+### 8.2 Verification — needs developer confirmation
+
+AI lists findings one at a time and waits for the developer to confirm each:
+
+- [ ] Does the implementation faithfully express the **intent** of each BR? (AI lists BR → impl location; developer judges fit)
+- [ ] Are the edge case handling decisions appropriate? (AI lists EC → handling; developer judges)
+- [ ] Are Domain Event payloads and handler placements (same-context sync vs cross-context async) correct? (AI lists; developer confirms)
+- [ ] Did we miss any tech debt worth recording?
+- [ ] Do the scenarios merged into `behavior.md` (incl. Aggregate transitions + Events) faithfully express the intended behavior? (AI lists merged anchors; developer judges)
+- [ ] Should the `實作任務` section in the spec be collapsed / removed now that it's complete? (team convention — developer decides)
+
+Ask these one-by-one; do not dump all six at once.
+
+### 8.3 Documentation updates
+
+- [ ] `specs/domain/glossary.md` — new terms added
+- [ ] `specs/domain/{context}/models.md` — model definitions updated
+- [ ] `specs/domain/{context}/rules.md` — business rules updated
+- [ ] `specs/domain/{context}/behavior.md` — merge completed spec's Given/When/Then scenarios (incl. Aggregate transitions + Events) into consolidated behavior. Sub-steps:
+      - Promote any Phase 3 draft sections (from B3 mid-sync) to formal sections
+      - Update the corresponding `rules.md` anchor's `last-updated` date (B4)
+- [ ] `behavior.md` draft cleanup — if the spec was abandoned mid-way, keep the `## 提案中變更` section's history or explicitly REMOVE it
+- [ ] `specs/domain/{context}/events.md` — Domain Events updated
+- [ ] `specs/domain/context-map.md` — updated if cross-context interaction was added or changed
+- [ ] `specs/architecture/tech-debt.md` — tech debt discovered during implementation recorded
+
+### 8.4 Archival
+
+- [ ] Spec `status` field changed to `completed`
+- [ ] Spec file moved from `specs/features/active/` to `specs/features/completed/`
+
+Only announce "feature complete" after 8.4 is done.

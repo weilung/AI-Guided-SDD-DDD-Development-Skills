@@ -1,12 +1,14 @@
 ## PROPOSAL-006: Ceremony Scaling 擴展（DDD 深度分級 + 漸進導入）
 
-**狀態**: `draft`
+**狀態**: `superseded`
 
 **提出日期**: 2026-04-11
 
 **優先級**: `中`
 
 **來源**: OpenSpec 比較分析（S3-2 DDD 分級 + S7-1 漸進導入合併）
+
+**superseded-by**: `PROPOSAL-006a-ddd-depth-column.md`（DDD 深度欄，approved）；P006-2 漸進導入以方案 γ defer，不獨立建檔
 
 ---
 

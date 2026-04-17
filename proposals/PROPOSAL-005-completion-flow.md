@@ -1,12 +1,17 @@
 ## PROPOSAL-005: 完成流程強化（Checklist + 驗證）
 
-**狀態**: `draft`
+**狀態**: `superseded`
 
 **提出日期**: 2026-04-11
 
 **優先級**: `高`
 
 **來源**: OpenSpec 比較分析（S4-1 完成 checklist + S4-2 完成驗證合併）
+
+**superseded-by**:
+- `PROPOSAL-005a-completion-checklist-wave-a.md`（驗證 + 文件更新 + 歸檔，Wave A；不依賴 P003/P004 的子集）
+- `PROPOSAL-005b-completion-checklist-wave-b.md`（behavior.md 草稿轉正式 + Tasks 全勾，Wave B；依賴 P003 + P004）
+- 「完成信號偵測」簡化為直接用 P001 的 `/dflow:next` Phase Gate 觸發，不另做自然語言偵測（見 evaluation-p002-p008.md § P005 關鍵簡化）
 
 ---
 
