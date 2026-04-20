@@ -226,9 +226,9 @@ TW（6 個）：兩版 SKILL_tw.md、四個 flow TW 檔案
 - `sdd-ddd-core-skill/references/pr-review-checklist.md`
 - `proposals/PROPOSAL-007b-pr-review-spec-intent.md`（status + 實施紀錄）
 
-### 待同步
+### 繁中版同步狀態
 
-- 繁體中文版（`sdd-ddd-webforms-skill-tw/`、`sdd-ddd-core-skill-tw/`）尚未同步，列為後續作業。
+- 已同步（2026-04-17）— 見「繁體中文版同步 Wave A 全部變更」entry。
 
 ---
 
@@ -273,9 +273,9 @@ TW（6 個）：兩版 SKILL_tw.md、四個 flow TW 檔案
 - `proposals/PROPOSAL-005a-completion-checklist-wave-a.md`（新檔）
 - `proposals/PROPOSAL-005b-completion-checklist-wave-b.md`（新檔）
 
-### 待同步
+### 繁中版同步狀態
 
-- 繁體中文版（`sdd-ddd-webforms-skill-tw/`、`sdd-ddd-core-skill-tw/`）尚未同步，列為後續作業。
+- 已同步（2026-04-17）— 見「繁體中文版同步 Wave A 全部變更」entry。
 
 ---
 
@@ -306,9 +306,9 @@ Delta 標記**僅用於變更 spec**，不累積到 P003 的 `behavior.md`（con
 - `sdd-ddd-core-skill/templates/lightweight-spec.md`
 - `proposals/PROPOSAL-002-delta-spec-format.md`（status + B1/B2 追加 + 評估紀錄）
 
-### 待同步
+### 繁中版同步狀態
 
-- 繁體中文版（`sdd-ddd-webforms-skill-tw/`、`sdd-ddd-core-skill-tw/`）尚未同步，列為後續作業。
+- 已同步（2026-04-17）— 見「繁體中文版同步 Wave A 全部變更」entry。
 
 ---
 
@@ -347,9 +347,9 @@ Delta 標記**僅用於變更 spec**，不累積到 P003 的 `behavior.md`（con
 - `sdd-ddd-webforms-skill/SKILL.md`
 - `sdd-ddd-core-skill/SKILL.md`
 
-### 待同步
+### 繁中版同步狀態
 
-- 繁體中文版（`sdd-ddd-webforms-skill-tw/`、`sdd-ddd-core-skill-tw/`）尚未同步，列為後續作業。
+- 已同步（2026-04-17）— 見「繁體中文版同步 Wave A 全部變更」entry。
 
 ---
 
@@ -384,6 +384,6 @@ Delta 標記**僅用於變更 spec**，不累積到 P003 的 `behavior.md`（con
 - `sdd-ddd-core-skill/references/new-feature-flow.md`
 - `sdd-ddd-core-skill/references/modify-existing-flow.md`
 
-### 待同步
+### 繁中版同步狀態
 
-- 繁體中文版（`sdd-ddd-webforms-skill-tw/`、`sdd-ddd-core-skill-tw/`）尚未同步，列為後續作業。
+- 已同步（2026-04-17）— 見「繁體中文版同步 Wave A 全部變更」entry。
