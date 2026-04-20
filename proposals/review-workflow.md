@@ -24,20 +24,30 @@
 
 ## 二、分輪策略
 
+**審查範圍**：本流程只審查**英文 Skill**（`sdd-ddd-webforms-skill/`、`sdd-ddd-core-skill/`）。繁中版（`*-tw/`）和 tutorial 檔案延後至 Post-Review Closeout 階段（見第七節）。
+
 八份提案拆為 6 輪，每輪 1–3 個語義相關提案。輪與輪之間無依賴（但 Round 3 與 Round 1 共用 SKILL.md，排程上建議循序）。
 
-| Round | 主題 | Proposals | 核心審查檔案 |
+| Round | 主題 | Proposals | 核心審查檔案（僅英文）|
 |---|---|---|---|
-| **R1** | 流程入口與透明度 | P001, P007b | `SKILL.md` × 2 + `new-feature-flow.md` × 2 + `modify-existing-flow.md` × 2 + `pr-review-checklist.md` × 2 |
-| **R2** | 變更描述格式 | P002, P004 | `modify-existing-flow.md` × 2 + `feature-spec.md` × 2 + `lightweight-spec.md` × 2 + `new-feature-flow.md` × 2（Step 5） |
-| **R3** | 完成流程 Checklist | P005a, P005b | `new-feature-flow.md` × 2（Step 8）+ `modify-existing-flow.md` × 2（最終 Step）+ `SKILL.md` × 2（Completion 子節） |
-| **R4** | Source of Truth 與漂移驗證 | P003, P008 | `behavior.md` × 2 + `context-definition.md` × 2 + `drift-verification.md` × 2 + `SKILL.md` × 2（/dflow:verify）+ 各 BC 的 rules.md 索引規範 |
-| **R5** | Ceremony 與逆向文件化 | P006a, P007a | Core `SKILL.md`（DDD Depth 欄）+ WebForms `modify-existing-flow.md`（Brownfield 補寫） |
-| **R6** | 輔助與教學 | P007c, Tutorial | `templates/CLAUDE.md` × 2 + `tutorial/TUTORIAL_*_tw_hybrid.md` × 2 |
+| **R1** | 流程入口與透明度 | P001, P007b | `SKILL.md` × 2 + `references/new-feature-flow.md` × 2 + `references/modify-existing-flow.md` × 2 + `references/pr-review-checklist.md` × 2 |
+| **R2** | 變更描述格式 | P002, P004 | `references/modify-existing-flow.md` × 2 + `templates/feature-spec.md` × 2 + `templates/lightweight-spec.md` × 2 + `references/new-feature-flow.md` × 2（Step 5） |
+| **R3** | 完成流程 Checklist | P005a, P005b | `references/new-feature-flow.md` × 2（Step 8）+ `references/modify-existing-flow.md` × 2（最終 Step）+ `SKILL.md` × 2（Completion 子節） |
+| **R4** | Source of Truth 與漂移驗證 | P003, P008 | `templates/behavior.md` × 2 + `templates/context-definition.md` × 2 + `references/drift-verification.md` × 2 + `SKILL.md` × 2（/dflow:verify） |
+| **R5** | Ceremony 與逆向文件化 | P006a, P007a | Core `SKILL.md`（DDD Depth 欄）+ WebForms `references/modify-existing-flow.md`（Brownfield 補寫） |
+| **R6** | 輔助 Template | P007c | `templates/CLAUDE.md` × 2 |
 
-### 繁中版審查納入策略
+> 「× 2」= WebForms 版 + Core 版。路徑展開：`sdd-ddd-webforms-skill/{path}` 和 `sdd-ddd-core-skill/{path}`。
 
-每一輪的英文版和繁中版**同輪審查**，不另開「繁中 review 專輪」。理由：drift 最容易出現在兩語言的同步點，分輪會讓對照中斷。
+### 為什麼繁中版和 Tutorial 不納入各輪 review
+
+三個原因：
+
+1. **移動標靶問題**：英文 Skill 仍在審查修正中，每一輪都可能調整指引措辭。若同步要求 TW 和 tutorial 跟著修，等於 Skill 每變一次、TW / tutorial 也要跟著變兩次（從英文 → TW、從 Skill → tutorial），工作量放大但價值低。
+2. **Review 焦點稀釋**：同輪比對英中兩版會讓 reviewer 花大量篇幅在「字串對應」而非「邏輯審查」。實際經驗中（R1 第一次跑）F-01 就是 TW drift 誤報，干擾真正的邏輯問題審查。
+3. **最終一次性同步更高效**：英文 Skill 定稿後，TW 和 tutorial 做**單向同步**（英文 → 繁中）即可，不需要雙向 review。
+
+這不代表 TW 和 tutorial 永遠不審——而是審的時機延後到 R1–R6 英文 Skill 全部定稿後，見第七節 Post-Review Closeout 階段。
 
 ---
 
@@ -72,18 +82,14 @@
 
 ### F-02 ...
 
-## 兩版一致性對照
+## 兩版一致性對照（WebForms 版 vs Core 版）
 
 | 檢查項 | WebForms 版 | Core 版 | 一致？ |
 |---|---|---|---|
 | ... | ... | ... | ✓ / ✗ |
-
-## 繁中同步對照
-
-| 檢查項 | 英文版 | 繁中版 | 一致？ |
-|---|---|---|---|
-| ... | ... | ... | ✓ / ✗ |
 ```
+
+> **注意**：本流程不比對繁中版與英文版的一致性——繁中版延後至 Post-Review Closeout 階段處理（見第七節）。若 reviewer 在審查英文版過程順手看到繁中版有明顯錯誤，記入 `reviews/cross-round-notes.md`，不佔本輪 Finding 數量。
 
 **嚴重度定義**：
 - **Critical**：實作違背 proposal 意圖，或導致流程無法運作
@@ -156,8 +162,12 @@
 1. 實作是否忠於 proposal 意圖？有沒有遺漏 proposal 明列的要求？
 2. 實作是否有邏輯矛盾或自相牴觸的指引？
 3. WebForms 版和 Core 版的共通部分是否一致？
-4. 英文版和繁中版是否同步（用字、段落結構、範例）？
-5. 實作有沒有超出 proposal 範圍的改動（可能引入未經審查的行為）？
+4. 實作有沒有超出 proposal 範圍的改動（可能引入未經審查的行為）？
+
+【審查範圍】
+本輪僅審查英文 Skill（`sdd-ddd-webforms-skill/`、`sdd-ddd-core-skill/`）。
+繁中版（`*-tw/`）和 `tutorial/` 不在本輪範圍；若順手看到明顯錯誤，
+記入 reviews/cross-round-notes.md，不佔本輪 Finding 數量。
 
 【產出格式】
 依照 proposals/review-workflow.md 第三節「Review 報告格式」寫入
@@ -167,6 +177,7 @@ reviews/round-N-report.md。
 - 不要修改任何實作檔，只產出 review 報告。
 - 嚴重度判斷從嚴：Critical 保留給「違背 proposal 意圖」級別，不要濫用。
 - 若對 proposal 意圖不確定，標為 Question，不要擅自判 Critical。
+- 不要比對繁中版和英文版的一致性（延後至 Post-Review Closeout 階段）。
 ```
 
 **需要替換的變數**：
@@ -251,7 +262,7 @@ reviews/round-N-report.md。
 | R3 | 完成流程 Checklist | 未開始 | — | — | — |
 | R4 | Source of Truth 與漂移驗證 | 未開始 | — | — | — |
 | R5 | Ceremony 與逆向文件化 | 未開始 | — | — | — |
-| R6 | 輔助與教學 | 未開始 | — | — | — |
+| R6 | 輔助 Template | 未開始 | — | — | — |
 
 **建議執行順序**：R1 → R2 → R3 → R4 → R5 → R6（從核心流程到輔助產物）。但各輪間無硬依賴，可依時間與精力彈性調整。
 
@@ -263,27 +274,78 @@ reviews/round-N-report.md。
 
 ```
 reviews/
+├── prompts/                       ← 各輪三階段提示詞（已預填變數）
+│   ├── round-1-review.md          ← 給 Codex CLI 使用
+│   ├── round-1-approve.md         ← 給 Claude Code Approve session
+│   ├── round-1-implement.md       ← 給 Claude Code Implement session
+│   ├── round-2-*.md
+│   └── ...
 ├── round-1-report.md              ← Codex 產出
 ├── round-1-decisions.md           ← Claude Approve session 產出
 ├── round-2-report.md
 ├── round-2-decisions.md
 ├── ...
-└── cross-round-notes.md           ← 跨輪發現的累積筆記
+├── cross-round-notes.md           ← 跨輪發現的累積筆記
+└── archive/                       ← 廢棄但保留的版本（審議軌跡）
+    ├── README.md
+    └── {file}-v{N}-deprecated.md
 ```
 
-建立時機：第一輪 Review 開始前，由使用者手動 `mkdir reviews/`。
+建立時機：第一輪 Review 開始前已建立。若某輪產出作廢重跑，原檔移到 `archive/` 並加上 `-v{N}-deprecated` 後綴，不覆蓋或刪除。
 
 ---
 
-## 七、流程結束條件
+## 七、流程結束條件 & Post-Review Closeout 階段
 
-六輪全部完成（Review + Approve + Implement）後：
+### 7.1 R1–R6 全部完成後：全域一致性 sweep
 
-1. 執行一次**全域一致性 sweep**（可作為 Wave D「Skill 精簡化審查」的前置步驟）：
-   - 檢查各輪修正之間是否有新引入的矛盾
-   - 檢查 CHANGELOG 連貫性
-2. 更新 `evaluation-p002-p008.md` 第七節：標記 review 階段完成
-3. 決定是否進入 Wave B 實施（P003 pilot / P005b 補完）
+六輪全部完成（Review + Approve + Implement）後，先做一次**全域一致性 sweep**（英文 Skill 範圍內）：
+
+1. 檢查各輪修正之間是否有新引入的矛盾（例如 R1 改了 SKILL.md 的某段、R3 又改了同段，彼此是否相容）
+2. 檢查 CHANGELOG 連貫性（日期序、關聯 proposal 標示）
+3. 更新 `evaluation-p002-p008.md` 第七節：標記 review 階段完成
+
+這一步可視為 Wave D「Skill 精簡化審查」的前置步驟。
+
+### 7.2 Post-Review Closeout 階段：繁中同步 + Tutorial 重建
+
+英文 Skill 定稿後，才開啟 Closeout 階段：
+
+**C1. 繁中版同步（`*-tw/`）**
+
+- 目標：把 `sdd-ddd-webforms-skill-tw/` 和 `sdd-ddd-core-skill-tw/` 的內容，從英文 Skill 做**單向重新翻譯 / 對齊**。
+- 做法建議：
+  - 不是 diff 式修補——因為英文 Skill 經過 6 輪修正，累積改動量大，diff-merge 會誤傷既有繁中用語。
+  - 改為**逐檔重新產出**繁中版（用英文版為唯一 source，參考舊繁中版的用字風格即可）。
+  - 每份繁中檔完成後，對照英文版做一次「資訊量一致性」檢查：段落結構、範例內容、指令清單對齊。
+- 完成標準：每份英文 Skill 檔都有對應繁中版，且資訊量無落差。
+- 不做的事：不在這階段再改英文 Skill。若發現英文 Skill 有問題，記入 `reviews/cross-round-notes.md`，作為未來另開一輪的候選議題。
+
+**C2. Tutorial 重建（`tutorial/`）**
+
+- 目標：Tutorial 是 Skill 的教學性包裝，內容應反映**定稿後**的 Skill，而非實作中途版本。
+- 做法建議：
+  - 以定稿後的英文 Skill（或同步完成後的繁中 Skill）為基礎，重寫 tutorial 對應段落。
+  - 保留舊 tutorial 的敘事結構、範例劇情，只替換被 Skill 改動影響的指引內容。
+- 完成標準：tutorial 描述的流程、指令、template 字段，與 Skill 定稿版一致。
+
+**C3. 最終 CHANGELOG 條目**
+
+Closeout 完成後，CHANGELOG 新增一段：
+
+```markdown
+## YYYY-MM-DD — Post-Review Closeout：繁中同步 + Tutorial 重建
+
+**前置**: R1–R6 審查修正全部完成（最後一輪日期：YYYY-MM-DD）
+**範圍**:
+- 繁中版重譯：`sdd-ddd-webforms-skill-tw/`、`sdd-ddd-core-skill-tw/`
+- Tutorial 重建：`tutorial/`
+**方法**: 以英文 Skill 為單一 source，非 diff 式修補
+```
+
+### 7.3 然後才進入下一個 Wave
+
+Closeout 完成後，才決定是否進入 Wave B 實施（P003 pilot / P005b 補完）或其他後續工作。
 
 ---
 
