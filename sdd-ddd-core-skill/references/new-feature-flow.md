@@ -229,6 +229,7 @@ Triggered by the Step 7 → Step 8 Phase Gate. AI runs the completion checklist 
 
 AI reports `✓` / `✗` for every item before touching docs. Items marked *(post-8.3)* are re-verified after the documentation merge in 8.3 lands:
 
+- [ ] `實作任務` section: all tasks checked, or unchecked items explicitly labelled as follow-up (linked to spec / tech-debt entry)
 - [ ] Every `Given/When/Then` scenario in the spec is covered by implementation or tests
 - [ ] Every `BR-*` business rule is covered by implementation or tests
 - [ ] Every `EC-*` edge case is handled
@@ -236,7 +237,6 @@ AI reports `✓` / `✗` for every item before touching docs. Items marked *(pos
 - [ ] Domain layer project has **no** external NuGet dependencies (check `*.Domain.csproj`)
 - [ ] Aggregate invariants still hold after the change (all state changes go through methods, no public setters)
 - [ ] EF Core configuration uses Fluent API only (no `[Table]`/`[Column]` on Domain entities)
-- [ ] `實作任務` section: all tasks checked, or unchecked items explicitly labelled as follow-up (linked to spec / tech-debt entry)
 - [ ] *(post-8.3)* `specs/domain/{context}/behavior.md` contains a section anchor for every `BR-*` introduced by this spec (mechanical input for `/dflow:verify`)
 - [ ] *(post-8.3)* `specs/domain/{context}/behavior.md` `last-updated` is later than this spec's `created` date (mechanical drift guard)
 

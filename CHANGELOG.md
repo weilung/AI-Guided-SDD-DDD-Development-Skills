@@ -6,6 +6,27 @@
 
 ---
 
+## 2026-04-20 — Round 2 審查修正：變更描述格式（P002 + P004）
+
+**關聯 Proposal**: P002, P004
+**審查輪次**: R2
+**對應決議文件**: `reviews/round-2-decisions.md`
+
+### 修正項目
+
+- **F-01 (Major)**: 兩版 `references/new-feature-flow.md` Step 8.1 的「實作任務」驗證項未依 PROPOSAL-004 實施紀錄自述的「加入第一項」位置語放在清單首位（WebForms 版落第 5 項、Core 版落第 8 項） → 將該驗證項移到 Step 8.1 清單第 1 項，其餘項相對順序不動。
+
+### 影響檔案
+
+- `sdd-ddd-webforms-skill/references/new-feature-flow.md`
+- `sdd-ddd-core-skill/references/new-feature-flow.md`
+
+### 繁中版同步狀態
+
+延後至 Post-Review Closeout 階段統一處理（見 `proposals/review-workflow.md` 第七節）。
+
+---
+
 ## 2026-04-20 — Round 1 審查修正：流程入口與透明度（P001 + P007b）
 
 **關聯 Proposal**: P001, P007b
