@@ -176,14 +176,14 @@ When the developer types `/dflow:status` or asks in NL ("where are we?", "curren
 
 ```
 Current workflow: new-feature-flow
-Current step: Step 3 — Domain Concept Discovery
+Current step: Step 3 — Domain Modeling
 
 Completed:
 - [x] Step 1: Intake — requirements understood
 - [x] Step 2: Identify BC — assigned to Expense context
 
 In progress:
-- [ ] Step 3: Domain Concept Discovery — identifying Aggregate / VO / Events
+- [ ] Step 3: Domain Modeling — identifying Aggregate / VO / Events
 
 Remaining:
 - [ ] Step 4: Write Spec

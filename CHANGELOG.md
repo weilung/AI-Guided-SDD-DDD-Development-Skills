@@ -6,6 +6,26 @@
 
 ---
 
+## 2026-04-20 — Round 1 審查修正：流程入口與透明度（P001 + P007b）
+
+**關聯 Proposal**: P001, P007b
+**審查輪次**: R1
+**對應決議文件**: `reviews/round-1-decisions.md`
+
+### 修正項目
+
+- **F-01 (Major)**: Core `SKILL.md` 的 `/dflow:status` Response Format 範例 Step 3 沿用 WebForms 版 `Domain Concept Discovery`，與 Core `references/new-feature-flow.md` 正式名稱 `Domain Modeling` 不一致 → 將範例中 Step 3 兩處（line 179 status line、line 186 in-progress checklist）改為 `Domain Modeling`，與 Core flow 檔對齊。
+
+### 影響檔案
+
+- `sdd-ddd-core-skill/SKILL.md`
+
+### 繁中版同步狀態
+
+延後至 Post-Review Closeout 階段統一處理（見 `proposals/review-workflow.md` 第七節）。
+
+---
+
 ## 2026-04-17 — Tutorial 同步 P001–P008：兩份 hybrid 教學文件更新
 
 **關聯 Proposal**: 無（非 Proposal，為 P001 Hybrid 教學的 P002–P008 累積同步）
