@@ -109,3 +109,6 @@ AI 執行以下機械檢查：
 3. **繁中同步**：兩版 SKILL_tw.md（決策樹 + Slash Commands + 參考文件表）、兩版 `drift-verification_tw.md`（新增）。
 
 **備註**：P008 原排程 Wave C 但依賴 P003（A+C 結構）。P003 於同日提前實施後，P008 隨即進行。
+
+- **R4 審查修正（2026-04-21）**: F-01 — SKILL.md `/dflow:verify` 從 Control commands 移至新設的 Standalone commands 小節，消除分類標題與條目描述自相矛盾的問題。
+- **R4 審查修正（2026-04-21）**: F-02 — `drift-verification.md` Step 3 BR-ID 擷取改為 primary set（scenario-bound）與 supplementary set（body-text only）兩層；Step 4 三項機械檢查以 primary set 為主；Step 5 報告格式區分 ✓ / ✗ / ℹ 三種狀態。維持機械層邊界，未引入語意判斷。

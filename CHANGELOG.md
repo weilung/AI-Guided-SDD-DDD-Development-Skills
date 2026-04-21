@@ -6,6 +6,30 @@
 
 ---
 
+## 2026-04-21 — Round 4 審查修正：Source of Truth 與漂移驗證（P003 + P008）
+
+**關聯 Proposal**: P003, P008
+**審查輪次**: R4
+**對應決議文件**: `reviews/round-4-decisions.md`
+
+### 修正項目
+
+- **F-01 (Major)**: `/dflow:verify` 在 SKILL.md Slash Commands 段被歸類於 Control commands（manage an active workflow），但同條目又以括號註記「standalone, no active workflow needed」自相矛盾 → 新增第三類 `Standalone commands` 小節，將 `/dflow:verify [<bc>]` 從 Control commands 移出並移除原括號註記。
+- **F-02 (Major)**: `drift-verification.md` Step 3 的 BR-ID 擷取規則將「section headings」與「body text」等值處理，違背 P008「對應情境段落」原意，會造成誤通過（body-text 提到就當 pass）與誤告警兩類雜訊 → Step 3 改為建立 primary set（scenario-bound，section headings 或 Given/When/Then 中的 BR-NNN marker）與 supplementary set（僅 body-text 提及）兩層；Step 4 三項檢查改以 primary set 為主要比對基礎，supplementary set 不能單獨滿足 forward / reverse 條件；Step 5 報告格式新增 ℹ 資訊狀態與區分失敗訊息（no scenario section for BR-NNN vs body-text only reference）。
+
+### 影響檔案
+
+- `sdd-ddd-webforms-skill/SKILL.md`
+- `sdd-ddd-core-skill/SKILL.md`
+- `sdd-ddd-webforms-skill/references/drift-verification.md`
+- `sdd-ddd-core-skill/references/drift-verification.md`
+
+### 繁中版同步狀態
+
+延後至 Post-Review Closeout 階段統一處理（見 `proposals/review-workflow.md` 第七節）。
+
+---
+
 ## 2026-04-20 — Round 2 審查修正：變更描述格式（P002 + P004）
 
 **關聯 Proposal**: P002, P004

@@ -53,17 +53,29 @@ Scan `rules.md` for all `BR-*` identifiers. Record each ID and any anchor link t
 
 ### Step 3: Extract BR-IDs from behavior.md
 
-Scan `behavior.md` for all `BR-*` identifiers referenced in section headings or body text.
+Build two sets:
+
+- **Primary set (scenario-bound)**: BR-IDs that appear in section headings
+  (e.g. `## Amount Validation (BR-001)`) or in the formal `(BR-NNN)` marker
+  inside a Given/When/Then scenario block. These represent BR-IDs that have
+  a dedicated scenario section.
+- **Supplementary set (body-text mentions)**: BR-IDs that appear only in
+  prose / discussion text, outside any Given/When/Then block. These are
+  informational references, not equivalent to a scenario section.
 
 ### Step 4: Cross-reference
 
-Run the three checks:
+Run the three checks using the primary set from Step 3 as the main comparison basis:
 
 | Check | Pass condition | Fail message |
 |---|---|---|
-| Forward | Every BR-ID in rules.md appears in behavior.md | `✗ BR-NNN declared in rules.md but missing from behavior.md` |
-| Anchor | Every `behavior.md#anchor` in rules.md resolves | `✗ BR-NNN links to behavior.md#section but anchor not found` |
-| Reverse | Every BR-ID in behavior.md appears in rules.md | `✗ BR-NNN referenced in behavior.md but not declared in rules.md` |
+| Forward | Every BR-ID in rules.md has a corresponding scenario section in behavior.md (primary set) | `✗ BR-NNN declared in rules.md but has no scenario section in behavior.md` |
+| Anchor | Every `behavior.md#anchor` in rules.md resolves to an existing heading | `✗ BR-NNN links to behavior.md#section but anchor not found` |
+| Reverse | Every BR-ID formally referenced in behavior.md (primary set) is declared in rules.md | `✗ BR-NNN referenced in behavior.md scenario but not declared in rules.md` |
+
+Body-text mentions (supplementary set) do **not** satisfy forward / reverse
+pass conditions on their own. They are reported separately as informational
+signals (see Step 5).
 
 ### Step 5: Report
 
@@ -72,24 +84,35 @@ Output format:
 ```
 Verifying {Context} — rules.md ↔ behavior.md consistency
 
-✓ BR-001 → {section heading} exists and references BR-001
-✓ BR-002 → {section heading} exists and references BR-002
-✗ BR-003 → behavior.md has no section for BR-003
-✓ BR-004 → {section heading} exists and references BR-004
-✗ BR-010 → referenced in behavior.md but not declared in rules.md
+✓ BR-001 → scenario section exists and references BR-001
+✓ BR-002 → scenario section exists and references BR-002
+✗ BR-003 → behavior.md has no scenario section for BR-003
+          (note: BR-003 appears in body text of another section,
+           but that does not satisfy the forward check)
+ℹ BR-005 → body text reference only — no dedicated scenario section;
+           confirm this is intentional (e.g. cross-reference to another BR)
 
-Summary: 3 passed, 2 issues found
+✗ BR-010 → formally referenced in a behavior.md scenario but not
+          declared in rules.md
+
+Summary: 3 passed, 2 issues, 1 informational
 
 Issues:
-1. rules.md declares BR-003, but behavior.md has no corresponding scenario
-   → Possible cause: rule was implemented but behavior.md wasn't updated in the completion flow
-   → Action: check the implementation, then either add the scenario to behavior.md
-     or remove BR-003 from rules.md if it was deprecated
+1. rules.md declares BR-003, but behavior.md has no corresponding
+   scenario section
+   → Possible cause: rule was implemented but behavior.md wasn't
+     updated in the completion flow; or a body-text mention was
+     mistaken for a scenario
+   → Action: check the implementation, then either add the scenario
+     to behavior.md (preferred) or remove BR-003 from rules.md if
+     deprecated
 
-2. behavior.md references BR-010, but rules.md doesn't declare it
-   → Possible cause: scenario was added directly to behavior.md without updating rules.md
-   → Action: add BR-010 to rules.md with a one-line summary, or remove
-     the stale reference from behavior.md
+2. behavior.md's {scenario section name} formally references BR-010,
+   but rules.md doesn't declare it
+   → Possible cause: scenario was added directly to behavior.md
+     without updating rules.md
+   → Action: add BR-010 to rules.md with a one-line summary, or
+     remove the stale scenario reference from behavior.md
 ```
 
 ## When to Run

@@ -103,8 +103,10 @@ The Skill uses a **Hybrid design**: slash commands as the primary entry, natural
 **Control commands** — manage an active workflow:
 - `/dflow:status` — report current workflow, step, and progress
 - `/dflow:next` — confirm proceeding to the next phase (equivalent to "OK" / "continue")
-- `/dflow:verify [<bc>]` — run drift verification on rules.md ↔ behavior.md (standalone, no active workflow needed)
 - `/dflow:cancel` — abort current workflow, return to free conversation (artifacts created so far are kept as-is)
+
+**Standalone commands** — run independently of any workflow:
+- `/dflow:verify [<bc>]` — run drift verification on rules.md ↔ behavior.md
 
 ### Auto-Trigger Safety Net
 
