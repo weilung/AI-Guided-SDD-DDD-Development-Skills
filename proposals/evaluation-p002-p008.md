@@ -848,18 +848,19 @@ P001 (Hybrid, 已定稿)
 
 1. **雙盲比對**（✓ 完成）：與獨立 Claude.AI session（`EVALUATION-RESULT.md`，2026-04-13）比對
 2. **盲點修正**（✓ 完成）：已納入 B1-B7、D1-D2，詳見第二之二節
-3. **實體拆分 proposal 檔案**（下一步待執行）：
+3. **R1–R6 審查階段已完成**（✓ 完成，2026-04-21）：P001–P008 實作的六輪審查（Review + Approve + Implement）全部完成，最後一輪 R6 於 2026-04-21 定案，同日完成全域一致性 sweep（見 `reviews/global-sweep-report.md`）。各輪決議文件見 `reviews/round-{1..6}-decisions.md`；R1/R2/R4 有 accept 並實施，R3/R5/R6 為 0 Finding。下一步進入 Post-Review Closeout 階段（繁中同步 + Tutorial 重建，見 `proposals/review-workflow.md` 第七節 7.2）。
+4. **實體拆分 proposal 檔案**（下一步待執行）：
    - 建立 `PROPOSAL-006a-ddd-depth-column.md`
    - 建立 `PROPOSAL-007a-brownfield-reverse-documentation.md`
    - 建立 `PROPOSAL-007b-pr-review-spec-intent.md`（標記 Wave A 優先）
    - 建立 `PROPOSAL-007c-claude-md-segmentation.md`
    - 建立 `PROPOSAL-008-drift-verification.md`
    - 舊 P006、P007 保留並加註 `superseded-by` 欄位
-4. **更新 comparison-analysis.md**：
+5. **更新 comparison-analysis.md**：
    - 納入 P001
    - 更新 proposal 清單（P005 拆分、P006/P007 拆分、P008 新增）
    - 更新實施順序為 Wave A-D（含 Checkpoint A/B/C）
-5. **既有 P002/P003/P004/P005 內文調整**：延後到 Wave A/B 實施時順便處理（納入 B1-B6 的具體內容）
+6. **既有 P002/P003/P004/P005 內文調整**：延後到 Wave A/B 實施時順便處理（納入 B1-B6 的具體內容）
 
 ---
 

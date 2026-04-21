@@ -185,4 +185,4 @@ Issues:
 
 - **R4 Review**：✓ 完成（2026-04-20）
 - **R4 Approve**：✓ 完成（2026-04-21）
-- **R4 Implement**：待開新 Claude Code session 執行
+- **R4 Implement**：✓ 完成（2026-04-21，見 `CHANGELOG.md` 2026-04-21 條目）
