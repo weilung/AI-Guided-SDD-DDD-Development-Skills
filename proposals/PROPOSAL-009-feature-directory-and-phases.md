@@ -48,11 +48,12 @@ Obts 團隊針對候選 A 的背書結論：**採混血方案** —— V2 的 fe
 
 3. **保留 SPEC-ID 系統**（`SPEC-YYYYMMDD-NNN`）；feature 目錄名格式 = `{SPEC-ID}-{slug}`（例如 `SPEC-20260421-001-報表調整`）。
 
-4. **每個 feature 目錄含**：
-   - `_index.md`：feature 級 dashboard + 輕量修改紀錄 + 接續入口
-   - 0-N 份 phase spec：`phase-spec-YYYY-MM-DD-{slug}.md`
-   
-   「0 份」對應輕量修改只需更新 `_index.md` 不需開 phase spec；「1+ 份」對應多階段規格。
+4. **每個 feature 目錄含**（範本終局詳見 § H，R7 Review F-01 定案）：
+   - `_index.md`：feature 級 dashboard + Current BR Snapshot + 輕量修改紀錄 + 接續入口（六段結構見 § H 決議 14）
+   - 0-N 份 phase spec：`phase-spec-YYYY-MM-DD-{slug}.md`（T1 Heavy ceremony 產出，完整 SDD 循環）
+   - 0-N 份 lightweight spec：`lightweight-{YYYY-MM-DD}-{slug}.md` 或 `BUG-{NUMBER}-{slug}.md`（T2 Light ceremony 產出，含 BR Delta）
+
+   三層 Ceremony 分層（T1 Heavy / T2 Light / T3 Trivial）由 AI 依 § H 決議 13 判準選擇；T3 最輕（顏色 / 文案 / 格式等無 BR 變動的修改）只在 `_index.md` 輕量修改紀錄段 inline 寫一列，不產獨立 spec 檔。
 
 5. **一份 phase spec ≈ 一次完整「Kickoff → Domain → Design → Build → Verify」循環的產出**。這對齊現況 `feature-spec.md` 範本的範圍（單一完整循環），但重新命名為 phase-spec 以反映「feature 內的一個階段」而非「feature 本身」。
 
@@ -79,6 +80,7 @@ Obts 團隊針對候選 A 的背書結論：**採混血方案** —— V2 的 fe
       - 驗證目錄內所有 phase spec 的 status 為 `completed`
       - 檢查 `_index.md` 是否有未結項
       - 更新 `_index.md` 的 feature 狀態為 completed
+      - **依 `_index.md` 的 Current BR Snapshot，同步 BR 變化到對應 BC 的 `rules.md` / `behavior.md`**（延續 Step 8.3 / Step 5.3 既有 sync 機制，不新設流程）
       - 用 `git mv` 將整個 feature 目錄從 `active/` 搬到 `completed/`
       - 產出 merge commit 訊息建議（給使用者 copy-paste）
     - **不做什麼**：**不自動 merge**（merge 策略由專案 / 使用者決定，Dflow 不預設）
@@ -96,8 +98,9 @@ Obts 團隊針對候選 A 的背書結論：**採混血方案** —— V2 的 fe
     → git branch：feature/SPEC-20260421-001-報表調整
     這樣可以嗎？或你想改 slug？」
     ```
-- **`/dflow:new-phase` 進入時同樣要求階段 slug 確認**（格式類比上述）
-- **`/dflow:finish-feature` 修補 Dflow 現況缺口**（目前收尾是流程內隱式步驟，無命令觸發）
+- **`/dflow:new-phase` 進入時同樣要求階段 slug 確認**（格式類比上述）；進入時同步 refresh `_index.md` 的 Current BR Snapshot 段（見 § H 決議 14）
+- **`/dflow:finish-feature` 修補 Dflow 現況缺口**（目前收尾是流程內隱式步驟，無命令觸發）；收尾時依 `_index.md` Current BR Snapshot 同步 BR 變化到對應 BC 的 `rules.md` / `behavior.md`（延續 Step 8.3 / Step 5.3，不新設流程）
+- **`modify-existing-flow.md` 增加三層 Ceremony 判準表**（見 § H 決議 13）：AI 依 T1 / T2 / T3 分層執行對應產出；`new-feature-flow.md` 預設走 T1 Heavy，不需判準
 
 #### E. Git 整合類（決議 11）
 
@@ -132,6 +135,61 @@ Obts 團隊針對候選 A 的背書結論：**採混血方案** —— V2 的 fe
 - 兩者不衝突：`/dflow:status` 在混血方案下改為讀各 active feature 目錄的 `_index.md` 摘要後彙整
 - 開新對話接續工作時的建議動作：`/dflow:status` → 選目標 feature → 讀該 feature 的 `_index.md`
 
+#### H. 範本與 Ceremony 終局（R7 Review F-01 決議，accept-with-choice Path A-3）
+
+> 本段由 R7 Review F-01 定案，補足原決議 4 對 phase-spec / `_index.md` / lightweight-spec 的範本終局與使用判準。核心設計：「Delta 是局部（commit 式），Snapshot 是聚合（feature 層），系統層 State 由 P003 `rules.md` / `behavior.md` 承擔」—— 三層狀態線明確分工。
+
+**決議 12：`phase-spec.md` 由 `feature-spec.md` 重命名；範本新增「Delta from prior phases」選用段**
+
+- 重命名路徑：`templates/feature-spec.md` → `templates/phase-spec.md`（雙版，用 `git mv`，見決議 11）
+- 範本結構沿用現況 feature-spec.md 既有章節（問題描述 / 領域概念 / 行為規格 / 業務規則 / 邊界情況 / Domain Events（Core 版）/ 實作計畫 / 資料結構變更 / 測試策略 / 實作任務）
+- **新增章節：「Delta from prior phases」**（置於「業務規則」之後，「邊界情況」之前）
+  - 首 phase 免填（AI 在 `/dflow:new-feature` 時留空並註明「首 phase，無前置 Delta」）
+  - Phase 2+ 必填；格式沿用 P002 / P004 既有 Delta 格式（ADDED / MODIFIED / REMOVED / RENAMED / UNCHANGED）
+  - 僅記**本 phase 的變化**，**不累積**歷史（累積狀態由 `_index.md` Current BR Snapshot 承擔，見決議 14）
+  - 「業務規則」章節在 phase 2+ 只列**本 phase 新增 / 修改到的 BR**，不重抄未變動 BR
+- `templates/feature-spec.md` 刪除（由 `git mv` 重命名而來，保留 git 歷史）
+
+**決議 13：三層 Ceremony 分層**
+
+| Tier | 情境 | 產出 | 命令 / 觸發 |
+|---|---|---|---|
+| **T1 Heavy** | 新功能、新 phase、架構變動、新增 BR | 獨立 `phase-spec-YYYY-MM-DD-{slug}.md` + `_index.md` 登記 Phase Specs 列表 + refresh BR Snapshot | `/dflow:new-feature` / `/dflow:new-phase` |
+| **T2 Light** | bug fix、UI 輸入驗證調整、流程分支修改——有 BR Delta | 獨立 `lightweight-{YYYY-MM-DD}-{slug}.md`（或 `BUG-{NUMBER}-{slug}.md`）置於 feature 目錄內 + `_index.md` 輕量修改紀錄段登記一列（外連）+ refresh BR Snapshot | `/dflow:bug-fix` 或 `/dflow:modify-existing` 走 lightweight 分支 |
+| **T3 Trivial** | 按鈕顏色、文案修正、typo、排版、純註解——**無 BR 變動、無 Domain 概念動、無資料結構動** | **只在 `_index.md` 輕量修改紀錄段 inline 寫一列**，不產獨立 spec 檔 | `/dflow:modify-existing` 走 `_index-only` 分支 |
+
+**T3 判準**（AI 需**同時**滿足以下四條才能判 T3）：
+1. 不涉及任何 BR-ID 變更（無 ADDED / MODIFIED / REMOVED / RENAMED 的業務規則）
+2. 不涉及任何 Domain 概念新增 / 變更（Aggregate / Entity / VO / Event）
+3. 不涉及資料結構變更（資料表、欄位、關聯、索引）
+4. 只改 UI 表層（顏色、文字、排版）、純註解、或純格式化
+
+任一不滿足 → 降到 T2；若同時有 Domain / BR / 資料結構動 → 升 T1。
+
+**Dflow 完全不走的底線**（低於 T3）：純 typo 修正、commit message 打錯字、純格式化 commit（如 prettier / dotnet format 自動整理）——連 T3 的「寫一列到 `_index.md`」都可省，直接 `git commit`。SKILL.md 的 Ceremony Scaling 段應補一句對應此底線的明文。
+
+**決議 14：`_index.md` 範本新增，含六段**
+
+1. **Metadata（YAML front matter）**：`spec-id` / `slug` / `status`（in-progress / completed）/ `created` / `branch`
+2. **目標與範圍**：散文段，描述 feature 解決什麼、為誰、邊界在哪（1-3 段）
+3. **Phase Specs**（T1 列表）：表格欄位 `| Phase | Date | Slug | Status | 檔案連結 |`
+4. **Current BR Snapshot**（feature 層累積狀態，本決議核心新增）：表格欄位 `| BR-ID | 現況規則 | 首次出現（phase）| 最後修訂（phase）| Status（active / removed）|`
+   - AI 在每次 `/dflow:new-phase` 進入時、每次完成一份 phase-spec 時、每次 T2 lightweight spec 定稿時 regenerate
+   - 是 feature 目錄內 BR 的**當前狀態**（不是歷史）；歷史由各 phase-spec 的「Delta from prior phases」段串接閱讀
+   - 與 BC 層 `rules.md` / `behavior.md` 的同步關係：feature 完成時 `/dflow:finish-feature` 把 Snapshot 推進到對應 BC（延續 Step 8.3 / Step 5.3 既有 sync 機制）
+5. **輕量修改紀錄**（T2 外連 + T3 inline 兩用）：表格欄位 `| Date | Tier | 描述 | commit |`
+   - T2 行：描述含「見 `lightweight-{date}-{slug}.md`」外連
+   - T3 行：inline 完整描述一句話 + 標籤（如 `[cosmetic]` / `[text]` / `[format]`）
+6. **接續入口（Resume Pointer）**：目前進展一句話 + 下次接手建議的下一個動作
+
+**決議 15：lightweight-spec.md 保留獨立範本，實例化檔置於 feature 目錄內**
+
+- 範本沿用現況（問題 / 行為變更 Delta / 根因 / 修復方式 / 發現的技術債）；不變動範本內容
+- 更新 SKILL.md / flow 文件的使用指引，明確對應 T2 ceremony（T1 走 phase-spec、T3 直接寫 `_index.md` inline）
+- **實例化檔案位置**：置於對應 feature 目錄內（不再像現況放在 `specs/features/active/` 頂層單檔）
+- **實例化檔名**：`lightweight-{YYYY-MM-DD}-{slug}.md`（通用輕量修改）或 `BUG-{NUMBER}-{slug}.md`（已分配 BUG-ID 的 bug）
+- 若 feature 目錄尚未存在（例如獨立 bug 未附掛既有 feature），`/dflow:bug-fix` 需先建 feature 目錄（含最小版 `_index.md`），再放 lightweight 實例化檔進去——保持「所有規格檔都在 feature 目錄內」的結構統一
+
 ---
 
 ### 影響範圍
@@ -142,13 +200,13 @@ Obts 團隊針對候選 A 的背書結論：**採混血方案** —— V2 的 fe
 | `sdd-ddd-webforms-skill/SKILL.md` | 修改 | Primary triggers 加入 `/dflow:new-phase`、`/dflow:finish-feature`；決策樹對應節點；Slash Commands 表；參考檔引用 |
 | `sdd-ddd-core-skill/SKILL.md` | 修改 | 同上；Project Structure 內 `specs/features/active/` 範例改為目錄形式 |
 | **Flow 文件** | | |
-| `sdd-ddd-webforms-skill/references/new-feature-flow.md` | 修改 | Step 3.5 Slug Confirmation 新增；Step 4（spec）/Step 6（branch）改為「目錄 + `_index.md` + 第一份 phase spec」建立；Step 8.4 archival 改為「整個目錄搬 `completed/`」|
+| `sdd-ddd-webforms-skill/references/new-feature-flow.md` | 修改 | Step 3.5 Slug Confirmation 新增；Step 4（spec）/Step 6（branch）改為「目錄 + `_index.md`（含初始 BR Snapshot）+ 第一份 phase-spec（首 phase，Delta 段空）」建立；Step 8.4 archival 改為「整個目錄搬 `completed/`」|
 | `sdd-ddd-core-skill/references/new-feature-flow.md` | 修改 | 同上（Core 版 8 步結構、Step 8.4 archival）|
-| `sdd-ddd-webforms-skill/references/modify-existing-flow.md` | 修改 | 判斷樹重寫：「輕量修改（只改 `_index.md`）」vs「新 phase（建 phase-spec）」；Step 5 archival 同步更新 |
+| `sdd-ddd-webforms-skill/references/modify-existing-flow.md` | 修改 | 判斷樹重寫為三層 Ceremony（見 § H 決議 13）：T1（升 `/dflow:new-phase`）/ T2（產出 lightweight spec 置於 feature 目錄內）/ T3（只在 `_index.md` inline 紀錄）；Step 5 archival 同步更新；同步 BC 層的步驟延續既有機制 |
 | `sdd-ddd-core-skill/references/modify-existing-flow.md` | 修改 | 同上（Core 版 5 步結構）|
-| `sdd-ddd-webforms-skill/references/new-phase-flow.md` | **新增** | `/dflow:new-phase` 完整流程（可從 new-feature-flow 衍生，去除 branch / 目錄建立步驟；保留階段 slug 確認、phase spec 撰寫、`_index.md` 更新）|
+| `sdd-ddd-webforms-skill/references/new-phase-flow.md` | **新增** | `/dflow:new-phase` 完整流程（可從 new-feature-flow 衍生，去除 branch / 目錄建立步驟；保留階段 slug 確認、phase-spec 撰寫含「Delta from prior phases」段、進入時 refresh `_index.md` Current BR Snapshot）|
 | `sdd-ddd-core-skill/references/new-phase-flow.md` | **新增** | 同上 |
-| `sdd-ddd-webforms-skill/references/finish-feature-flow.md` | **新增** | `/dflow:finish-feature` 完整流程（驗證清單、`git mv` 搬目錄、merge commit 建議格式）|
+| `sdd-ddd-webforms-skill/references/finish-feature-flow.md` | **新增** | `/dflow:finish-feature` 完整流程（驗證清單、依 `_index.md` BR Snapshot 同步到 BC 層 `rules.md` / `behavior.md`、`git mv` 搬目錄、merge commit 建議格式）|
 | `sdd-ddd-core-skill/references/finish-feature-flow.md` | **新增** | 同上 |
 | **Git / Review / Verify** | | |
 | `sdd-ddd-webforms-skill/references/git-integration.md` | 修改 | 增加「Directory Moves Must Use git mv」原則段；Branch naming 段補 slug 語言跟隨討論的規則（補 PROPOSAL-011 留的 placeholder）|
@@ -158,14 +216,14 @@ Obts 團隊針對候選 A 的背書結論：**採混血方案** —— V2 的 fe
 | `sdd-ddd-webforms-skill/references/drift-verification.md` | 修改 | 路徑假設從 `active/{SPEC-ID}-{name}.md` 改為 `active/{SPEC-ID}-{slug}/phase-spec-*.md`；BR-ID 擷取邏輯需跨多份 phase spec |
 | `sdd-ddd-core-skill/references/drift-verification.md` | 修改 | 同上 |
 | **Templates** | | |
-| `sdd-ddd-webforms-skill/templates/_index.md` | **新增** | feature 級 dashboard 範本（phase spec 列表、輕量修改紀錄欄、接續入口欄）|
+| `sdd-ddd-webforms-skill/templates/_index.md` | **新增** | feature 級 dashboard 範本；含 Metadata / 目標與範圍 / Phase Specs / Current BR Snapshot / 輕量修改紀錄（T2 外連 + T3 inline）/ 接續入口 六段（見 § H 決議 14）|
 | `sdd-ddd-core-skill/templates/_index.md` | **新增** | 同上 |
-| `sdd-ddd-webforms-skill/templates/phase-spec.md` | **新增**（或由 `feature-spec.md` 重命名）| 一次完整循環的 spec 範本（沿用 feature-spec.md 的 scope）|
-| `sdd-ddd-core-skill/templates/phase-spec.md` | **新增**（或由 `feature-spec.md` 重命名）| 同上 |
-| `sdd-ddd-webforms-skill/templates/feature-spec.md` | 刪除 / 重命名 | 若選擇重命名為 phase-spec.md（用 `git mv`），此列為刪除；若選擇雙軌過渡期，此列保留 |
-| `sdd-ddd-core-skill/templates/feature-spec.md` | 刪除 / 重命名 | 同上 |
-| `sdd-ddd-webforms-skill/templates/lightweight-spec.md` | 修改或保留 | 評估是否保留獨立範本，或併入 `_index.md` 的輕量修改紀錄段；預設保留並調整引用指引 |
-| `sdd-ddd-core-skill/templates/lightweight-spec.md` | 修改或保留 | 同上 |
+| `sdd-ddd-webforms-skill/templates/phase-spec.md` | **由 `feature-spec.md` `git mv` 重命名** | 沿用現況 feature-spec.md 全部章節；於「業務規則」之後新增「Delta from prior phases」選用段（首 phase 免填，phase 2+ 必填；格式沿用 P002/P004 Delta）見 § H 決議 12 |
+| `sdd-ddd-core-skill/templates/phase-spec.md` | 由 `feature-spec.md` `git mv` 重命名 | 同上 |
+| `sdd-ddd-webforms-skill/templates/feature-spec.md` | **刪除**（由 `git mv` 重命名而來，保留 git 歷史）| 不再獨立存在 |
+| `sdd-ddd-core-skill/templates/feature-spec.md` | 刪除（由 `git mv` 重命名而來，保留 git 歷史）| 同上 |
+| `sdd-ddd-webforms-skill/templates/lightweight-spec.md` | 修改（保留獨立範本）| 範本內容不變；更新使用指引使其明確對應 T2 ceremony；實例化檔置於 feature 目錄內、命名 `lightweight-{YYYY-MM-DD}-{slug}.md` 或 `BUG-{NUMBER}-{slug}.md`（見 § H 決議 15）|
+| `sdd-ddd-core-skill/templates/lightweight-spec.md` | 修改（保留獨立範本）| 同上 |
 | `sdd-ddd-webforms-skill/templates/CLAUDE.md` | 修改 | 專案指引範本中的目錄結構 / 流程引用同步更新 |
 | `sdd-ddd-core-skill/templates/CLAUDE.md` | 修改 | 同上 |
 | **繁中版同步** | | |
@@ -213,7 +271,7 @@ Obts 團隊針對候選 A 的背書結論：**採混血方案** —— V2 的 fe
 - **假設 2**：目錄化對「單 commit 快速結束的小 feature」不會顯著增加 overhead——`_index.md` 可極簡（一段摘要 + 單份 phase spec 連結）。
 - **假設 3**：中文 / 英文混用 slug 在 Git server / CI / PR review bot 不會出現編碼問題（Obts 已驗證，不同 Git 平台仍需注意）。
 - **假設 4**：`/dflow:finish-feature` 的「驗證所有 phase spec ✅」是 AI 可靠執行的機械檢查（不需人工判斷 spec 內容品質）；若 phase spec 的 status 欄位規範不穩，此假設需重檢。
-- **假設 5**：`_index.md` 的「輕量修改紀錄」段可替代部分 `lightweight-spec.md` 用途，但不完全取代（兩者的關係由實施時決定）。
+- **假設 5**（R7 Review F-01 定案後轉為確認）：`_index.md` 的「輕量修改紀錄」段同時承擔 T2 外連（指向獨立 lightweight 檔）與 T3 inline（無獨立檔的表層修改）兩種場景；`lightweight-spec.md` 範本保留對應 T2 ceremony，不併入 `_index.md`（見 § H 決議 13-15）。三層 Ceremony 判準在長期實戰下是否需調整（例如 T2/T3 邊界）納入 R7 Implement 後的驗證點。
 
 **驗證點（實施後）**：
 - 跑一個小規模 feature（1 phase spec、2-3 commit）全流程，確認 overhead 可接受
