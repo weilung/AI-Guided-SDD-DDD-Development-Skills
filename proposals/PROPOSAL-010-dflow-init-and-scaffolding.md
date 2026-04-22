@@ -106,6 +106,9 @@ sdd-ddd-core-skill/scaffolding/       ← 對應結構
 **Git-principles 二版本**：
 - `Git-principles-gitflow.md`：含 develop / release / hotfix 分支結構、Git Flow 慣例、24 小時補 spec（對人的承諾）等——Obts 風格
 - `Git-principles-trunk.md`：含 main 單分支 + feature/*、squash vs rebase 選項、commit message 規範——主流開源風格
+- **兩版本各自新增「Integration Commit 訊息慣例」段**（R7 Review F-04 決議 Path B）：PROPOSAL-009 的 `/dflow:finish-feature` 只產出 Git-strategy-neutral 的 Integration Summary；兩版 Git-principles 在此段提供把 Integration Summary 格式化為具體 commit 訊息的範例：
+  - gitflow 版：建議 merge commit 格式（例：`Merge feature/SPEC-{id}-{slug} into main` + Summary body）
+  - trunk 版：提供 squash commit / rebase commit 格式範例（含 Co-Authored-By 等選用項）
 - 使用者在 `/dflow:init-project` Q5 可選其一（或都不選，自行撰寫）
 - 對應候選 L（PROPOSAL-011）解耦原則：Dflow 本體中立，Git Flow 規範只存在於選擇性 scaffolding 範本
 
@@ -165,8 +168,8 @@ sdd-ddd-core-skill/scaffolding/       ← 對應結構
 | **Scaffolding 目錄（新增）** | | |
 | `sdd-ddd-webforms-skill/scaffolding/_overview.md` | **新增** | 系統概觀範本（placeholder 化的 V2 `_overview.md`）|
 | `sdd-ddd-webforms-skill/scaffolding/_conventions.md` | **新增** | 規格撰寫慣例範本（含 Ceremony Scaling 對照，引用 SKILL.md）|
-| `sdd-ddd-webforms-skill/scaffolding/Git-principles-gitflow.md` | **新增** | Git Flow 版專案 Git 規範範本（含 develop/release/hotfix、24h 補 spec 等）|
-| `sdd-ddd-webforms-skill/scaffolding/Git-principles-trunk.md` | **新增** | Trunk-based / GitHub Flow 版 Git 規範範本 |
+| `sdd-ddd-webforms-skill/scaffolding/Git-principles-gitflow.md` | **新增** | Git Flow 版專案 Git 規範範本（含 develop/release/hotfix、24h 補 spec、**Integration Commit 訊息慣例段**：merge commit 格式—— R7 Review F-04）|
+| `sdd-ddd-webforms-skill/scaffolding/Git-principles-trunk.md` | **新增** | Trunk-based / GitHub Flow 版 Git 規範範本（含 **Integration Commit 訊息慣例段**：squash / rebase commit 格式—— R7 Review F-04）|
 | `sdd-ddd-webforms-skill/scaffolding/CLAUDE-md-snippet.md` | **新增** | `CLAUDE.md` 建議片段（類比 V2 `CLAUDE.md-範例片段.md`）|
 | `sdd-ddd-core-skill/scaffolding/` 對應 5 檔 | **新增** | 同上（Core 版的 scaffolding，內容根據 Clean Architecture 調整）|
 | **Repo 根文件** | | |

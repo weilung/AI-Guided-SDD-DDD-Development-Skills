@@ -14,7 +14,7 @@
 | F-01 | 009 | Major | D1 | **accept-with-choice（Path A-3）** | 選定：phase-spec 由 feature-spec `git mv` 重命名 + 新增 Delta 段；lightweight-spec 保留獨立檔並置於 feature 目錄內；`_index.md` 六段範本（含 Current BR Snapshot）；三層 Ceremony T1/T2/T3 |
 | F-02 | 009 | Major | D1 | **accept-with-choice（Path C）** | 選定：completed/ = 凍結歷史不搬回；reopen 走新建 follow-up feature（新 SPEC-ID + `follow-up-of` 欄位 + 反向 Follow-up Tracking 段）；`/dflow:new-phase` 嚴格只適用於 active feature |
 | F-03 | 009 | Major | D1 | **accept** | `/dflow:verify` scope 收斂：不擴張到跨 phase-spec 聚合；drift-verification 維持 `rules.md` ↔ `behavior.md` 現況對照；BR 現況聚合由 `_index.md` Current BR Snapshot 承擔（F-01 A-3 間接處理） |
-| F-04 | 009/010/011 | Major | D3 | _（待決）_ | |
+| F-04 | 009/010/011 | Major | D3 | **accept-with-choice（Path B）** | P009 `/dflow:finish-feature` 產出改為 Integration Summary（Git-strategy-neutral）；P010 兩版 Git-principles 各自補「Integration Commit 訊息慣例」段；P011 關聯表註記與解耦目標一致 |
 | F-05 | 010 | Major | D4 | _（待決）_ | |
 | F-06 | 011 | Major | D1 | _（待決）_ | |
 | F-07 | 010 | Minor | D2 | _（待決）_ | |
@@ -98,6 +98,33 @@
 - § 驗證點（實施後）：verify 的驗證目標改為「不受 feature 目錄化影響」
 
 **交叉影響**: 無跨 proposal 修訂。但 F-03 的 accept **確認了 F-01 A-3 的 BR Snapshot 設計已足夠處理 BR 現況聚合需求**，不需要 verify 做替代聚合。這也讓 P009 scope 更純粹（回歸 feature 目錄化 + 多階段規格 + 新命令的主軸），不混入 P008 的職責領域。
+
+### F-04（accept-with-choice, Path B：P009 中立化 + P010 scaffolding 補 Integration 格式）
+
+**背景脈絡**：
+- Codex 指出 P009 § C 決議 10 把 `/dflow:finish-feature` 的產出寫成「產出 merge commit 訊息建議」，但 P011 明確把「怎麼合」交回專案決策，P010 也明寫 trunk-based 範本會提供 squash / rebase 選項。這等於把剛解耦掉的 Git strategy 又從另一個命令偷偷綁回來。對採 squash merge / rebase merge / fast-forward 的專案來說，「merge commit 訊息」不是通用產物。
+- 本 finding 是 R7 唯一跨三份 proposal 的 finding（C-08 檢查點）。R7 Approve session 考量三種 path：A（純中立化，三份都不綁）、B（P009 中立 + P010 scaffolding 補格式）、C（/dflow:finish-feature 條件產出）。
+- 選定 Path B 理由：P009 / P011 保持絕對中立；P010 的 scaffolding 本就是裝 Git-specific 內容的地方；與候選 K/L 的職責分工相容（skill 本體中立 + scaffolding 選擇）；避免 Path C 的互動額外負擔。
+
+**決定**：
+1. **P009 `/dflow:finish-feature` 產出中立化**：從「merge commit 訊息建議」改為「Integration Summary（feature 目標 / 變動範圍 / 關聯 BR-ID / phase 清單）」，Git-strategy-neutral
+2. **P010 Git-principles 兩版本各自補「Integration Commit 訊息慣例」段**：gitflow 版建議 merge commit 格式；trunk 版提供 squash / rebase commit 格式範例
+3. **P011 關聯表明示與本 finding 一致**：確認 P009 的新設計符合 011 解耦目標
+
+**修訂檔案**（3 份 proposal）：
+
+**`proposals/PROPOSAL-009-feature-directory-and-phases.md`**（2 處）：
+- § C 命令類 / 決議 10 「做什麼」清單：「產出 merge commit 訊息建議」改為「產出 Integration Summary（Git-strategy-neutral）」，並註明格式依專案 Git-principles 決定
+- § 影響範圍 Flow 段 finish-feature-flow.md 描述：同步改為「Integration Summary 產出（Git-strategy-neutral）」
+
+**`proposals/PROPOSAL-010-dflow-init-and-scaffolding.md`**（2 處）：
+- § 提議的解法 / 2. Git-principles 二版本段：新增 bullet「兩版本各自新增『Integration Commit 訊息慣例』段」，說明 gitflow / trunk 兩版的格式差異
+- § 影響範圍 scaffolding 段：Git-principles-gitflow.md 和 Git-principles-trunk.md 描述追加「Integration Commit 訊息慣例段」mention
+
+**`proposals/PROPOSAL-011-git-flow-decoupling.md`**（1 處）：
+- § 關聯的 Proposal 表 PROPOSAL-009 那列：追加「R7 Review F-04 定案：009 的 `/dflow:finish-feature` 產出 Git-strategy-neutral 的 Integration Summary，與本 proposal 的解耦目標一致」
+
+**交叉影響**: 本 finding 是跨三份 proposal 的唯一 finding，處理上三份同時修訂。P011 的修訂最輕（僅關聯表補一句）；P009 的改動是「措辭中立化」；P010 的改動是「scaffolding 範本 scope 輕微擴張」（+2 段「Integration Commit 訊息慣例」）。Codex 點的 Codex F-04 三個行號（P009:77-85 / P011:49-54 / P010:106-110）全部 verify 過並處理。
 
 ---
 

@@ -131,7 +131,7 @@ references/git-flow-integration.md  →  references/git-integration.md
 
 | Proposal | 關係 | 說明 |
 |---|---|---|
-| PROPOSAL-009 | 前置於 009 | 009 要在穩定的 `git-integration.md` 上加「Directory Moves Must Use git mv」規範段（決議 11）；011 先完成檔名重構與基底內容，009 再擴增 |
+| PROPOSAL-009 | 前置於 009 | 009 要在穩定的 `git-integration.md` 上加「Directory Moves Must Use git mv」規範段（決議 11）；011 先完成檔名重構與基底內容，009 再擴增。**R7 Review F-04 定案**：009 的 `/dflow:finish-feature` 產出 Git-strategy-neutral 的 Integration Summary，不綁特定 merge strategy，與本 proposal 的解耦目標一致 |
 | PROPOSAL-010 | 前置於 010 | 010 的 `Git-原則.md` scaffolding 範本可選地保留 Git Flow 版本，但需先在 Dflow 本體解耦後才能以「可選範本」形式提供 |
 | PROPOSAL-008 | 互補 | `/dflow:verify` 不受 Git Flow 解耦影響；但若 pr-review-checklist 段落變動，需確認 verify 相關觸發指引不失效 |
 

@@ -83,7 +83,7 @@ Obts 團隊針對候選 A 的背書結論：**採混血方案** —— V2 的 fe
       - 更新 `_index.md` 的 feature 狀態為 completed
       - **依 `_index.md` 的 Current BR Snapshot，同步 BR 變化到對應 BC 的 `rules.md` / `behavior.md`**（延續 Step 8.3 / Step 5.3 既有 sync 機制，不新設流程）
       - 用 `git mv` 將整個 feature 目錄從 `active/` 搬到 `completed/`
-      - 產出 merge commit 訊息建議（給使用者 copy-paste）
+      - 產出 **Integration Summary**（feature 目標 / 變動範圍 / 關聯 BR-ID / phase 清單）—— Git-strategy-neutral；具體 commit 訊息格式依專案 Git-principles 選定的 merge strategy 決定（若採用 PROPOSAL-010 scaffolding，參考 `scaffolding/Git-principles-{gitflow|trunk}.md` 的「Integration Commit 訊息慣例」段；R7 Review F-04 決議 Path B）
     - **不做什麼**：**不自動 merge**（merge 策略由專案 / 使用者決定，Dflow 不預設）
     - **修補現況缺口**：目前收尾是 new-feature-flow Step 8.4 的文件步驟，沒有命令可觸發；新命令讓這個動作顯式化。
 
@@ -245,7 +245,7 @@ Obts 團隊針對候選 A 的背書結論：**採混血方案** —— V2 的 fe
 | `sdd-ddd-core-skill/references/modify-existing-flow.md` | 修改 | 同上（Core 版 5 步結構）|
 | `sdd-ddd-webforms-skill/references/new-phase-flow.md` | **新增** | `/dflow:new-phase` 完整流程（可從 new-feature-flow 衍生，去除 branch / 目錄建立步驟；保留階段 slug 確認、phase-spec 撰寫含「Delta from prior phases」段、進入時 refresh `_index.md` Current BR Snapshot）|
 | `sdd-ddd-core-skill/references/new-phase-flow.md` | **新增** | 同上 |
-| `sdd-ddd-webforms-skill/references/finish-feature-flow.md` | **新增** | `/dflow:finish-feature` 完整流程（驗證清單、依 `_index.md` BR Snapshot 同步到 BC 層 `rules.md` / `behavior.md`、`git mv` 搬目錄、merge commit 建議格式）|
+| `sdd-ddd-webforms-skill/references/finish-feature-flow.md` | **新增** | `/dflow:finish-feature` 完整流程（驗證清單、依 `_index.md` BR Snapshot 同步到 BC 層 `rules.md` / `behavior.md`、`git mv` 搬目錄、**Integration Summary 產出（Git-strategy-neutral）**——具體 commit 訊息格式由專案 Git-principles 決定，見 PROPOSAL-010 scaffolding）|
 | `sdd-ddd-core-skill/references/finish-feature-flow.md` | **新增** | 同上 |
 | **Git / Review / Verify** | | |
 | `sdd-ddd-webforms-skill/references/git-integration.md` | 修改 | 增加「Directory Moves Must Use git mv」原則段；Branch naming 段補 slug 語言跟隨討論的規則（補 PROPOSAL-011 留的 placeholder）|
