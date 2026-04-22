@@ -70,8 +70,9 @@ Obts 團隊針對候選 A 的背書結論：**採混血方案** —— V2 的 fe
 #### C. 命令類（決議 9–10）
 
 9. **新增 `/dflow:new-phase`**：在**已啟動的 active feature branch 上**啟動新階段。
-   - **做什麼**：建新 phase spec（`phase-spec-YYYY-MM-DD-{slug}.md`）+ 更新 `_index.md` 進度欄
+   - **做什麼**：建新 phase spec（`phase-spec-YYYY-MM-DD-{slug}.md`）+ 更新 `_index.md` 進度欄（含 refresh Current BR Snapshot）
    - **不做什麼**：不建 branch、不建 feature 目錄（這些是 `/dflow:new-feature` / `/dflow:modify-existing` 的職責）
+   - **嚴格只適用於 active feature**（見 § I 決議 16）：若目標 feature 已在 `completed/` 下，`/dflow:new-phase` 拒絕執行並提示改用 `/dflow:modify-existing` 走 follow-up 路徑
    - **觸發時機**：同 feature 內已完成 N 個 phase，要開始第 N+1 個 phase 時
    - **階段 slug 確認**：進入時要求使用者確認階段 slug（類比 Step 3.5 Slug Confirmation）
 
@@ -190,6 +191,44 @@ Obts 團隊針對候選 A 的背書結論：**採混血方案** —— V2 的 fe
 - **實例化檔名**：`lightweight-{YYYY-MM-DD}-{slug}.md`（通用輕量修改）或 `BUG-{NUMBER}-{slug}.md`（已分配 BUG-ID 的 bug）
 - 若 feature 目錄尚未存在（例如獨立 bug 未附掛既有 feature），`/dflow:bug-fix` 需先建 feature 目錄（含最小版 `_index.md`），再放 lightweight 實例化檔進去——保持「所有規格檔都在 feature 目錄內」的結構統一
 
+#### I. Completed Feature Reopen 生命週期（R7 Review F-02 決議，accept-with-choice Path C）
+
+> 本段由 R7 Review F-02 定案，補足原決議對「已完成 feature 日後又要改」場景的生命週期規則。核心設計：「completed/ = 凍結歷史，不搬回 active/；延續需求建新 follow-up feature，用 `follow-up-of` / Follow-up Tracking 雙向連結維持可追蹤性」。
+
+**決議 16：`/dflow:new-phase` 嚴格只適用於 active feature**
+
+- `/dflow:new-phase` 僅能在 `specs/features/active/{SPEC-ID}-{slug}/` 目錄下執行
+- 若目標 feature 已在 `specs/features/completed/` 下，`/dflow:new-phase` 拒絕執行並提示改用 `/dflow:modify-existing` 走 follow-up 路徑
+- **拒絕「搬回 active」策略**：不允許 `git mv completed/{feature}/ active/{feature}/`——這會破壞「completed = 歷史凍結」的狀態語意，也讓 git dir rename detection 產生難追蹤的歷史
+
+**決議 17：`/dflow:modify-existing` 的 completed feature 偵測與 follow-up 分流**
+
+現況 `modify-existing-flow` 的「檢查 completed/ 既有 spec」步驟（`webforms:32-34,257-260` / `core:30-37,189-191`）在 P009 目錄化後改為：
+
+1. AI 讀使用者描述的修改需求，比對 `specs/features/completed/*/\_index.md` 的「目標與範圍」段，偵測語意相關的 completed feature
+2. 若偵測到（一個或多個），AI 主動詢問：「這是延續 `{SPEC-ID}-{slug}` 的 follow-up，還是獨立新需求？」並附上候選 feature 的 `_index.md` 摘要供使用者判斷
+3. 使用者選「follow-up」→ 走新建 follow-up feature 流程（決議 18）
+4. 使用者選「獨立新需求」→ 走 `/dflow:new-feature` 正常流程，與舊 completed feature 無連結
+5. 使用者選「其實是輕量修改（T2/T3），不需開新 feature」→ **此情境禁止**（見下）
+
+**禁止情境**：已完成 feature 不接受任何 T2 / T3 輕量修改直接寫進原 completed 目錄（會破壞 completed 的凍結語意）。若使用者堅持是極輕量修改（例如只改該 feature 產生的 UI 按鈕顏色），仍需建新 follow-up feature（可只含 T3 inline 紀錄於新 `_index.md`），成本略高但結構一致。
+
+**決議 18：Follow-up feature 的新建規則**
+
+- **新配 SPEC-ID**：依當天日期序，不沿用原 SPEC-ID（例如原 `SPEC-20260401-001-訂單折扣`，follow-up 配 `SPEC-20260715-002-訂單折扣-匯率擴充`）
+- **新 slug 不強制等於原 slug**：可以是描述 follow-up 本身的新 slug（更可讀），或沿用原 slug 加後綴（語意連續）
+- **新 `_index.md` Metadata 段新增必填欄位**：`follow-up-of: {原 SPEC-ID}`（可陣列，若 follow-up 同時跨多個舊 feature）
+- **新 `_index.md` 目標與範圍段**：頂部自動生成「本 feature 為 `{原 SPEC-ID}-{原 slug}` 的 follow-up，原 feature 完成於 `{date}`，詳見 `completed/{原 SPEC-ID}-{原 slug}/_index.md`」
+- **BR 演化繼承**：新 feature 的 `_index.md` Current BR Snapshot 段初始化時，AI 從 BC 層 `rules.md` 讀入涉及的 BR 作為 baseline 填入（「首次出現」欄標示「inherited from rules.md」，「最後修訂」欄暫空），避免跨 feature 讀歷史的成本
+
+**決議 19：舊 completed feature 的反向連結維護**
+
+- `/dflow:new-feature` / `/dflow:modify-existing` 建立 follow-up feature 時，AI 同步更新 `completed/{原 SPEC-ID}-{原 slug}/_index.md`：
+  - 新增（或更新）「Follow-up Tracking」段，表格欄位：`| SPEC-ID | slug | Created | Status |`
+  - 此更新與新 feature 的建立**同一 commit** 提交（commit message 註明「Add follow-up reference to `{原 SPEC-ID}`」）
+- **連結權威**：新 → 舊的 `follow-up-of` 是權威來源；舊 → 新的 Follow-up Tracking 段是衍生索引。若兩邊不一致，以新 feature 的 `follow-up-of` 為準（`/dflow:verify` 可加入此校正檢查，但不列本輪 scope，屬後續 P008 延伸）
+- **Follow-up 完成時的反向更新**：新 follow-up feature 跑 `/dflow:finish-feature` 時，同步更新舊 `_index.md` 的 Follow-up Tracking 表該列 Status 欄為 `completed`
+
 ---
 
 ### 影響範圍
@@ -202,7 +241,7 @@ Obts 團隊針對候選 A 的背書結論：**採混血方案** —— V2 的 fe
 | **Flow 文件** | | |
 | `sdd-ddd-webforms-skill/references/new-feature-flow.md` | 修改 | Step 3.5 Slug Confirmation 新增；Step 4（spec）/Step 6（branch）改為「目錄 + `_index.md`（含初始 BR Snapshot）+ 第一份 phase-spec（首 phase，Delta 段空）」建立；Step 8.4 archival 改為「整個目錄搬 `completed/`」|
 | `sdd-ddd-core-skill/references/new-feature-flow.md` | 修改 | 同上（Core 版 8 步結構、Step 8.4 archival）|
-| `sdd-ddd-webforms-skill/references/modify-existing-flow.md` | 修改 | 判斷樹重寫為三層 Ceremony（見 § H 決議 13）：T1（升 `/dflow:new-phase`）/ T2（產出 lightweight spec 置於 feature 目錄內）/ T3（只在 `_index.md` inline 紀錄）；Step 5 archival 同步更新；同步 BC 層的步驟延續既有機制 |
+| `sdd-ddd-webforms-skill/references/modify-existing-flow.md` | 修改 | 判斷樹重寫為三層 Ceremony（見 § H 決議 13）：T1（升 `/dflow:new-phase`）/ T2（產出 lightweight spec 置於 feature 目錄內）/ T3（只在 `_index.md` inline 紀錄）；**completed feature 偵測與 follow-up 分流**（見 § I 決議 17-18）：偵測語意相關的 completed feature → 詢問使用者是否為 follow-up → 走新建 follow-up feature 或獨立新 feature 流程；Step 5 archival 同步更新；同步 BC 層的步驟延續既有機制 |
 | `sdd-ddd-core-skill/references/modify-existing-flow.md` | 修改 | 同上（Core 版 5 步結構）|
 | `sdd-ddd-webforms-skill/references/new-phase-flow.md` | **新增** | `/dflow:new-phase` 完整流程（可從 new-feature-flow 衍生，去除 branch / 目錄建立步驟；保留階段 slug 確認、phase-spec 撰寫含「Delta from prior phases」段、進入時 refresh `_index.md` Current BR Snapshot）|
 | `sdd-ddd-core-skill/references/new-phase-flow.md` | **新增** | 同上 |
@@ -213,10 +252,10 @@ Obts 團隊針對候選 A 的背書結論：**採混血方案** —— V2 的 fe
 | `sdd-ddd-core-skill/references/git-integration.md` | 修改 | 同上 |
 | `sdd-ddd-webforms-skill/references/pr-review-checklist.md` | 修改 | 多份 phase spec 的檢查邏輯（「檢查所有 phase spec ✅ 而非單一 spec」）|
 | `sdd-ddd-core-skill/references/pr-review-checklist.md` | 修改 | 同上 |
-| `sdd-ddd-webforms-skill/references/drift-verification.md` | 修改 | 路徑假設從 `active/{SPEC-ID}-{name}.md` 改為 `active/{SPEC-ID}-{slug}/phase-spec-*.md`；BR-ID 擷取邏輯需跨多份 phase spec |
-| `sdd-ddd-core-skill/references/drift-verification.md` | 修改 | 同上 |
+| `sdd-ddd-webforms-skill/references/drift-verification.md` | 修改（輕量）| 路徑假設從 `active/{SPEC-ID}-{name}.md` 更新為 `active/{SPEC-ID}-{slug}/`（目錄化）；現有 `rules.md` ↔ `behavior.md` 機械對照邏輯**不變**；**不擴張** `/dflow:verify` scope 到「跨 phase-spec 聚合」——BR 現況值改由 `_index.md` Current BR Snapshot 表承擔（見 § H 決議 14），若 drift-verification 要加入此對照點屬後續 P008 延伸，不列本輪 scope（R7 Review F-03 決議） |
+| `sdd-ddd-core-skill/references/drift-verification.md` | 修改（輕量）| 同上 |
 | **Templates** | | |
-| `sdd-ddd-webforms-skill/templates/_index.md` | **新增** | feature 級 dashboard 範本；含 Metadata / 目標與範圍 / Phase Specs / Current BR Snapshot / 輕量修改紀錄（T2 外連 + T3 inline）/ 接續入口 六段（見 § H 決議 14）|
+| `sdd-ddd-webforms-skill/templates/_index.md` | **新增** | feature 級 dashboard 範本；含 Metadata（含選用 `follow-up-of` 欄，見 § I 決議 18）/ 目標與範圍 / Phase Specs / Current BR Snapshot / 輕量修改紀錄（T2 外連 + T3 inline）/ 接續入口 六段（見 § H 決議 14）；若本 feature 有 follow-up 衍生，於末尾附加「Follow-up Tracking」段（見 § I 決議 19）|
 | `sdd-ddd-core-skill/templates/_index.md` | **新增** | 同上 |
 | `sdd-ddd-webforms-skill/templates/phase-spec.md` | **由 `feature-spec.md` `git mv` 重命名** | 沿用現況 feature-spec.md 全部章節；於「業務規則」之後新增「Delta from prior phases」選用段（首 phase 免填，phase 2+ 必填；格式沿用 P002/P004 Delta）見 § H 決議 12 |
 | `sdd-ddd-core-skill/templates/phase-spec.md` | 由 `feature-spec.md` `git mv` 重命名 | 同上 |
@@ -261,7 +300,7 @@ Obts 團隊針對候選 A 的背書結論：**採混血方案** —— V2 的 fe
 | PROPOSAL-005 / 005a / 005b | 互補 | Completion checklist 結構不變，但 Step 8.4 / Step 5.4 的 archival 動作由「搬單檔」改為「搬整個目錄」；新增 `/dflow:finish-feature` 可作為 checklist 完成後的收尾 trigger |
 | PROPOSAL-007a | 互補 | Brownfield baseline capture 產物寫入 `domain/` 目錄（跨 feature），不受本 proposal 影響；但 Step 編號若調整需同步 |
 | PROPOSAL-007c | 互補 | `CLAUDE.md` segmentation（系統脈絡 / 開發流程）保留；本 proposal 只更新「開發流程」段內的 feature 結構說明 |
-| PROPOSAL-008 | 互補 | `/dflow:verify` 的 BR-ID 擷取邏輯需跨多份 phase spec；驗證流程本體不變 |
+| PROPOSAL-008 | 互補 | `/dflow:verify` 本輪**不擴張 scope**：維持現況 `rules.md` ↔ `behavior.md` 機械對照；BR 現況聚合由 `_index.md` Current BR Snapshot 承擔（見 § H 決議 14），跨 phase-spec 聚合需求若真有價值，屬後續 P008 延伸，不列本輪（R7 Review F-03 決議） |
 
 ---
 
@@ -276,7 +315,7 @@ Obts 團隊針對候選 A 的背書結論：**採混血方案** —— V2 的 fe
 **驗證點（實施後）**：
 - 跑一個小規模 feature（1 phase spec、2-3 commit）全流程，確認 overhead 可接受
 - 跑一個大規模 feature（3+ phase spec、10+ commit）全流程，確認 `_index.md` 確實替代了原先 `/dflow:status` 需聚合的資訊
-- 跑 `/dflow:verify` 在新目錄結構下，確認 BR-ID 擷取仍正常
+- 跑 `/dflow:verify` 在新目錄結構下，確認 `rules.md` ↔ `behavior.md` 對照**不受 feature 目錄化影響**（verify 不讀 feature 目錄）；`_index.md` Current BR Snapshot 的正確性透過 `/dflow:new-phase` / `/dflow:finish-feature` 的 AI refresh 機制維護，不納入 verify 本輪 scope
 - 中文 slug 專案的 PR review bot / CI 腳本 run 一輪，確認無 regression
 
 ---
