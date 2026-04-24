@@ -168,7 +168,7 @@ Update the feature's `_index.md`:
 
 1. **Phase Specs table** — add a new row for this phase:
    ```
-   | {N+1} | {YYYY-MM-DD} | {phase-slug} | in-progress | [phase-spec-{date}-{slug}.md](./phase-spec-{date}-{slug}.md) |
+   | {N+1} | {YYYY-MM-DD} | {phase-slug} | in-progress | [phase-spec-{date}-{phase-slug}.md](./phase-spec-{date}-{phase-slug}.md) |
    ```
 
 2. **Current BR Snapshot table** — regenerate to reflect the new phase's

@@ -63,7 +63,7 @@ Template note (for AI):
 
 | Phase | Date | Slug | Status | 檔案連結 |
 |---|---|---|---|---|
-| 1 | {YYYY-MM-DD} | {phase-slug} | in-progress / completed | [phase-spec-{date}-{slug}.md](./phase-spec-{date}-{slug}.md) |
+| 1 | {YYYY-MM-DD} | {phase-slug} | in-progress / completed | [phase-spec-{date}-{phase-slug}.md](./phase-spec-{date}-{phase-slug}.md) |
 
 ## Current BR Snapshot
 
