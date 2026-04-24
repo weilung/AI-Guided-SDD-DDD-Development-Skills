@@ -23,6 +23,31 @@ Semantic verification (LLM reads the one-line summary in `rules.md` vs the Given
 - Semantic judgment costs tokens and requires human review of LLM conclusions
 - Deferred to Wave D — revisit after 10+ verify runs show the type distribution of actual drift
 
+### This command does NOT do (feature-directory aggregation — explicitly excluded)
+
+After PROPOSAL-009 introduced the feature directory layout
+(`specs/features/active/{SPEC-ID}-{slug}/` containing `_index.md` plus
+0..N `phase-spec-*.md` and 0..N `lightweight-*.md`), a tempting but
+**out-of-scope** extension would be: "make `/dflow:verify` aggregate BR
+state across all phase-spec files in a feature, then cross-check against
+`rules.md`." Don't do that here.
+
+Reasons (R7 Review F-03 decision):
+- Feature-level BR aggregation is already maintained by `_index.md`
+  Current BR Snapshot, refreshed by `/dflow:new-phase` Step 5 and
+  `/dflow:finish-feature` Step 3
+- BC-level current state is already maintained by `rules.md` /
+  `behavior.md`, written by the same `/dflow:finish-feature` Step 3
+- `/dflow:verify` keeps a small, mechanical scope: just the
+  `rules.md` ↔ `behavior.md` correspondence inside one BC
+- Cross-feature / cross-phase aggregation would mix `/dflow:verify`'s
+  job with `/dflow:finish-feature`'s job and produce false positives
+  during in-progress features
+
+If a future need arises to add an `_index.md` Current BR Snapshot ↔
+`rules.md` cross-check, that belongs in a follow-up PROPOSAL-008
+extension, not in this command's current scope.
+
 ## Usage
 
 ```
@@ -121,9 +146,26 @@ Recommended trigger points (not enforced — developer's judgment):
 - Before creating a PR (`/dflow:verify` as a pre-PR sanity check)
 - After a refactor that touched multiple specs or domain docs
 - When onboarding to an unfamiliar Bounded Context (verify before trusting the docs)
+- After running `/dflow:finish-feature` — that command writes BC layer
+  updates from the feature's `_index.md` Current BR Snapshot; verify
+  catches any anchor / link drift introduced by the merge
+
+## Path Assumptions (post-PROPOSAL-009)
+
+This command operates entirely within `specs/domain/{context}/` files
+(`rules.md` and `behavior.md`). It does **not** read from
+`specs/features/active/{SPEC-ID}-{slug}/` directories — the feature
+directory layout introduced by PROPOSAL-009 is not part of verify's
+input. The only effect of feature directory layout on this command is
+ensuring `last-updated` dates in `behavior.md` are bumped at
+`/dflow:finish-feature` time (so verify's mechanical drift guard stays
+useful).
 
 ## Interaction with Other Commands
 
 - `/dflow:verify` is a **standalone command** — it does not require an active workflow
 - It can be run mid-workflow (e.g., during Step 7 implementation to check you haven't drifted)
+- It can be run after `/dflow:finish-feature` lands — that's the moment
+  BC-layer files get rewritten; verify catches mechanical issues from
+  the merge
 - If issues are found, the developer decides whether to fix now or defer — the command does not block other workflows

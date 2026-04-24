@@ -7,6 +7,36 @@ created: {YYYY-MM-DD}
 branch: bugfix/BUG-{NUMBER}-{short-description}
 ---
 
+<!--
+Template note (for AI):
+  This is the **lightweight-spec** template — it corresponds to T2 Light
+  ceremony in the three-tier Ceremony Scaling (T1 Heavy / T2 Light /
+  T3 Trivial; see SKILL.md § Ceremony Scaling for the tier criteria).
+
+  - T1 Heavy → use templates/phase-spec.md instead
+  - T2 Light → THIS template; produces an independent file
+  - T3 Trivial → no independent file; just one inline row in _index.md
+                 輕量修改紀錄 with a tag like [cosmetic] / [text] / [format]
+
+  Instance file location and naming:
+    Place the instantiated file inside the corresponding feature directory:
+      specs/features/active/{SPEC-ID}-{slug}/lightweight-{YYYY-MM-DD}-{slug}.md
+    or, when the lightweight change is a tracked bug:
+      specs/features/active/{SPEC-ID}-{slug}/BUG-{NUMBER}-{slug}.md
+
+    If the change is a standalone bug not yet attached to any existing
+    feature, /dflow:bug-fix must first create a feature directory (with a
+    minimal _index.md) before placing the lightweight-spec instance inside.
+    This keeps the structure invariant: every spec file lives under some
+    feature directory.
+
+  After finalizing this lightweight-spec, AI must:
+    1. Add an outbound-link row to the feature's _index.md 輕量修改紀錄 table
+       (Tier = T2; description includes the link to this file)
+    2. Refresh the feature's _index.md Current BR Snapshot table to reflect
+       any BR ADDED / MODIFIED / REMOVED / RENAMED in this lightweight-spec
+-->
+
 # {問題簡述}
 
 ## 問題

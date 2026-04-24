@@ -4,7 +4,8 @@ description: >
   AI-guided Specification-Driven Development (SDD) and Domain-Driven Design (DDD) workflow guardian
   for ASP.NET Core projects with Clean Architecture.
   PRIMARY TRIGGERS — /dflow: slash commands: /dflow:new-feature, /dflow:modify-existing,
-  /dflow:bug-fix, /dflow:pr-review, /dflow:verify, /dflow:status, /dflow:next, /dflow:cancel.
+  /dflow:bug-fix, /dflow:new-phase, /dflow:finish-feature, /dflow:pr-review, /dflow:verify,
+  /dflow:status, /dflow:next, /dflow:cancel.
   SECONDARY TRIGGERS (auto-trigger safety net) — natural language:
   "I need to add a feature", "I want to modify...", "there's a bug in...", "new requirement",
   "let's work on...", any mention of creating or changing code, or starting a new branch.
@@ -62,6 +63,12 @@ Developer input arrives
     │   ├─ /dflow:modify-existing → MODIFY EXISTING WORKFLOW (references/modify-existing-flow.md)
     │   ├─ /dflow:bug-fix         → Lightweight-ceremony modification of existing functionality.
     │   │                             Not tied to any branch strategy (not Git Flow's hotfix).
+    │   ├─ /dflow:new-phase       → NEW PHASE WORKFLOW (references/new-phase-flow.md)
+    │   │                             Add a new phase-spec to an active feature directory.
+    │   │                             Active features ONLY (rejects completed features).
+    │   ├─ /dflow:finish-feature  → FINISH FEATURE WORKFLOW (references/finish-feature-flow.md)
+    │   │                             Validate all phase-specs ✅, sync BR Snapshot to BC layer,
+    │   │                             git mv feature dir to completed/, emit Integration Summary.
     │   ├─ /dflow:pr-review       → PR REVIEW CHECKLIST (references/pr-review-checklist.md)
     │   ├─ /dflow:verify [<bc>]    → DRIFT VERIFICATION (references/drift-verification.md)
     │   ├─ /dflow:status          → Report current workflow state (see § Workflow Transparency)
@@ -95,11 +102,17 @@ The Skill uses a **Hybrid design**: slash commands as the primary entry, natural
 
 ### Slash Commands
 
-**Flow entry commands** — start a workflow:
+**Flow entry commands** — start a workflow (build branch + feature directory):
 - `/dflow:new-feature` — enter new-feature-flow
 - `/dflow:modify-existing` — enter modify-existing-flow
 - `/dflow:bug-fix` — **lightweight-ceremony modification of existing functionality. Not tied to any branch strategy (not Git Flow's hotfix).**
 - `/dflow:pr-review` — enter PR review checklist
+
+**Phase commands** — work inside an already-started active feature:
+- `/dflow:new-phase` — add a new phase-spec to an active feature directory + refresh `_index.md` (Current BR Snapshot, Phase Specs row). **Active features only**: if the target feature is in `completed/`, this command refuses and points the user to `/dflow:modify-existing` (follow-up path).
+
+**Closeout commands** — wrap a feature up:
+- `/dflow:finish-feature` — feature closeout ceremony. Verify every phase-spec status is `completed`, sync `_index.md` Current BR Snapshot to the BC layer (`rules.md` / `behavior.md`), `git mv` the feature directory from `active/` to `completed/`, and emit a Git-strategy-neutral **Integration Summary** (does NOT auto-merge).
 
 **Control commands** — manage an active workflow:
 - `/dflow:status` — report current workflow, step, and progress
@@ -211,20 +224,33 @@ If no workflow is active, reply: "No active workflow. Use `/dflow:new-feature`, 
 
 ## Ceremony Scaling
 
-| Change Type | Spec Level | DDD Modeling Depth | Tech Debt Record |
-|---|---|---|---|
-| New Aggregate / BC | Full spec | Full: Aggregate design + Events + Context Map | — |
-| New feature (within existing BC) | Full spec | Standard: confirm Aggregate ownership + new VO/Event | If applicable |
-| Business rule change | Standard spec | Standard: update rules.md + check invariants | Yes |
-| Bug fix (logic error) | Lightweight spec | Lightweight: confirm fix is in the correct layer | If found |
-| UI-only / API contract | Lightweight spec | Skip | Skip |
-| Infrastructure change | Skip spec | Skip | Evaluate |
+Dflow uses three tiers — **T1 Heavy / T2 Light / T3 Trivial** — chosen by AI
+per change. `/dflow:new-feature` and `/dflow:new-phase` always default to T1
+(no judgement needed). The criteria below apply when `/dflow:modify-existing`
+or `/dflow:bug-fix` decides which tier fits a modification.
 
-**DDD Modeling Depth definitions:**
-- **Full** — use `templates/aggregate-design.md`, update `context-map.md`, define Domain Events in `events.md`
-- **Standard** — confirm Aggregate ownership, update `models.md` and `rules.md`
-- **Lightweight** — only confirm the fix is in the correct architectural layer
-- **Skip** — no domain logic involved
+| Tier | 情境 | 產出 | 命令 / 觸發 |
+|---|---|---|---|
+| **T1 Heavy** | New feature, new phase, new Aggregate / BC, architectural change, new BR | Independent `phase-spec-YYYY-MM-DD-{slug}.md` placed in the feature directory + `_index.md` Phase Specs row + refresh BR Snapshot. For new Aggregate / BC also use `templates/aggregate-design.md` + update `context-map.md` + `events.md`. | `/dflow:new-feature` / `/dflow:new-phase` |
+| **T2 Light** | Bug fix (logic error), UI input validation tweak, flow branch change — has BR Delta | Independent `lightweight-{YYYY-MM-DD}-{slug}.md` (or `BUG-{NUMBER}-{slug}.md`) inside the feature directory + `_index.md` 輕量修改紀錄 row (outbound link) + refresh BR Snapshot. Confirm the fix lands in the correct architectural layer. | `/dflow:bug-fix` or `/dflow:modify-existing` (lightweight branch) |
+| **T3 Trivial** | Button colour, copy/text fix, typo, formatting, pure comments — **no BR change, no Domain concept change, no data structure change** | **Inline row in `_index.md` 輕量修改紀錄 only** (no independent spec file) | `/dflow:modify-existing` (`_index-only` branch) |
+
+**T3 criteria** (AI must satisfy **all four** before classifying T3):
+1. No BR-ID change (no ADDED / MODIFIED / REMOVED / RENAMED business rule)
+2. No Domain concept added or changed (Aggregate / Entity / VO / Event)
+3. No data structure change (table, column, relation, index)
+4. Only changes UI surface (colour, text, layout), pure comments, or pure formatting
+
+If any criterion fails → drop to T2; if Domain / BR / data structure is touched → escalate to T1.
+
+**Below T3 — Dflow doesn't track at all**: pure typo fixes, commit-message
+typos, pure formatting commits (e.g. `prettier` / `dotnet format` auto-runs).
+You can `git commit` directly without writing even a T3 inline row.
+
+**DDD Modeling Depth (still informs T1 scope)**:
+- New Aggregate / BC → **Full**: use `templates/aggregate-design.md`, update `context-map.md`, define Domain Events in `events.md`
+- Feature within existing BC → **Standard**: confirm Aggregate ownership, update `models.md` and `rules.md`
+- T2 / T3 → confirm fix lands in the correct architectural layer; no design-level updates required
 
 ## Project Structure
 
@@ -245,8 +271,16 @@ ExpenseTracker/
 │   │       └── events.md               # Domain Events catalog
 │   ├── features/
 │   │   ├── active/
-│   │   ├── completed/
+│   │   │   └── {SPEC-ID}-{slug}/     # One feature = one directory
+│   │   │       ├── _index.md         # Feature dashboard + BR Snapshot + 接續入口
+│   │   │       ├── phase-spec-YYYY-MM-DD-{slug}.md   # T1: 0..N phase specs
+│   │   │       └── lightweight-YYYY-MM-DD-{slug}.md  # T2: 0..N lightweight specs
+│   │   │                                              #     (or BUG-{NUMBER}-{slug}.md)
+│   │   ├── completed/                # Done (whole feature directory archived here)
 │   │   └── backlog/
+│   │   #
+│   │   # SPEC-ID format: SPEC-YYYYMMDD-NNN; slug follows discussion language (中文/英文 both OK).
+│   │   # T3 trivial changes have NO independent file — just a row in _index.md 輕量修改紀錄.
 │   └── architecture/
 │       ├── decisions/                   # Architecture Decision Records
 │       └── tech-debt.md
@@ -342,7 +376,7 @@ This is analogous to how OpenSpec's `specs/` directory serves as the system beha
 
 ## Guiding Questions by Phase
 
-**Phase markers in feature-spec template**: each section in `templates/feature-spec.md` carries an HTML comment (e.g., `<!-- 填寫時機：Phase 2 -->`) indicating the phase in which that section should be filled. These markers align with the phases below and are used by `/dflow:status` and the completion checklist to track progress. When guiding a developer, fill sections in phase order; do not jump ahead to Phase 4 (implementation planning) before Phase 3 (spec writing) is agreed. The `實作任務` section at the end of the template is produced by AI at the end of Phase 4 — see new-feature-flow.md Step 5 / modify-existing-flow.md Step 3.
+**Phase markers in phase-spec template**: each section in `templates/phase-spec.md` carries an HTML comment (e.g., `<!-- 填寫時機：Phase 2 -->`) indicating the phase in which that section should be filled. These markers align with the phases below and are used by `/dflow:status` and the completion checklist to track progress. When guiding a developer, fill sections in phase order; do not jump ahead to Phase 4 (implementation planning) before Phase 3 (spec writing) is agreed. The `實作任務` section at the end of the template is produced by AI at the end of Phase 4 — see new-feature-flow.md Step 5 / new-phase-flow.md Step 4 / modify-existing-flow.md Step 3.
 
 ### Phase 1: Understanding (What & Why)
 - What problem does this solve? Who asked for it?
@@ -358,7 +392,7 @@ This is analogous to how OpenSpec's `specs/` directory serves as the system beha
 - Does this cross Aggregate/Context boundaries? → Need integration strategy
 
 ### Phase 3: Spec Writing
-- Write the spec (see templates/)
+- Write the spec using the template (see templates/phase-spec.md)
 - Define Given/When/Then with Aggregate state transitions
 - Document Domain Events produced and consumed
 - Identify edge cases around Aggregate invariants
@@ -385,6 +419,8 @@ Format: `| Term | Definition | Bounded Context | Code Mapping |`
 |---|---|
 | `references/new-feature-flow.md` | New feature development |
 | `references/modify-existing-flow.md` | Changing existing functionality |
+| `references/new-phase-flow.md` | `/dflow:new-phase` — add a new phase-spec to an active feature |
+| `references/finish-feature-flow.md` | `/dflow:finish-feature` — feature closeout ceremony |
 | `references/ddd-modeling-guide.md` | Domain model design questions |
 | `references/pr-review-checklist.md` | Code review |
 | `references/git-integration.md` | Branch management and SDD ↔ Git coupling (branching-strategy-neutral) |
@@ -394,8 +430,9 @@ Format: `| Term | Definition | Bounded Context | Code Mapping |`
 
 | Template | Purpose |
 |---|---|
-| `templates/feature-spec.md` | Full feature specification |
-| `templates/lightweight-spec.md` | Quick spec for bug fixes |
+| `templates/_index.md` | Feature-level dashboard (per-feature directory) — Metadata / 目標與範圍 / Phase Specs / Current BR Snapshot / 輕量修改紀錄 / 接續入口 |
+| `templates/phase-spec.md` | One phase inside a feature — full SDD cycle output (T1 Heavy ceremony); contains Delta-from-prior-phases section for phase 2+ |
+| `templates/lightweight-spec.md` | T2 Light ceremony — instance file placed inside the feature directory |
 | `templates/context-definition.md` | New Bounded Context |
 | `templates/behavior.md` | Consolidated behavior spec for a Bounded Context |
 | `templates/aggregate-design.md` | New Aggregate design worksheet |

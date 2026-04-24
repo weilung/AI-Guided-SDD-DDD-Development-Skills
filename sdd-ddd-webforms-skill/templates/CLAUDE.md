@@ -26,9 +26,15 @@ specs/
 │       ├── models.md         # 領域模型定義
 │       └── rules.md          # 業務規則目錄
 ├── features/
-│   ├── active/               # 進行中的功能規格
-│   ├── completed/            # 已完成（文件歸檔）
+│   ├── active/               # 進行中的 feature
+│   │   └── {SPEC-ID}-{slug}/ # 一個 feature 一個目錄
+│   │       ├── _index.md     # Feature dashboard：目標 / Phase Specs / BR Snapshot / 接續入口
+│   │       ├── phase-spec-YYYY-MM-DD-{slug}.md   # T1 Heavy：每 phase 一份
+│   │       └── lightweight-YYYY-MM-DD-{slug}.md  # T2 Light（或 BUG-NNN-{slug}.md）
+│   ├── completed/            # 整個 feature 目錄 git mv 到這裡
 │   └── backlog/              # 待處理
+│   # SPEC-ID 格式：SPEC-YYYYMMDD-NNN；slug 跟隨討論語言（中文/英文皆可）
+│   # T3 無獨立檔，只在 _index.md 輕量修改紀錄寫一列
 └── migration/
     └── tech-debt.md          # 技術債與遷移備忘
 
@@ -55,21 +61,52 @@ src/
 3. **Ubiquitous Language** — 使用 `specs/domain/glossary.md` 中定義的術語
 4. **Migration Awareness** — 每個決策都要考慮未來 ASP.NET Core 遷移
 
-### 新增功能
-1. 先在 `specs/features/active/` 建立功能規格
-2. 識別涉及的領域概念，更新 `specs/domain/` 下的對應文件
-3. 盡可能將業務邏輯實作在 `src/Domain/` 中（純 C# class，不依賴 WebForms）
-4. Code-Behind 僅負責 UI 綁定，呼叫 Domain 層處理邏輯
-5. 撰寫測試驗證 Domain 層行為符合規格
+### Ceremony 三層（T1 Heavy / T2 Light / T3 Trivial）
 
-### 修改既有功能
-1. 先為該功能補寫規格（記錄現有行為 + 預期變更）
-2. 如果該功能的邏輯還在 Code-Behind 中，評估是否值得先抽離到 Domain 層
-3. 在 `specs/migration/tech-debt.md` 記錄發現的技術債
+不是每次修改都要跑完整流程。AI 依下列判準選 tier：
 
-### Bug 修復
+- **T1 Heavy** — 新功能、新 phase、架構變動、新增 BR → 建獨立 phase-spec，
+  走 `/dflow:new-feature` 或 `/dflow:new-phase`
+- **T2 Light** — bug fix、UI 輸入驗證、流程分支修改（有 BR Delta 但無 Domain /
+  資料結構變動）→ 建獨立 lightweight spec 置於 feature 目錄內
+- **T3 Trivial** — 按鈕顏色、文案修正、typo、排版、純註解（無 BR 變動、
+  無 Domain 概念動、無資料結構動、只改 UI 表層 / 註解 / 格式化）→
+  只在 `_index.md` 輕量修改紀錄 inline 寫一列
+
+純 typo / 純格式化 commit（`dotnet format` / `prettier` 自動整理）**低於 T3**：
+直接 `git commit`，不走 Dflow。
+
+### 新增功能（/dflow:new-feature）
+1. 建 feature 目錄 `specs/features/active/{SPEC-ID}-{slug}/`
+2. 建 `_index.md`（feature dashboard）+ 第一份 `phase-spec-YYYY-MM-DD-{slug}.md`
+3. 識別涉及的領域概念，更新 `specs/domain/` 下的對應文件
+4. 盡可能將業務邏輯實作在 `src/Domain/` 中（純 C# class，不依賴 WebForms）
+5. Code-Behind 僅負責 UI 綁定，呼叫 Domain 層處理邏輯
+6. 撰寫測試驗證 Domain 層行為符合規格
+
+### 新增階段（/dflow:new-phase）
+1. 在已啟動的 active feature 上新增一份 phase-spec（含 Delta-from-prior-phases）
+2. 更新 `_index.md` 的 Phase Specs 表 + regenerate Current BR Snapshot
+3. 嚴格只適用於 active feature；completed 的 feature 不接受新 phase
+
+### 修改既有功能（/dflow:modify-existing）
+1. AI 依 T1 / T2 / T3 判準分流
+2. 若偵測到改動與 completed feature 相關，主動詢問是否為 follow-up
+   （follow-up 走新建 feature + `follow-up-of` 鏈回原 feature；不把 T2/T3
+   寫回 completed 目錄）
+3. 如果該功能的邏輯還在 Code-Behind 中，評估是否值得先抽離到 Domain 層
+4. 在 `specs/migration/tech-debt.md` 記錄發現的技術債
+
+### Bug 修復（/dflow:bug-fix）
 1. 建立輕量規格（問題 + 現有行為 + 預期行為 + 修復方式）
-2. 修 Bug 時順便記錄發現的技術債
+2. 若 bug 不附掛既有 feature，先建最小 feature 目錄再放 lightweight-spec
+3. 修 Bug 時順便記錄發現的技術債
+
+### Feature 收尾（/dflow:finish-feature）
+1. 驗證 feature 目錄內所有 phase-spec `status: completed`
+2. 把 `_index.md` Current BR Snapshot 同步到 BC 層 `rules.md` / `behavior.md`
+3. `git mv` 整個 feature 目錄從 `active/` 搬到 `completed/`
+4. 產出 Integration Summary（Git-strategy-neutral；不自動 merge）
 
 ### Git 整合
 

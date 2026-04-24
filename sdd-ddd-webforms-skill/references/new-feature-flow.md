@@ -3,11 +3,14 @@
 Step-by-step guide for when a developer triggers `/dflow:new-feature` (or natural language implying a new-feature task — see SKILL.md § Workflow Transparency for the auto-trigger safety net behavior).
 
 **Phase Gates** in this flow (stop-and-confirm before proceeding):
+- Step 3 → Step 3.5 (domain concepts captured → confirm slug + directory + branch names)
 - Step 4 → Step 5 (spec written → plan implementation)
 - Step 6 → Step 7 (branch ready → start implementation)
 - Step 7 → Step 8 (implementation done → completion)
 
 All other step transitions are **step-internal**: announce "Step N complete, entering Step N+1" and proceed without waiting. See SKILL.md § Workflow Transparency for the full transparency protocol and confirmation signals.
+
+**Ceremony**: this flow always defaults to **T1 Heavy** — the first phase of a brand-new feature is by definition a full SDD cycle. Tier judgement (T1 / T2 / T3) only applies to `/dflow:modify-existing` (see `references/modify-existing-flow.md` and SKILL.md § Ceremony Scaling).
 
 ## Step 1: Intake — Understand the Request
 
@@ -59,11 +62,74 @@ For each new concept:
 2. Check if it already exists in models.md — extend if needed
 3. If entirely new, add to the appropriate context's models.md
 
-**→ Transition (step-internal)**: Step 3 complete. Announce "Step 3 complete (domain concepts captured). Entering Step 4: Write the Spec." and continue.
+**→ Phase Gate: Step 3 → Step 3.5**
+
+Announce to developer:
+> "Domain concepts captured. Before I create any files, let me confirm the SPEC-ID, slug, directory name, and branch name with you (Step 3.5). `/dflow:next` to proceed."
+
+Wait for confirmation before entering Step 3.5.
+
+## Step 3.5: Slug Confirmation
+
+AI proposes the SPEC-ID, slug, feature directory path, and branch name in
+one message and asks the developer to confirm before any directory or
+branch is created. Slug follows the language of the discussion (中文 or
+English — both are valid; see `references/git-integration.md` for the slug
+language rule).
+
+Example (中文 discussion):
+
+> 「依我們的討論：
+>  - SPEC-ID: `SPEC-20260424-001`
+>  - slug: `報表調整`（跟隨中文討論）
+>  - feature 目錄: `specs/features/active/SPEC-20260424-001-報表調整/`
+>  - git branch: `feature/SPEC-20260424-001-報表調整`
+>
+>  這樣可以嗎？或你想改 slug？」
+
+Example (English discussion):
+
+> "Per our discussion:
+>  - SPEC-ID: `SPEC-20260424-002`
+>  - slug: `jpy-currency-support` (English following our discussion)
+>  - feature directory: `specs/features/active/SPEC-20260424-002-jpy-currency-support/`
+>  - git branch: `feature/SPEC-20260424-002-jpy-currency-support`
+>
+>  Sound good? Or would you prefer a different slug?"
+
+Wait for explicit confirmation. The slug agreed here is reused for:
+- The feature directory name
+- The first phase-spec filename (`phase-spec-{date}-{slug}.md`)
+- The git branch (Step 6)
+
+If the developer asks to change the slug, re-propose and re-confirm.
+
+**→ Transition (step-internal)**: Step 3.5 complete. Announce "Step 3.5 complete (slug confirmed). Entering Step 4: Write the Spec." and continue.
 
 ## Step 4: Write the Spec
 
-Create `specs/features/active/{ID}-{feature-name}.md` using the feature-spec template.
+Create the **feature directory** + **`_index.md`** + **first phase-spec**:
+
+```
+specs/features/active/{SPEC-ID}-{slug}/
+├── _index.md
+└── phase-spec-{YYYY-MM-DD}-{slug}.md
+```
+
+1. **Create the directory**: `specs/features/active/{SPEC-ID}-{slug}/`
+2. **Create `_index.md`** using `templates/_index.md`:
+   - Metadata: fill `spec-id`, `slug`, `status: in-progress`, `created`, `branch`
+   - 目標與範圍: 1-3 sentences capturing what / for whom / boundary
+   - Phase Specs: one row for the first phase
+     (`| 1 | {date} | {slug} | in-progress | [phase-spec-{date}-{slug}.md](./phase-spec-{date}-{slug}.md) |`)
+   - Current BR Snapshot: initialise from the first phase's planned BRs
+     (will be refreshed when the phase-spec finalises)
+   - 輕量修改紀錄: empty table at start
+   - 接續入口: "phase-1 進行中：drafting phase-spec." / "下一個動作：finish phase-spec, then implement."
+3. **Create the first phase-spec** at `phase-spec-{YYYY-MM-DD}-{slug}.md`
+   using `templates/phase-spec.md`. The "Delta from prior phases" section
+   is filled with "首 phase，無前置 Delta" (first phase has nothing to
+   delta against).
 
 Guide the developer through each section:
 
@@ -180,11 +246,15 @@ The list becomes the execution punch-list for Step 7 and the completion checklis
 After the spec is written and reviewed:
 
 ```
-Branch naming: feature/{SPEC-ID}-{short-description}
-Example: feature/EXP-001-jpy-currency-support
+Branch naming: feature/{SPEC-ID}-{slug}
+Examples:
+  feature/SPEC-20260424-002-jpy-currency-support   (English slug)
+  feature/SPEC-20260424-001-報表調整                  (Chinese slug)
 ```
 
-The spec ID links the branch to its specification document.
+The slug **must match the slug agreed in Step 3.5** (which is also the
+feature directory name). The SPEC-ID + slug links the branch to its
+feature directory and `_index.md`.
 
 **→ Phase Gate: Step 6 → Step 7**
 
@@ -252,7 +322,29 @@ Ask these one-by-one; do not dump all five at once.
 
 ### 8.4 Archival
 
-- [ ] Spec `status` field changed to `completed`
-- [ ] Spec file moved from `specs/features/active/` to `specs/features/completed/`
+For a single-phase feature, this is the closeout point. For a multi-phase
+feature, the developer typically reaches this point at the end of the
+final phase — at which time `/dflow:finish-feature` is the recommended
+trigger (it bundles steps 8.1 / 8.2 verification, BC sync, and archival
+into one explicit ceremony). Either path is acceptable; pick the one
+that matches the developer's habit.
+
+- [ ] `_index.md` `status` field changed to `completed`
+- [ ] All `phase-spec-*.md` files in the feature directory have `status:
+      completed` in their frontmatter
+- [ ] **Whole feature directory** moved from `specs/features/active/`
+      to `specs/features/completed/` using `git mv` (preserves rename
+      tracking — see `references/git-integration.md` § "Directory Moves
+      Must Use git mv"):
+      ```
+      git mv specs/features/active/{SPEC-ID}-{slug} \
+             specs/features/completed/{SPEC-ID}-{slug}
+      ```
+
+> **Recommended path for multi-phase features**: instead of doing
+> 8.1–8.4 manually at the end of every phase, run `/dflow:finish-feature`
+> once the feature's last phase is complete. It executes the same checks
+> + BC sync + `git mv` + emits an Integration Summary. See
+> `references/finish-feature-flow.md`.
 
 Only announce "feature complete" after 8.4 is done.

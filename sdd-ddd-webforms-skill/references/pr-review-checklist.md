@@ -7,33 +7,80 @@ the SDD/DDD workflow was followed.
 
 ## Step 0: Understand the Change Intent (before code review)
 
-Ground yourself in the spec *before* looking at the diff:
+Ground yourself in the spec *before* looking at the diff. A feature
+directory may contain multiple spec files; identify which ones this PR
+touches and read them all.
 
-- [ ] Read the spec referenced by this PR (`specs/features/active/{id}-*.md` or an accompanying lightweight/bug spec)
-- [ ] If the spec has a `行為變更（Delta）` section (modify-existing), read **ADDED / MODIFIED / REMOVED / RENAMED**; note any **UNCHANGED** scope declaration
-- [ ] State in one sentence: "This PR intends to {change} because {reason}." (If you can't, pause and ask the author.)
+- [ ] Locate the feature directory at
+      `specs/features/active/{SPEC-ID}-{slug}/` (or
+      `specs/features/completed/{SPEC-ID}-{slug}/` if the PR is the
+      closeout commit and the dir was already `git mv`d)
+- [ ] Read `_index.md` first — it gives you the feature-level overview,
+      Current BR Snapshot, list of phase-specs, and 接續入口 (where the
+      author left off)
+- [ ] Identify which **phase-spec(s)** and / or **lightweight-spec(s)**
+      this PR diff touches. There may be:
+      - A new phase-spec being introduced (T1) — read in full
+      - An existing phase-spec being marked `completed` — verify its
+        Delta-from-prior-phases section reads correctly relative to the
+        prior phase
+      - A new lightweight-spec (T2) — read in full
+      - Just T3 inline rows added to `_index.md` 輕量修改紀錄 (no
+        spec file changed) — confirm the row description is precise
+- [ ] If a `行為變更（Delta）` / Delta-from-prior-phases section exists,
+      read **ADDED / MODIFIED / REMOVED / RENAMED**; note any
+      **UNCHANGED** scope declaration
+- [ ] State in one sentence: "This PR intends to {change} because
+      {reason}." (If you can't, pause and ask the author.)
 - [ ] Only then proceed to the code-review sections below
 
-If the PR has no spec:
+If the PR has no spec or no `_index.md`:
 ```
-"I don't see a spec for this PR. Before I review the code, can you
-point me to it, or create a lightweight spec (`templates/lightweight-spec.md`)
-capturing problem / behavior change / reason? SDD relies on the spec
-being the review anchor."
+"I don't see a feature directory or _index.md for this PR. Before I
+review the code, can you point me to it, or run /dflow:new-feature
+(or /dflow:bug-fix for a small fix) to create the feature directory
+and at least a lightweight spec? SDD relies on the spec being the
+review anchor."
 ```
 
 ## Spec Compliance
 
-- [ ] **Spec exists** — Is there a spec in `specs/features/` for this change?
-- [ ] **Spec matches code** — Does the implementation match the Given/When/Then scenarios?
-- [ ] **Business rules covered** — Are all BR-* rules from the spec implemented?
-- [ ] **Edge cases handled** — Are EC-* edge cases from the spec addressed?
+Per-feature checks:
+- [ ] **Feature directory exists** with `_index.md` + at least one
+      phase-spec (or one lightweight-spec for a T2-only feature)
+- [ ] **`_index.md` Current BR Snapshot is up to date** — reflects
+      the cumulative effect of all phase-specs / lightweight-specs in
+      the directory
+- [ ] **`_index.md` Phase Specs table** — every row's referenced
+      phase-spec file exists and its `status` matches the row's claim
+- [ ] **For follow-up features**: `_index.md` Metadata has `follow-up-of:
+      {原 SPEC-ID}` AND the original feature's `_index.md`
+      Follow-up Tracking row references this feature
+
+Per-phase-spec / lightweight-spec checks (run for **each** spec file the
+PR touches, not just one):
+- [ ] **Spec matches code** — implementation matches Given/When/Then
+- [ ] **Business rules covered** — all BR-* rules in this spec
+      implemented
+- [ ] **Edge cases handled** — EC-* in this spec addressed
+- [ ] **Delta integrity** (phase 2+ only) — the Delta-from-prior-phases
+      section's ADDED / MODIFIED / REMOVED / RENAMED entries actually
+      match the diff against the prior phase-spec's BR set
+
+If the closeout commit is in this PR (`/dflow:finish-feature` was run):
+- [ ] **BC layer sync landed** — `specs/domain/{context}/rules.md` and
+      `behavior.md` reflect the feature's net effect (compare against
+      `_index.md` Current BR Snapshot)
+- [ ] **Whole feature directory `git mv`'d** to `completed/` — git
+      shows `renamed:` (not `deleted:` + `new file:`)
+- [ ] **Integration Summary** was emitted to the conversation (not
+      written to a file — it's ephemeral)
 
 If the spec is missing or incomplete:
 ```
-"I notice this PR doesn't have a matching spec. Let's create one
-retroactively — it'll help with documentation and future migration.
-Can you describe what this change does?"
+"I notice this PR doesn't have a matching feature directory / _index.md.
+Let's create one retroactively — it'll help with documentation and
+future migration. Can you describe what this change does?"
 ```
 
 ## Domain Layer Quality

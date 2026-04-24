@@ -15,17 +15,140 @@ All other step transitions are **step-internal**: announce "Step N complete, ent
 
 **Ceremony adjustment when triggered by `/dflow:bug-fix`**: treat as lightweight — use the Lightweight Spec Template (see `templates/lightweight-spec.md`) instead of the full spec, and Step 3 may default to "no DDD impact, fix in place" unless the bug itself is in Domain logic.
 
-## Step 1: Assess the Change
+## Step 1: Assess the Change — Ceremony Tier + Feature Linkage + Layer
 
-1. **What needs to change?** Get specifics.
-2. **Why?** Bug fix, new requirement, or behavior change?
-3. **Which layer is affected?**
-   - Domain invariant broken → Domain fix + full spec
-   - Application orchestration issue → Application fix + lightweight spec
-   - Infrastructure bug (DB, external service) → Infrastructure fix + lightweight spec
-   - API contract change → Presentation fix + spec if behavior changes
+This step has three parallel concerns:
 
-**→ Transition (step-internal)**: Step 1 complete. Announce "Step 1 complete (change assessed, affected layer identified). Entering Step 2: Check Documentation." and continue.
+**Part A — Determine the Ceremony Tier (T1 / T2 / T3)**
+
+Dflow runs three ceremony tiers (full table in SKILL.md § Ceremony Scaling).
+For a modification, AI judges which tier fits before deciding what to
+produce:
+
+| Tier | When to choose | Production |
+|---|---|---|
+| **T1 Heavy** | Architectural change / new BR / new Aggregate or VO / new Domain Event / new data structure → escalate to `/dflow:new-phase` (if extending an active feature) or `/dflow:new-feature` (if it's truly a new concern) | Full phase-spec via the appropriate flow |
+| **T2 Light** | Bug fix / UI input validation tweak / flow branch change — **has BR Delta** but no Aggregate / data-structure overhaul | Independent `lightweight-{date}-{slug}.md` placed in feature directory + outbound-link row in `_index.md` 輕量修改紀錄 |
+| **T3 Trivial** | Button colour / copy fix / typo / formatting / pure comments — **all four T3 criteria** must hold (no BR change, no Domain concept change, no data structure change, only UI surface / comments / formatting) | **Inline row in `_index.md` 輕量修改紀錄 only** (no independent spec file) |
+
+If any T3 criterion fails → drop to T2. If Domain / BR / data structure
+is touched → escalate to T1.
+
+**Below T3** (pure typo, formatting commit) → tell the developer Dflow
+doesn't track this and they can `git commit` directly.
+
+**Part B — Locate the Feature this Change Belongs To**
+
+Walk through these in order:
+
+1. **Active features**: scan `specs/features/active/*/_index.md`. Does
+   the change belong inside an existing active feature directory? If
+   yes, use that as the host (T1 → `/dflow:new-phase`; T2 → place
+   lightweight-spec inside; T3 → inline row in that `_index.md`).
+2. **Completed features**: scan `specs/features/completed/*/_index.md`
+   目標與範圍 sections. If the change description is semantically
+   related to a completed feature, this becomes the **completed feature
+   reopen** scenario — go to Step 1.5 below.
+3. **Standalone**: if no related feature exists (active or completed),
+   this is a new concern. For T1, use `/dflow:new-feature`. For T2 / T3
+   on a standalone bug, see Step 1.5 — `/dflow:bug-fix` will create a
+   minimal feature directory to host the lightweight-spec.
+
+> **Why scan completed too?** Decision 17 in PROPOSAL-009: completed
+> features are frozen history and **cannot accept** any T2 / T3 directly
+> (would break the "completed = frozen" semantic). Reopen routes through
+> a new follow-up feature instead — see Step 1.5.
+
+**Part C — Identify the Affected Layer (Clean Architecture)**
+
+This still matters for picking the right fix location:
+- Domain invariant broken → Domain fix
+- Application orchestration issue → Application fix
+- Infrastructure bug (DB, external service) → Infrastructure fix
+- API contract change → Presentation fix (becomes T1 if behaviour changes)
+
+**→ Transition (step-internal)**: Step 1 complete. Announce "Step 1 complete (tier {T1/T2/T3} decided, host feature {SPEC-ID-slug / new / follow-up} identified, layer {Domain/Application/Infrastructure/Presentation}). Entering Step 1.5 / Step 2 as appropriate." and continue.
+
+## Step 1.5: Completed-Feature Reopen Detection (only if Step 1 found a related completed feature)
+
+If Step 1 Part B identified a semantically related completed feature, AI
+must explicitly disambiguate the user's intent **before** writing any
+files:
+
+```
+"I notice this change overlaps with completed feature
+`{SPEC-ID}-{slug}` (目標與範圍: '{first 1-2 sentences}', completed on
+{date}).
+
+Is this a follow-up to that feature, or an independent new concern?
+
+Option A — follow-up of `{SPEC-ID}-{slug}`
+  → Build a new feature with a fresh SPEC-ID and `follow-up-of:
+    {SPEC-ID}` link back to the original. Inherits BR Snapshot baseline
+    from the BC's rules.md.
+Option B — independent new requirement
+  → Run /dflow:new-feature normally; no link to the completed feature.
+Option C — actually I think it's just a tiny lightweight tweak, no
+            new feature needed
+  → Refused. Completed features are frozen — even T3 inline rows must
+    live in a new follow-up feature directory. (You can still pick A
+    and have the new feature contain only one T3 row in _index.md if
+    that fits the change.)"
+```
+
+**Wait for the developer's explicit choice (A / B / C).**
+
+If A (follow-up): proceed to **Step 1.6: Create Follow-up Feature**.
+If B (independent): tell the developer to `/dflow:new-feature`; this
+flow ends.
+If C: gently re-explain (per decision 17) that completed features
+cannot accept direct T2 / T3 writes; offer Option A (follow-up with
+just a T3 inline row) as the lightweight equivalent.
+
+## Step 1.6: Create Follow-up Feature (only if user picked Option A)
+
+Build the follow-up feature using the same machinery as
+`/dflow:new-feature` (see `new-feature-flow.md` Steps 3.5 and 4), with
+these follow-up-specific differences:
+
+- **New SPEC-ID** (today's date sequence — do NOT reuse the original
+  SPEC-ID): e.g. original `SPEC-20260201-003-訂單折扣` → follow-up
+  `SPEC-20260424-002-訂單折扣-匯率擴充` (or any new slug)
+- **New slug**: not required to equal the original slug; pick whatever
+  best describes the follow-up scope
+- **`_index.md` Metadata**: `follow-up-of: {原 SPEC-ID}` is REQUIRED
+  (uncomment the optional line in the template; can be a YAML array if
+  the follow-up spans multiple originals)
+- **`_index.md` 目標與範圍** auto-prepended note:
+  ```
+  > 本 feature 為 `{原 SPEC-ID}-{原 slug}` 的 follow-up，原 feature
+  > 完成於 `{date}`，詳見 `completed/{原 SPEC-ID}-{原 slug}/_index.md`。
+  ```
+- **`_index.md` Current BR Snapshot baseline**: AI reads the BC's
+  `specs/domain/{context}/rules.md` and inherits the BRs that are
+  in-scope for this follow-up. Mark each inherited row with 首次出現
+  = `inherited from rules.md` and 最後修訂 = (empty until the new
+  feature's first phase Delta touches it)
+
+**Reverse-link into the old `_index.md`**: AI also updates
+`specs/features/completed/{原 SPEC-ID}-{原 slug}/_index.md` —
+uncomment the Follow-up Tracking section (if not already present) and
+add a row:
+
+```
+| {新 SPEC-ID} | {新 slug} | {today} | in-progress |
+```
+
+This update is **part of the same change set** (the developer commits
+both at once; commit message should mention "Add follow-up reference to
+`{新 SPEC-ID}`"). The reverse link is a derived index — the new
+feature's `follow-up-of` field is the authoritative source.
+
+After the follow-up feature is set up, this flow hands off to the
+`/dflow:new-phase` flow (or stays in this flow at Step 2 for the first
+phase's content).
+
+## Step 2: Check Documentation
 
 ## Step 2: Check Documentation
 
@@ -188,6 +311,31 @@ Ask these one-by-one.
 
 ### 5.4 Archival
 
-- [ ] Spec file moved to `specs/features/completed/` (if a spec was opened in this flow)
+If this modification was a **T1 new-phase** within an existing active
+feature, archival happens at the *feature* level, not the *phase* level —
+do NOT move individual phase-spec files. Instead:
 
-Only announce "change complete" after 5.4 is done.
+- [ ] Mark this phase-spec's `status` field `completed` in its frontmatter
+- [ ] Keep the phase-spec inside its feature directory at
+      `specs/features/active/{SPEC-ID}-{slug}/` (it stays alongside
+      sibling phase-specs)
+- [ ] When the developer is ready to wrap the whole feature, run
+      `/dflow:finish-feature` — that command does the BC-layer sync,
+      `git mv`s the **whole feature directory** to `completed/`, and
+      emits an Integration Summary
+
+If this modification was a **T2 lightweight** spec, archival is
+similarly at the feature level — the lightweight-spec stays in the
+feature directory and `_index.md`'s 輕量修改紀錄 row references it. No
+file move at this point. The whole feature directory moves to
+`completed/` when the developer eventually runs `/dflow:finish-feature`.
+
+If this modification was a **T3 inline-only** change, no spec file
+exists — archival is just leaving the row in `_index.md` 輕量修改紀錄.
+
+If the modification was a **standalone follow-up feature** (created
+via Step 1.6), the same rule applies: this flow does not archive the
+new follow-up directory; that happens at `/dflow:finish-feature` time.
+
+Only announce "change complete" after the appropriate archival step
+above (or the Step 5.3 docs sweep) is done.

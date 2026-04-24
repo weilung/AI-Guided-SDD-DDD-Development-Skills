@@ -53,11 +53,38 @@ the traceability chain:
 Git Branch → Spec Document → Domain Concepts → Code Implementation → Tests
 ```
 
-> **Slug language** — the branch slug follows the language the developer /
-> AI discuss the feature in (Chinese, English, etc.). Exact rules for slug
-> conventions are maintained in the feature-directory layer (see
-> PROPOSAL-009 for the authoritative slug language guidance once
-> implemented).
+### Slug Language
+
+The branch slug follows the language the developer / AI discuss the
+feature in. **Both Chinese and English slugs are valid**; Dflow does not
+force translation in either direction. The same slug is reused for the
+feature directory name and the first phase-spec filename, so consistency
+across branch / dir / phase-spec is automatic.
+
+Examples:
+
+```
+feature/SPEC-20260421-001-報表調整                     (Chinese discussion)
+feature/SPEC-20260421-002-jpy-currency-support       (English discussion)
+feature/SPEC-20260423-003-訂單折扣-匯率擴充             (Chinese, hyphenated)
+bugfix/BUG-051-rounding-fix                          (English)
+```
+
+Empirical note: an Obts production team has run Dflow with Chinese
+branch / directory / PR titles in 2026-Q1–Q2 without encountering
+encoding issues on common Git hosts (GitHub, Azure DevOps), CI runners,
+or PR review bots. Other Git platforms may still need spot-checking;
+when in doubt, run a smoke test on the project's CI pipeline with one
+representative Chinese-slug branch before adopting it widely.
+
+Slug-shape guidance (regardless of language):
+- Keep it short (2–4 words / 2–6 中文字 plus separators)
+- Avoid characters that break filesystems on contributors' platforms
+  (forward slash, backslash, colon, asterisk, question mark, double
+  quote, angle brackets, pipe)
+- Avoid leading dots, trailing spaces
+- Lowercase ASCII / 繁體中文 are both fine; mixed-case is OK but be
+  consistent within a project
 
 ## Feature Branch per Feature (Required)
 
@@ -76,44 +103,125 @@ This requirement is independent of the branching strategy — whether you
 branch off `develop`, `main`, or something else, the feature-per-branch
 convention stays.
 
-## Use `git mv` for Directory / File Renames
+## Directory Moves Must Use `git mv`
 
-When you rename a directory or file that is tracked in Dflow (feature
-directories, spec files, domain knowledge files), **always use `git mv`
-instead of a plain `mv` + `git add`**. This preserves git's rename
-tracking, which in turn preserves `git log --follow` history, `git blame`
-chains, and PR diff quality.
+When you rename or move a directory or file that is tracked in Dflow
+(feature directories, spec files, domain knowledge files, reference
+files), **always use `git mv` instead of a plain `mv` + `git add`**.
 
-Common cases:
+### Why this is non-negotiable in Dflow
+
+Dflow is intentionally tightly coupled to Git for the feature-branch /
+feature-directory pairing (one feature = one branch = one directory).
+This coupling means feature lifecycle events trigger directory moves,
+and rename history is what makes the spec auditable across time.
+
+A plain `mv` followed by `git add` shows up as `delete + add` in git's
+diff. That breaks:
+- `git log --follow {path}` (won't trace history across the move)
+- `git blame` on lines that crossed the rename boundary
+- PR diff quality (reviewers see two unrelated big-blob changes
+  instead of one rename + small content diff)
+- `/dflow:verify` and other tools that walk feature history
+
+This is a known weakness of OpenSpec's directory-rename pattern; Dflow
+deliberately avoids it by mandating `git mv`.
+
+### Where `git mv` is required
+
+All of the following situations require `git mv`:
 
 ```bash
-# Renaming a feature's slug or SPEC-ID
-git mv specs/features/active/EXP-001-old-slug \
-       specs/features/active/EXP-001-new-slug
+# 1. /dflow:finish-feature: archive an entire feature directory
+git mv specs/features/active/{SPEC-ID}-{slug} \
+       specs/features/completed/{SPEC-ID}-{slug}
 
-# Moving a completed feature to the archive
-git mv specs/features/active/EXP-001-jpy-currency-support \
-       specs/features/completed/EXP-001-jpy-currency-support
+# 2. Slug correction (rare — done right after Step 3.5 if the developer
+#    realises the agreed slug needs a tweak)
+git mv specs/features/active/{SPEC-ID}-{old-slug} \
+       specs/features/active/{SPEC-ID}-{new-slug}
 
-# Renaming a reference file (like this one)
+# 3. Phase-spec rename inside a feature directory
+#    (e.g. fixing a wrong date in the filename)
+git mv specs/features/active/{SPEC-ID}-{slug}/phase-spec-2026-04-23-foo.md \
+       specs/features/active/{SPEC-ID}-{slug}/phase-spec-2026-04-24-foo.md
+
+# 4. Lightweight-spec rename inside a feature directory
+git mv specs/features/active/{SPEC-ID}-{slug}/lightweight-2026-04-15-old.md \
+       specs/features/active/{SPEC-ID}-{slug}/lightweight-2026-04-15-new.md
+
+# 5. Template-level renames (this proposal itself: feature-spec.md → phase-spec.md)
+git mv sdd-ddd-webforms-skill/templates/feature-spec.md \
+       sdd-ddd-webforms-skill/templates/phase-spec.md
+
+# 6. Reference file renames (PROPOSAL-011 example)
 git mv sdd-ddd-webforms-skill/references/git-flow-integration.md \
        sdd-ddd-webforms-skill/references/git-integration.md
 ```
 
-> The full "Directory Moves Must Use `git mv`" rule set (including edge
-> cases, commit message conventions for renames, and CI verification
-> hooks) is developed in PROPOSAL-009. This section establishes the
-> principle; 009 expands the detailed rules.
+### Commit-message hint for renames
+
+When the rename is the primary action (not a rename + many edits),
+prefer a commit message that calls it out:
+
+```
+[SPEC-ID] git mv {SPEC-ID}-{slug}: active/ → completed/
+```
+
+If the rename is bundled with content edits (e.g. archival commit also
+updates `rules.md`), one commit is fine — git's rename detection still
+holds via similarity index.
+
+### What NOT to do
+
+```bash
+# ❌ Wrong: produces delete + add, loses rename detection
+mv specs/features/active/{SPEC-ID}-{slug} specs/features/completed/
+git add -A
+```
+
+```bash
+# ❌ Also wrong: deleting the source then later adding the destination
+#    in a separate commit prevents git rename detection across commits.
+git rm -r specs/features/active/{SPEC-ID}-{slug}
+# ... commit ...
+# ... later, add the destination: rename trail is now broken
+```
+
+### Verifying a rename took
+
+After `git mv`, run `git status` — a successful rename shows:
+
+```
+Changes to be committed:
+  renamed:    specs/features/active/{SPEC-ID}-{slug}/_index.md ->
+              specs/features/completed/{SPEC-ID}-{slug}/_index.md
+  ...
+```
+
+If you see `deleted` + `new file` instead, the rename detection failed
+— investigate before committing (most often, the file was edited
+heavily enough that git's similarity index dropped below the rename
+threshold; consider using `git mv` for the move, then making content
+edits in a follow-up commit).
+
+### CI / hook automation (future)
+
+A pre-commit hook can refuse commits where `specs/features/active/` or
+`specs/features/completed/` show paired `D` + `A` instead of `R` for
+the same feature directory. Not part of Dflow today, but compatible
+with the rule.
 
 ## Gate Checks by Branch Type
 
 ### feature/ branch — Before Creating
 
 AI should verify:
-- [ ] Spec exists in `specs/features/active/{SPEC-ID}-*.md`
-- [ ] Spec has status: `draft` or `in-progress`
+- [ ] Feature directory exists at `specs/features/active/{SPEC-ID}-{slug}/`
+      with `_index.md` and at least one phase-spec inside
+- [ ] `_index.md` has status: `in-progress`
 - [ ] Bounded Context is identified
-- [ ] At least one Given/When/Then scenario is defined
+- [ ] At least one Given/When/Then scenario is defined in the first phase-spec
 - [ ] Domain concepts are identified (even if not yet in models.md)
 
 If any are missing, guide the developer through creating them BEFORE the branch.
@@ -128,7 +236,12 @@ during implementation."
 ### feature/ branch — Before Merging (Pre-PR / Pre-Integration)
 
 AI should verify:
-- [ ] Spec status updated to `completed`
+- [ ] `_index.md` status updated to `completed`
+- [ ] All `phase-spec-*.md` in the feature directory have `status: completed`
+- [ ] `_index.md` Current BR Snapshot has been synced to BC layer
+      (`rules.md` / `behavior.md`) — typically by `/dflow:finish-feature`
+- [ ] Whole feature directory ready to `git mv` to `specs/features/completed/`
+      (or already moved if `/dflow:finish-feature` ran)
 - [ ] All new business logic is in `src/Domain/` (not Code-Behind only)
 - [ ] New terms added to `glossary.md`
 - [ ] `rules.md` and `models.md` updated if applicable

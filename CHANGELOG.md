@@ -6,6 +6,42 @@
 
 ---
 
+## 2026-04-24 — R7 Wave 2 實施：PROPOSAL-009 Feature 目錄化 + 多階段規格 + 新命令
+
+**前置**：R7 Wave 1（PROPOSAL-011 Git Flow Decoupling）已完成（見下段 CHANGELOG）；R7 Review + Approve 處理 4 個 finding（accept-with-choice：F-01 Path A-3 / F-02 Path C / F-04 Path B；accept：F-03）
+**Proposal**：`proposals/PROPOSAL-009-feature-directory-and-phases.md`（approved）
+**影響範圍**：
+
+**結構 + 命名 + 範本（Sub-wave 9a）**
+- 新增：`templates/_index.md`（雙版）—— feature 級 dashboard 六段範本（Metadata / 目標與範圍 / Phase Specs / Current BR Snapshot / 輕量修改紀錄 / 接續入口）+ 選用 Follow-up Tracking 段；含 Snapshot refresh 時機註解（new-phase / phase-spec 完成 / T2 lightweight 定稿）
+- `git mv`：`templates/feature-spec.md` → `templates/phase-spec.md`（雙版）—— 在「業務規則」之後新增「Delta from prior phases」段（首 phase 免填 / phase 2+ 必填，沿用 P002/P004 ADDED/MODIFIED/REMOVED/RENAMED + 選用 UNCHANGED 格式）；範本 note 補充 phase-spec 語意 + phase 2+ 業務規則段只列新增/修改 BR
+- 修改：`templates/lightweight-spec.md`（雙版）—— 範本內容不變，補充 Template note 明確對應 T2 ceremony、實例化檔位置（feature 目錄內，命名 `lightweight-{date}-{slug}.md` / `BUG-{NUMBER}-{slug}.md`）、定稿後 AI 須更新 `_index.md` 輕量修改紀錄 + Current BR Snapshot
+- 修改：`SKILL.md`（雙版）—— Project Structure 範例改為目錄形式（`active/{SPEC-ID}-{slug}/` 含 `_index.md` / `phase-spec-*.md` / `lightweight-*.md`）；Ceremony Scaling 表重寫為三層（T1 Heavy / T2 Light / T3 Trivial）含 T3 四項判準 + Dflow 不走的底線；Templates 表加入 `_index.md` + `phase-spec.md`，移除 `feature-spec.md`；Phase 3 Spec Writing 引用更新
+
+**新命令 + Flow（Sub-wave 9b）**
+- 新增：`references/new-phase-flow.md`（雙版）—— `/dflow:new-phase` 五步流程（Step 1 Read context with active-only refusal / Step 2 Confirm scope / Step 3 Slug Confirmation / Step 4 Write phase-spec with Delta / Step 5 Refresh `_index.md` BR Snapshot + Phase Specs row + 接續入口）；嚴格只適用於 active feature，遇 completed 拒絕並導向 `/dflow:modify-existing` follow-up
+- 新增：`references/finish-feature-flow.md`（雙版）—— `/dflow:finish-feature` 六步流程（Step 1 驗證 phase-specs + `_index.md` / Step 2 flip status / Step 3 同步 BR Snapshot 到 BC 層 `rules.md` / `behavior.md`，延續 Step 8.3 / 5.3 既有機制 / Step 4 `git mv` 整目錄到 `completed/` / Step 5 emit Integration Summary（**Git-strategy-neutral**，F-04 Path B）/ Step 6 反向更新舊 feature 的 Follow-up Tracking）；明確「AI 做 git mv + add，不 commit、不 merge、不 push」（風險 5 緩解）
+- 修改：`SKILL.md`（雙版）—— Frontmatter Primary triggers 加入 `/dflow:new-phase` + `/dflow:finish-feature`；決策樹對應節點；Slash Commands 表加入「Phase commands」+「Closeout commands」兩個子分類；Reference Files 表加入兩新 flow
+- 修改：`references/new-feature-flow.md`（雙版）—— Step 3 → Step 3.5 Phase Gate 新增；Step 3.5 Slug Confirmation（中英文 slug 範例各一份）；Step 4 改為「建 feature 目錄 + `_index.md`（含初始 BR Snapshot）+ 第一份 phase-spec（首 phase Delta 註明免填）」；Step 6 branch naming 補中英文範例；Step 8.4 archival 改為整目錄 `git mv` + 推薦多 phase feature 走 `/dflow:finish-feature`
+- 修改：`references/modify-existing-flow.md`（雙版）—— Step 1 重寫為三層 Ceremony 判準表（Part A）+ feature 定位（Part B：active / completed / standalone）+ layer 識別（Part C，僅 Core 版）；新增 Step 1.5 Completed-Feature Reopen Detection（A/B/C 三選項，C 拒絕並導向 follow-up）；新增 Step 1.6 Create Follow-up Feature（新 SPEC-ID + `follow-up-of` + BR Snapshot baseline 從 `rules.md` 繼承 + 反向 Follow-up Tracking 同 commit）；Step 5.4 / 6.4 archival 改為 feature-level 不再搬單檔，整目錄交 `/dflow:finish-feature`
+
+**既有文件同步（Sub-wave 9c）**
+- 修改：`references/git-integration.md`（雙版）—— 新增完整「Directory Moves Must Use `git mv`」段（理由、6 種適用情境、commit message 提示、什麼不該做、驗證方式、CI hook 未來方向），取代 P011 留的 placeholder；Branch naming 加 Slug Language 子段（中英文 slug 都合法、Obts 實測背書、slug-shape guidance）；Gate Checks 路徑假設更新為 `active/{SPEC-ID}-{slug}/` 目錄形式（`_index.md` + 多 phase-spec），Pre-PR checklist 加入 BC 層同步 + `git mv` 驗證項
+- 修改：`references/pr-review-checklist.md`（雙版）—— Step 0 重寫為「先讀 `_index.md` 取得 feature 全貌 → 識別 PR 觸及的 phase-spec / lightweight-spec / T3 inline 哪一類 → 全部讀過」；Spec Compliance 拆為「Per-feature checks」（含 `_index.md` 完整性 + follow-up 連結驗證）+「Per-phase-spec / lightweight-spec checks」（多份逐一檢查 + Delta integrity）+「If closeout commit」（BC 同步 + `git mv` rename detection + Integration Summary）
+- 修改（輕量）：`references/drift-verification.md`（雙版）—— 新增「This command does NOT do (feature-directory aggregation — explicitly excluded)」明確段（F-03 決議：不擴張 scope 到跨 phase-spec 聚合，BR 現況聚合由 `_index.md` Snapshot 承擔）；新增「Path Assumptions (post-PROPOSAL-009)」段，明示 verify 不讀 feature 目錄；When to Run 加入「After `/dflow:finish-feature` lands」觸發點
+- 修改：`templates/CLAUDE.md`（雙版）—— 「目錄結構」段 features 子樹改為目錄形式；「開發流程」段重寫為 Ceremony 三層 + 五個命令分節（new-feature / new-phase / modify-existing / bug-fix / finish-feature），明示 follow-up 規則與 BC 同步動作；「系統脈絡」段（P007c segmentation）保持不動
+
+**繁中版同步**：延至 Post-Review Closeout C1（依 review-workflow.md §七）
+
+**範圍外（嚴格遵守）**：
+- 繁中版（`*-tw/`）—— 延到 Closeout C1
+- PROPOSAL-010 scope（`scaffolding/`、`init-project-flow.md`、`CLAUDE-md-snippet.md`、`README.md`）—— 屬 R7 Wave 3
+- P003 / P005 / P007 / P008 既有核心結構 —— 只更新引用 / 路徑，不改核心
+
+**下一步**：R7 Wave 3（PROPOSAL-010 實施）—— 本 proposal 完成後，`/dflow:init-project` 可引用本輪定義的 `_index.md` 範本與 feature 目錄結構
+
+---
+
 ## 2026-04-24 — R7 Wave 1 實施：PROPOSAL-011 Git Flow Decoupling
 
 **前置**：R7 Review（Codex，2026-04-22 產出 `reviews/round-7-report.md`）+ R7 Approve（2026-04-22）處理 2 個 finding（accept-with-choice：F-04 Path B；accept：F-06）
