@@ -6,6 +6,45 @@
 
 ---
 
+## 2026-04-24 — R7 Wave 3 實施：PROPOSAL-010 `dflow init` 機制 + Scaffolding 範本集
+
+**前置**：R7 Wave 1（PROPOSAL-011 Git Flow Decoupling）+ Wave 2（PROPOSAL-009 Feature 目錄化 + 多階段規格 + 新命令）已完成（見下方兩段 CHANGELOG）；R7 Review + Approve 處理 3 個 PROPOSAL-010 相關 finding（accept-with-choice：F-04 Path B；accept：F-05、F-07）
+**Proposal**：`proposals/PROPOSAL-010-dflow-init-and-scaffolding.md`（approved）
+**影響範圍**：
+
+**新增 Scaffolding 目錄**（雙版共 10 檔）
+- `sdd-ddd-{webforms|core}-skill/scaffolding/_overview.md` —— 系統概觀範本（WebForms 版強調漸進式 Domain 抽離 + 遷移策略；Core 版強調 Clean Architecture 四層 + ADR）
+- `sdd-ddd-{webforms|core}-skill/scaffolding/_conventions.md` —— 規格撰寫慣例範本（引用 SKILL.md 的三層 Ceremony T1/T2/T3，不重寫判準；Core 版補 Aggregate / VO / Domain Event 的 DDD 特有慣例）
+- `sdd-ddd-{webforms|core}-skill/scaffolding/Git-principles-gitflow.md` —— Git Flow 版專案 Git 規範範本；**含 Integration Commit 訊息慣例段（F-04 Path B）** 對應 `/dflow:finish-feature` 產出的 Integration Summary 的 `--no-ff` merge commit 格式；含 hotfix 24h 補 spec 時限（人對人承諾，Dflow 不追蹤）
+- `sdd-ddd-{webforms|core}-skill/scaffolding/Git-principles-trunk.md` —— Trunk-based / GitHub Flow 版；**含 Integration Commit 訊息慣例段（F-04 Path B）** 的 Squash / Rebase / Fast-forward 三種 commit 格式；不含 hotfix / release branch 規範（trunk-based 不用）
+- `sdd-ddd-{webforms|core}-skill/scaffolding/CLAUDE-md-snippet.md` —— 加入專案 `CLAUDE.md` 的片段；**沿用 P007c 的 H2 分段**（系統脈絡 / 開發流程），明示完整 Dflow 決策邏輯在 skill 本體、不重抄
+- 每份 scaffolding 檔頂部有版本註記：`<!-- Scaffolding template maintained alongside Dflow skill. See proposals/PROPOSAL-010 for origin. -->`（proposal 風險 1 緩解）
+- Scaffolding 不重疊 skill 本體：不重述 SKILL.md 的 AI 決策邏輯、不重複 references/ 的 flow 文件；專注「專案治理」
+
+**新增 Flow 文件**（雙版）
+- `sdd-ddd-{webforms|core}-skill/references/init-project-flow.md` —— `/dflow:init-project` 五步流程（Step 1 現況盤點 / Step 2 專案資訊 5 題問答 / Step 3 File-list 預覽（Phase Gate：AI 列出 create / skip 清單供使用者確認，proposal 風險 2 緩解）/ Step 4 逐檔 Write，既有檔不覆寫 / Step 5 結果報告 + 下一步建議）
+  - Step 3「必產清單」依 skill 版本分拆（**F-05 決議**）：
+    - WebForms 版必產：`specs/features/{active,completed,backlog}/`、`specs/domain/glossary.md`、`specs/migration/tech-debt.md`
+    - Core 版必產：`specs/features/{active,completed,backlog}/`、`specs/domain/glossary.md`、`specs/domain/context-map.md`、`specs/architecture/tech-debt.md`、`specs/architecture/decisions/README.md`
+  - **`behavior.md` 不在 init 階段產生**（F-05 決議）：明確註記由 `/dflow:new-feature` Step 8.3 或 P007a baseline capture 於首個 bounded context 建立時產生，不在 init 階段製造 stale placeholder
+  - `CLAUDE.md` 特別處理：已存在則不覆寫，以 `specs/_共用/CLAUDE-md-snippet.md` 形式提供片段供使用者合併；不存在則建立最小版
+
+**修改**
+- `sdd-ddd-{webforms|core}-skill/SKILL.md` —— Frontmatter Primary triggers 加入 `/dflow:init-project` + NL 二次觸發詞（"set up SDD in this project" / "adopt Dflow"）；決策樹新增 `/dflow:init-project` 節點；Slash Commands 表新增「專案級命令」子分類**置於「啟動類」之上**（proposal § 5）；Reference Files 表新增 `references/init-project-flow.md` 列；Templates 段改為「Templates & Scaffolding」，新增 Scaffolding 子段（5 檔清單 + 一句話說明 + 引用 `init-project-flow.md`）
+- `README.md`（repo 根）—— 新增「How to adopt Dflow in your project」四步流程段：步驟 1 **用中立措辭不寫死 `.claude/skills/` 路徑**（F-07 決議；以 "using the current Claude Code skill-installation mechanism" + "Refer to Claude Code's official documentation" + "installation paths and conventions change over time, so Dflow deliberately does **not** hardcode a specific directory" 表達）；新增 V2 / Dflow 分工說明子段（4-column 對照表 + 共存 note + C2 Tutorial 重建鉤子）；**未改動既有「如何使用」段**（不鋪張不改寫舊內容）
+
+**繁中版同步**：延至 Post-Review Closeout C1（依 review-workflow.md §七）；scaffolding 範本若使用者選中文語言，可選擇性新增繁中版（屬人讀內容，本 wave 先以英文版為主，繁中版選擇性）
+
+**範圍外（嚴格遵守）**：
+- 繁中版（`*-tw/`）—— 延到 Closeout C1
+- PROPOSAL-009 / PROPOSAL-011 scope 產物未被修改（`templates/_index.md` / `templates/phase-spec.md` / `references/new-phase-flow.md` / `references/finish-feature-flow.md` / `references/git-integration.md` / SKILL.md 的三層 Ceremony + `/dflow:new-phase` / `/dflow:finish-feature` 段）
+- V2 級別的完整 onboarding 文件（`SDD-AI協作開發模式介紹.md` / `使用說明.md` 等）—— 屬 Closeout C2 範圍
+- R1-R6 既有機制的核心結構 —— 只擴充，不動核
+
+**下一步**：R7 Implement 三 wave 全部完成；進入 **R7 實作品質審查**（Codex review，仿 R1-R6 pattern）
+
+---
+
 ## 2026-04-24 — R7 Wave 2 實施：PROPOSAL-009 Feature 目錄化 + 多階段規格 + 新命令
 
 **前置**：R7 Wave 1（PROPOSAL-011 Git Flow Decoupling）已完成（見下段 CHANGELOG）；R7 Review + Approve 處理 4 個 finding（accept-with-choice：F-01 Path A-3 / F-02 Path C / F-04 Path B；accept：F-03）

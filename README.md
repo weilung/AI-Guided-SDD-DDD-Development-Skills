@@ -103,6 +103,32 @@ AI 的決策樹和核心規範。定義了五個核心原則、流程嚴謹度�
 
 ---
 
+## How to adopt Dflow in your project
+
+Dflow is the AI-guided SDD/DDD skill contained in this repo (see `sdd-ddd-webforms-skill/` and `sdd-ddd-core-skill/`). Adopting Dflow in a project takes 4 steps:
+
+1. **Install the appropriate skill** (either the WebForms edition or the Core edition) using the current Claude Code skill-installation mechanism. Refer to Claude Code's official documentation for how skills are registered in your environment — installation paths and conventions change over time, so Dflow deliberately does **not** hardcode a specific directory.
+2. In your project root, run `/dflow:init-project`. Dflow will inspect the repo, ask a short set of intake questions (project type, tech stack, language, optional starter files), and seed the baseline `specs/` structure plus any scaffolding templates you pick.
+3. Follow the prompts to review the file-list preview and confirm the writes. Existing files are never overwritten.
+4. Start your first feature with `/dflow:new-feature`, or — for an existing codebase — `/dflow:modify-existing` to work from an incoming change request.
+
+For what gets created at init time, how scaffolding templates are chosen, and how to re-run safely, see `sdd-ddd-webforms-skill/references/init-project-flow.md` (or the Core equivalent).
+
+### V2 Starter Kit and Dflow — division of labour
+
+Dflow is distributed alongside a sister project, **V2 Starter Kit** (`SDD-Starter-Kit`), which plays a complementary role:
+
+| | V2 Starter Kit | Dflow (this repo) |
+|---|---|---|
+| **Format** | Complete distributable starter kit (flat files + tutorial docs) | AI-guided skill (read and executed by Claude Code at runtime) |
+| **Onboarding documents** | Ships full onboarding pack (e.g. `SDD-AI協作開發模式介紹.md`, `使用說明.md`) | Ships minimal scaffolding templates only (`scaffolding/`) |
+| **Primary audience** | Humans reading + copying files manually | AI running slash commands in a live project |
+| **Typical use** | Teams evaluating SDD/DDD or wanting a human-readable reference | Teams who want the workflow enforced at development time |
+
+The two are designed to coexist: you can start with V2's onboarding docs for reading/training, then adopt Dflow in the project itself for enforcement. Dflow's `scaffolding/` is intentionally a **minimal** template set; if you want the full V2 onboarding documents, copy them from V2 separately (V2's Tutorial rebuild is tracked as Closeout C2 of this repo's work plan).
+
+---
+
 ## 如何使用
 
 ### 在 Claude Code 中使用 Skill（WebForms 專案）

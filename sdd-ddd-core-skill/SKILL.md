@@ -3,12 +3,13 @@ name: sdd-ddd-core
 description: >
   AI-guided Specification-Driven Development (SDD) and Domain-Driven Design (DDD) workflow guardian
   for ASP.NET Core projects with Clean Architecture.
-  PRIMARY TRIGGERS — /dflow: slash commands: /dflow:new-feature, /dflow:modify-existing,
-  /dflow:bug-fix, /dflow:new-phase, /dflow:finish-feature, /dflow:pr-review, /dflow:verify,
-  /dflow:status, /dflow:next, /dflow:cancel.
+  PRIMARY TRIGGERS — /dflow: slash commands: /dflow:init-project, /dflow:new-feature,
+  /dflow:modify-existing, /dflow:bug-fix, /dflow:new-phase, /dflow:finish-feature,
+  /dflow:pr-review, /dflow:verify, /dflow:status, /dflow:next, /dflow:cancel.
   SECONDARY TRIGGERS (auto-trigger safety net) — natural language:
   "I need to add a feature", "I want to modify...", "there's a bug in...", "new requirement",
-  "let's work on...", any mention of creating or changing code, or starting a new branch.
+  "let's work on...", "set up SDD in this project", "adopt Dflow", any mention of creating or
+  changing code, or starting a new branch.
   Also triggers when reviewing PRs, planning sprints, discussing architecture, or designing domain models.
   When triggered by natural language, DO NOT auto-enter a workflow — judge the intent, suggest
   the matching /dflow: command, and wait for developer confirmation before proceeding.
@@ -59,6 +60,9 @@ pure .NET types. No EF Core attributes, no JSON serialization attributes, no fra
 Developer input arrives
     │
     ├─ /dflow: command (explicit entry — route directly to workflow)
+    │   ├─ /dflow:init-project    → INIT PROJECT WORKFLOW (references/init-project-flow.md)
+    │   │                             One-time project bootstrap: set up specs/ baseline +
+    │   │                             optional scaffolding. Safe to re-run (skips existing files).
     │   ├─ /dflow:new-feature     → NEW FEATURE WORKFLOW (references/new-feature-flow.md)
     │   ├─ /dflow:modify-existing → MODIFY EXISTING WORKFLOW (references/modify-existing-flow.md)
     │   ├─ /dflow:bug-fix         → Lightweight-ceremony modification of existing functionality.
@@ -101,6 +105,9 @@ Developer input arrives
 The Skill uses a **Hybrid design**: slash commands as the primary entry, natural-language auto-trigger as a safety net, and tiered transparency so developers always know where they are in the workflow.
 
 ### Slash Commands
+
+**Project-level commands** — one-time (or occasional) project-scope operations:
+- `/dflow:init-project` — **project bootstrap**. Inspect the repo, ask a short set of intake questions, and seed the `specs/` baseline (features / domain / architecture directories, including `context-map.md` + `architecture/decisions/`) plus any scaffolding templates the developer picks (`_overview.md` / `_conventions.md` / `Git-principles-*.md` / `CLAUDE.md` snippet). Existing files are **never overwritten**; re-running only fills in gaps.
 
 **Flow entry commands** — start a workflow (build branch + feature directory):
 - `/dflow:new-feature` — enter new-feature-flow
@@ -417,6 +424,7 @@ Format: `| Term | Definition | Bounded Context | Code Mapping |`
 
 | File | When to read |
 |---|---|
+| `references/init-project-flow.md` | `/dflow:init-project` — one-time project bootstrap (set up `specs/` baseline + optional scaffolding) |
 | `references/new-feature-flow.md` | New feature development |
 | `references/modify-existing-flow.md` | Changing existing functionality |
 | `references/new-phase-flow.md` | `/dflow:new-phase` — add a new phase-spec to an active feature |
@@ -426,7 +434,11 @@ Format: `| Term | Definition | Bounded Context | Code Mapping |`
 | `references/git-integration.md` | Branch management and SDD ↔ Git coupling (branching-strategy-neutral) |
 | `references/drift-verification.md` | `/dflow:verify` — rules.md ↔ behavior.md consistency check |
 
-## Templates
+## Templates & Scaffolding
+
+### Templates (used by in-flow tools)
+
+These are the feature-/spec-level building blocks that the flows instantiate during `/dflow:new-feature` / `/dflow:new-phase` / completion work:
 
 | Template | Purpose |
 |---|---|
@@ -437,3 +449,17 @@ Format: `| Term | Definition | Bounded Context | Code Mapping |`
 | `templates/behavior.md` | Consolidated behavior spec for a Bounded Context |
 | `templates/aggregate-design.md` | New Aggregate design worksheet |
 | `templates/CLAUDE.md` | Project-level CLAUDE.md |
+
+### Scaffolding (used by `/dflow:init-project`)
+
+The `scaffolding/` directory holds **project-level** templates seeded by `/dflow:init-project` into a project's `specs/_共用/` directory (or repo root for `CLAUDE.md`). They are **not** read by AI during normal flows; they are written to the target project once, then owned and maintained by the project.
+
+| Scaffolding file | Purpose |
+|---|---|
+| `scaffolding/_overview.md` | System overview + Clean Architecture layer summary placeholder set |
+| `scaffolding/_conventions.md` | Project-level spec-writing conventions (references the skill's T1 / T2 / T3 tiers and DDD-specific spec conventions such as Aggregate identification, Domain Event documentation, CQRS split) |
+| `scaffolding/Git-principles-gitflow.md` | Git Flow edition of project Git conventions — includes Integration Commit Message Conventions that pair with `/dflow:finish-feature` output |
+| `scaffolding/Git-principles-trunk.md` | Trunk-based / GitHub Flow edition of project Git conventions — includes squash/rebase Integration Commit Message formats |
+| `scaffolding/CLAUDE-md-snippet.md` | Starter block for a project's root `CLAUDE.md`, preserving the `系統脈絡` / `開發流程` H2 layout |
+
+See `references/init-project-flow.md` for how the scaffolding files are selected and written.
