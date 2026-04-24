@@ -6,6 +6,37 @@
 
 ---
 
+## 2026-04-24 — R7 Implement Review Fix：4 findings 修正
+
+**前置**：R7 Implement Review（Codex gpt-5.4 xhigh，`reviews/round-7-implement-review-report.md`）對 Wave 1-3 實施產物產出 4 個 findings（1 Critical / 2 Major / 1 Minor / 0 Question）
+**決議文件**：`reviews/round-7-implement-review-decisions.md`（Approve + Fix 合併 session）
+**修正項目**：
+
+- **F-01 (Critical, accept + 擴 scope)**：`new-phase-flow.md` Step 5 row 範例的 `_index.md` 檔案連結誤用 `{slug}` 而非 `{phase-slug}`，會產生失配連結破壞 P009 Path A-3 命名一致性。修正：雙版 `new-phase-flow.md` 第 5 欄 `{slug}` → `{phase-slug}`；scope 擴至 `templates/_index.md` 雙版 row 1 範例（同類 within-row 不一致 typo）。`new-feature-flow.md` 雙版保持不動（self-consistent 設計；首 phase 預設 phase-slug = feature-slug）
+- **F-02 (Major, accept-with-choice Path B)**：Wave 1 `git-flow-integration.md` → `git-integration.md` 的 rename 在 git 預設門檻看不出。Verify 結果：**`git mv` 實際有執行**，但同 commit 大幅內容重寫使相似度（WebForms 43%、Core 18%）低於 `-M50` 預設。採 Path B：保留 commit 歷史 + 修 CHANGELOG 自述 + 雙版 `git-integration.md` 頂部加 file history note。理由：(a) Codex review report 以 `bf5bb85` 為對照 hash，改 history 破壞可追溯性；(b) Dflow 非活躍 blame repo；(c) 誠實記錄 > 修歷史。**教訓（後記於本 CHANGELOG Wave 1 段）**：`git mv` + 大重寫需拆為兩個 commit（先純 rename、再內容改寫），未來納入 `git-integration.md`「Directory Moves Must Use git mv」段
+- **F-03 (Major, accept)**：WebForms `CLAUDE-md-snippet.md` 5 處路徑（3 個 unique pattern）引用 `specs/_overview.md` / `specs/_conventions.md` / `specs/Git-principles-*.md`，但 `init-project-flow.md` 實際產出 `specs/_共用/...`；Core 版已正確。修正：WebForms 版所有相關路徑加 `_共用/` 前綴
+- **F-04 (Minor, accept)**：雙版 `templates/CLAUDE.md` 引用 `scaffolding/Git-原則-gitflow.md`（中文化檔名），Wave 3 實際檔名為 `Git-principles-gitflow.md`（英文）。修正：兩版 `Git-原則-gitflow.md` → `Git-principles-gitflow.md`
+
+**修改檔案**（10 檔英文版）：
+- `sdd-ddd-{webforms|core}-skill/references/new-phase-flow.md`（F-01）
+- `sdd-ddd-{webforms|core}-skill/templates/_index.md`（F-01 擴 scope）
+- `CHANGELOG.md` Wave 1 段 + 新增本段（F-02）
+- `sdd-ddd-{webforms|core}-skill/references/git-integration.md`（F-02，頂部加 file history note）
+- `sdd-ddd-webforms-skill/scaffolding/CLAUDE-md-snippet.md`（F-03，5 處路徑修正）
+- `sdd-ddd-{webforms|core}-skill/templates/CLAUDE.md`（F-04）
+
+**不變動**：
+- Wave 1 / 2 / 3 commit history（採 Path B 保留歷史）
+- 繁中版檔案（延至 Closeout C1）
+- Proposal 本身（已 approved，不修）
+- `new-feature-flow.md` 雙版（F-01 self-consistent 設計，不擴 scope）
+
+**統計**：accept 3 / accept-with-choice 1 / reject 0 / defer 0 / clarify 0 / out-of-scope 0
+
+**下一步**：**R7 全部完成**。進入 Post-R7 —— Global Sweep（選擇性）→ Closeout C1（繁中同步）→ Closeout C2（Tutorial 重建）→ 改名 + 遷移新 repo → Dflow V1 ships
+
+---
+
 ## 2026-04-24 — R7 Wave 3 實施：PROPOSAL-010 `dflow init` 機制 + Scaffolding 範本集
 
 **前置**：R7 Wave 1（PROPOSAL-011 Git Flow Decoupling）+ Wave 2（PROPOSAL-009 Feature 目錄化 + 多階段規格 + 新命令）已完成（見下方兩段 CHANGELOG）；R7 Review + Approve 處理 3 個 PROPOSAL-010 相關 finding（accept-with-choice：F-04 Path B；accept：F-05、F-07）
@@ -86,10 +117,10 @@
 **前置**：R7 Review（Codex，2026-04-22 產出 `reviews/round-7-report.md`）+ R7 Approve（2026-04-22）處理 2 個 finding（accept-with-choice：F-04 Path B；accept：F-06）
 **Proposal**：`proposals/PROPOSAL-011-git-flow-decoupling.md`（approved）
 **影響範圍**：
-- 重命名：`references/git-flow-integration.md` → `references/git-integration.md`（雙版，`git mv`）
+- 重命名：`references/git-flow-integration.md` → `references/git-integration.md`（雙版，**實際執行 `git mv`**；但因同 commit 內大幅內容重寫，git 預設 rename detection（`-M50`）無法識別為 rename，詳見下方 F-02 後記 —— R7 Implement Review F-02）
 - 內容重構：`git-integration.md`（雙版）—— 移除 Git Flow 專屬段（develop/release/hotfix 分支圖、release checklist、hotfix expedited process、24h 補 spec）、保留 SDD ↔ Git 核心耦合（feature branch per feature、`git mv` 規範總則、Gate Checks、Commit Message Convention、CI/CD Future Enhancement）
 - 修改：`SKILL.md`（雙版）—— references 表檔名更新 + 描述中立化、決策樹「I'm creating a branch」節點檔名引用更新、`/dflow:bug-fix` 語意澄清（不綁分支策略，雙處：決策樹 + Slash Commands 段）
-- 修改：`drift-verification.md`（雙版）—— 移除「Before a release branch cut」觸發點；Purpose 段的「before a release」passing mention 同步中立化（當場移除 Git Flow 殘餘語句，符合 proposal § 5 指導）
+- 修改：`drift-verification.md`(雙版)—— 移除「Before a release branch cut」觸發點；Purpose 段的「before a release」passing mention 同步中立化（當場移除 Git Flow 殘餘語句，符合 proposal § 5 指導）
 - 修改：`templates/CLAUDE.md`（雙版）—— 「Git Flow」段標題改為「Git 整合」，加註「分支策略由專案決定，Dflow 不強制」，移除 `hotfix/` / `release/` 預設分支命名與 24h 補 spec 規則，新增「若採 Git Flow 可參考 scaffolding 範本」指引
 
 **不在本輪 scope（已於 R7 Review F-06 verify 過現況無 Git Flow 字樣）**：
@@ -97,6 +128,22 @@
 - `pr-review-checklist.md`（雙版）
 
 **繁中版同步**：延至 Post-Review Closeout C1（依 review-workflow.md §七）
+
+**R7 Implement Review F-02 後記（2026-04-24）**：
+
+Codex R7 Implement Review 指出本 commit（`bf5bb85`）在 `git diff-tree --summary` 預設（`-M50`）顯示為 delete+add 而非 rename。經 verify，**實際上有執行 `git mv`**，但此 commit 同時刪除 Git Flow 專屬內容並新增大量新內容，新舊檔相似度：WebForms 版 43%、Core 版 18%，低於 git 預設 rename detection 門檻（50%）。
+
+查看 rename 軌跡的指令：
+- WebForms：`git log --follow -M30 sdd-ddd-webforms-skill/references/git-integration.md`
+- Core：`git log --follow -M10 sdd-ddd-core-skill/references/git-integration.md`
+
+**教訓**：`git mv` **不等於** git 會自動把 commit 識別為 rename。當 rename 與大幅內容改寫發生在同一 commit 時，git 依新舊檔相似度判斷；若低於 `-M50` 預設門檻，會顯示為 delete+add。
+
+**對未來大重寫的建議**（應納入 `git-integration.md` 的「Directory Moves Must Use git mv」段長期原則）：
+1. 先用獨立 commit 執行純 `git mv`（不改內容）—— 這樣 git 100% 能識別為 rename
+2. 再用後續 commit 進行內容改寫 —— rename 軌跡不受影響
+
+**本輪採 Path B（保留歷史，更新 CHANGELOG 與 `git-integration.md` 頂部 file history note）**，不 rewrite commit history。理由：(a) Codex review report 以 `bf5bb85` 為對照 hash，改 history 會失去可追溯性；(b) Dflow 為方法論 repo，`git blame` 穿 rename 的實用價值有限；(c) 誠實記錄比修歷史更具教學價值。
 
 **下一步**：R7 Wave 2（PROPOSAL-009 實施）—— 本 proposal 完成後，`git-integration.md` 基底穩定，009 可在其上擴增「Directory Moves Must Use git mv」完整段與 slug 語言段
 

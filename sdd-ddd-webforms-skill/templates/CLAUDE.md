@@ -113,7 +113,7 @@ src/
 > 本流程只規定 SDD 必要的最小 Git 耦合（feature branch per feature、
 > `git mv`、commit 對應 SPEC-ID）。實際採用的分支策略（Git Flow /
 > GitHub Flow / trunk-based / 單一 main）由專案決定，不在此強制。
-> 若採用 Git Flow，可參考 `scaffolding/Git-原則-gitflow.md` 範本。
+> 若採用 Git Flow，可參考 `scaffolding/Git-principles-gitflow.md` 範本。
 
 **分支命名**
 ```

@@ -10,6 +10,15 @@ feature-branch-per-feature convention that SDD traceability depends on.
 > `scaffolding/Git-principles-gitflow.md` template (provided by PROPOSAL-010)
 > for Git-Flow-specific conventions.
 
+> **File history note**: This file was renamed from
+> `references/git-flow-integration.md` in commit `bf5bb85` (R7 Wave 1,
+> PROPOSAL-011). `git mv` was used, but the same commit also rewrote the
+> content more aggressively than the WebForms version (18% similarity),
+> which falls below git's default rename-detection threshold (`-M50`). To
+> trace the rename history use `git log --follow -M10 <this file>`. See
+> CHANGELOG "R7 Implement Review F-02 後記" for details and the
+> lesson-learned on splitting large rewrites into separate commits.
+
 ## Branch-to-Workflow Mapping
 
 Dflow only requires that every SDD feature / bug-fix lives on its own branch
