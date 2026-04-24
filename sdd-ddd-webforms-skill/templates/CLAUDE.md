@@ -47,7 +47,7 @@ src/
 
 ## 開發流程（How do we work?）
 
-> SDD 流程、Git Flow、Domain 層規範、術語表、AI 協作
+> SDD 流程、Git 整合、Domain 層規範、術語表、AI 協作
 
 ### 核心原則
 1. **Spec Before Code** — 沒有規格就不寫實作
@@ -71,14 +71,17 @@ src/
 1. 建立輕量規格（問題 + 現有行為 + 預期行為 + 修復方式）
 2. 修 Bug 時順便記錄發現的技術債
 
-### Git Flow
+### Git 整合
+
+> 本流程只規定 SDD 必要的最小 Git 耦合（feature branch per feature、
+> `git mv`、commit 對應 SPEC-ID）。實際採用的分支策略（Git Flow /
+> GitHub Flow / trunk-based / 單一 main）由專案決定，不在此強制。
+> 若採用 Git Flow，可參考 `scaffolding/Git-原則-gitflow.md` 範本。
 
 **分支命名**
 ```
-feature/{SPEC-ID}-{short-description}    # 新功能
-bugfix/BUG-{NUMBER}-{short-description}  # Bug 修復
-hotfix/HOT-{NUMBER}-{short-description}  # 緊急修復
-release/{version}                         # 發布版本
+feature/{SPEC-ID}-{short-description}    # 新功能（SDD 必須）
+bugfix/{BUG-ID}-{short-description}      # Bug 修復（SDD 必須）
 ```
 
 **Commit Message**
@@ -89,7 +92,8 @@ release/{version}                         # 發布版本
 **分支規則**
 - **feature/** — 必須先有 spec 才能開始編碼
 - **bugfix/** — 至少要有輕量 spec
-- **hotfix/** — 先修，24 小時內補 spec
+- **`/dflow:bug-fix`** 不綁定任何分支策略；採 Git Flow 的專案可選擇把
+  緊急修復放在 `hotfix/` 分支，但這是專案決策，Dflow 不代為規定
 
 ### Domain 層規範（`src/Domain/`）
 

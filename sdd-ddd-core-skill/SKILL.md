@@ -60,7 +60,8 @@ Developer input arrives
     ├─ /dflow: command (explicit entry — route directly to workflow)
     │   ├─ /dflow:new-feature     → NEW FEATURE WORKFLOW (references/new-feature-flow.md)
     │   ├─ /dflow:modify-existing → MODIFY EXISTING WORKFLOW (references/modify-existing-flow.md)
-    │   ├─ /dflow:bug-fix         → MODIFY EXISTING WORKFLOW (lightweight ceremony)
+    │   ├─ /dflow:bug-fix         → Lightweight-ceremony modification of existing functionality.
+    │   │                             Not tied to any branch strategy (not Git Flow's hotfix).
     │   ├─ /dflow:pr-review       → PR REVIEW CHECKLIST (references/pr-review-checklist.md)
     │   ├─ /dflow:verify [<bc>]    → DRIFT VERIFICATION (references/drift-verification.md)
     │   ├─ /dflow:status          → Report current workflow state (see § Workflow Transparency)
@@ -80,7 +81,7 @@ Developer input arrives
     │   └─ → Check specs/domain/ first, answer from domain knowledge
     │
     ├─ "I'm creating a branch"
-    │   └─ → GIT FLOW INTEGRATION (read references/git-flow-integration.md)
+    │   └─ → GIT INTEGRATION (read references/git-integration.md)
     │
     └─ Anything else code-related
         └─ → Assess: does this touch business logic?
@@ -97,7 +98,7 @@ The Skill uses a **Hybrid design**: slash commands as the primary entry, natural
 **Flow entry commands** — start a workflow:
 - `/dflow:new-feature` — enter new-feature-flow
 - `/dflow:modify-existing` — enter modify-existing-flow
-- `/dflow:bug-fix` — enter modify-existing-flow with lightweight ceremony
+- `/dflow:bug-fix` — **lightweight-ceremony modification of existing functionality. Not tied to any branch strategy (not Git Flow's hotfix).**
 - `/dflow:pr-review` — enter PR review checklist
 
 **Control commands** — manage an active workflow:
@@ -386,7 +387,7 @@ Format: `| Term | Definition | Bounded Context | Code Mapping |`
 | `references/modify-existing-flow.md` | Changing existing functionality |
 | `references/ddd-modeling-guide.md` | Domain model design questions |
 | `references/pr-review-checklist.md` | Code review |
-| `references/git-flow-integration.md` | Branch management |
+| `references/git-integration.md` | Branch management and SDD ↔ Git coupling (branching-strategy-neutral) |
 | `references/drift-verification.md` | `/dflow:verify` — rules.md ↔ behavior.md consistency check |
 
 ## Templates

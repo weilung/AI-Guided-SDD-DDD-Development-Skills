@@ -4,7 +4,7 @@ Triggered by `/dflow:verify` or `/dflow:verify <bounded-context>`.
 
 ## Purpose
 
-The A+C structure (`rules.md` as index + `behavior.md` as scenario content) introduces a drift risk — the two files can fall out of sync. This command provides a mechanical verification safety net that developers can run at key moments: before a PR, before a release, or after a refactor.
+The A+C structure (`rules.md` as index + `behavior.md` as scenario content) introduces a drift risk — the two files can fall out of sync. This command provides a mechanical verification safety net that developers can run at key moments: before a PR, after a refactor, or when onboarding to an unfamiliar Bounded Context.
 
 ## Scope
 
@@ -119,7 +119,6 @@ Issues:
 
 Recommended trigger points (not enforced — developer's judgment):
 - Before creating a PR (`/dflow:verify` as a pre-PR sanity check)
-- Before a release branch cut
 - After a refactor that touched multiple specs or domain docs
 - When onboarding to an unfamiliar Bounded Context (verify before trusting the docs)
 

@@ -6,6 +6,27 @@
 
 ---
 
+## 2026-04-24 — R7 Wave 1 實施：PROPOSAL-011 Git Flow Decoupling
+
+**前置**：R7 Review（Codex，2026-04-22 產出 `reviews/round-7-report.md`）+ R7 Approve（2026-04-22）處理 2 個 finding（accept-with-choice：F-04 Path B；accept：F-06）
+**Proposal**：`proposals/PROPOSAL-011-git-flow-decoupling.md`（approved）
+**影響範圍**：
+- 重命名：`references/git-flow-integration.md` → `references/git-integration.md`（雙版，`git mv`）
+- 內容重構：`git-integration.md`（雙版）—— 移除 Git Flow 專屬段（develop/release/hotfix 分支圖、release checklist、hotfix expedited process、24h 補 spec）、保留 SDD ↔ Git 核心耦合（feature branch per feature、`git mv` 規範總則、Gate Checks、Commit Message Convention、CI/CD Future Enhancement）
+- 修改：`SKILL.md`（雙版）—— references 表檔名更新 + 描述中立化、決策樹「I'm creating a branch」節點檔名引用更新、`/dflow:bug-fix` 語意澄清（不綁分支策略，雙處：決策樹 + Slash Commands 段）
+- 修改：`drift-verification.md`（雙版）—— 移除「Before a release branch cut」觸發點；Purpose 段的「before a release」passing mention 同步中立化（當場移除 Git Flow 殘餘語句，符合 proposal § 5 指導）
+- 修改：`templates/CLAUDE.md`（雙版）—— 「Git Flow」段標題改為「Git 整合」，加註「分支策略由專案決定，Dflow 不強制」，移除 `hotfix/` / `release/` 預設分支命名與 24h 補 spec 規則，新增「若採 Git Flow 可參考 scaffolding 範本」指引
+
+**不在本輪 scope（已於 R7 Review F-06 verify 過現況無 Git Flow 字樣）**：
+- `modify-existing-flow.md`（雙版）
+- `pr-review-checklist.md`（雙版）
+
+**繁中版同步**：延至 Post-Review Closeout C1（依 review-workflow.md §七）
+
+**下一步**：R7 Wave 2（PROPOSAL-009 實施）—— 本 proposal 完成後，`git-integration.md` 基底穩定，009 可在其上擴增「Directory Moves Must Use git mv」完整段與 slug 語言段
+
+---
+
 ## 2026-04-21 — Round 4 審查修正：Source of Truth 與漂移驗證（P003 + P008）
 
 **關聯 Proposal**: P003, P008

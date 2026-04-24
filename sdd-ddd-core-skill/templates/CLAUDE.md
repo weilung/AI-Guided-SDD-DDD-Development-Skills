@@ -66,7 +66,7 @@ tests/
 
 ## 開發流程（How do we work?）
 
-> SDD 流程、Git Flow、Domain 層規範、AI 協作
+> SDD 流程、Git 整合、Domain 層規範、AI 協作
 
 ### 核心原則
 1. **Spec Before Code** — 沒有規格就不寫實作
@@ -86,19 +86,26 @@ tests/
 2. 找到問題所在的層
 3. 在正確的層修復
 
-### Git Flow
+### Git 整合
+
+> 本流程只規定 SDD 必要的最小 Git 耦合（feature branch per feature、
+> `git mv`、commit 對應 SPEC-ID）。實際採用的分支策略（Git Flow /
+> GitHub Flow / trunk-based / 單一 main）由專案決定，不在此強制。
+> 若採用 Git Flow，可參考 `scaffolding/Git-原則-gitflow.md` 範本。
 
 **分支命名**
 ```
-feature/{SPEC-ID}-{short-description}
-bugfix/BUG-{NUMBER}-{short-description}
-hotfix/HOT-{NUMBER}-{short-description}
+feature/{SPEC-ID}-{short-description}    # 新功能（SDD 必須）
+bugfix/{BUG-ID}-{short-description}      # Bug 修復（SDD 必須）
 ```
 
 **Commit Message**
 ```
 [SPEC-ID] 簡述變更
 ```
+
+> `/dflow:bug-fix` 不綁定任何分支策略；採 Git Flow 的專案可選擇把緊急修復
+> 放在 `hotfix/` 分支，但這是專案決策，Dflow 不代為規定。
 
 ### Domain 層規範
 

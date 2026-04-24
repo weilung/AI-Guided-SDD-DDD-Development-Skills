@@ -43,7 +43,8 @@ Developer input arrives
     ├─ /dflow: command (explicit entry — route directly to workflow)
     │   ├─ /dflow:new-feature     → NEW FEATURE WORKFLOW (references/new-feature-flow.md)
     │   ├─ /dflow:modify-existing → MODIFY EXISTING WORKFLOW (references/modify-existing-flow.md)
-    │   ├─ /dflow:bug-fix         → MODIFY EXISTING WORKFLOW (lightweight ceremony)
+    │   ├─ /dflow:bug-fix         → Lightweight-ceremony modification of existing functionality.
+    │   │                             Not tied to any branch strategy (not Git Flow's hotfix).
     │   ├─ /dflow:pr-review       → PR REVIEW CHECKLIST (references/pr-review-checklist.md)
     │   ├─ /dflow:verify [<bc>]    → DRIFT VERIFICATION (references/drift-verification.md)
     │   ├─ /dflow:status          → Report current workflow state (see § Workflow Transparency)
@@ -64,7 +65,7 @@ Developer input arrives
     │   └─ → Review specs/features/backlog/, suggest based on migration value
     │
     ├─ "I'm creating a branch"
-    │   └─ → GIT FLOW INTEGRATION (read references/git-flow-integration.md)
+    │   └─ → GIT INTEGRATION (read references/git-integration.md)
     │       Verify branch naming, ensure spec exists before coding starts
     │
     └─ Anything else code-related
@@ -82,7 +83,7 @@ The Skill uses a **Hybrid design**: slash commands as the primary entry, natural
 **Flow entry commands** — start a workflow:
 - `/dflow:new-feature` — enter new-feature-flow
 - `/dflow:modify-existing` — enter modify-existing-flow
-- `/dflow:bug-fix` — enter modify-existing-flow with lightweight ceremony
+- `/dflow:bug-fix` — **lightweight-ceremony modification of existing functionality. Not tied to any branch strategy (not Git Flow's hotfix).**
 - `/dflow:pr-review` — enter PR review checklist
 
 **Control commands** — manage an active workflow:
@@ -317,7 +318,7 @@ Read these files when you need detailed procedures:
 | `references/new-feature-flow.md` | Developer wants to add a new feature |
 | `references/modify-existing-flow.md` | Developer wants to change existing functionality |
 | `references/pr-review-checklist.md` | During code review or PR discussion |
-| `references/git-flow-integration.md` | Branch creation, merge strategy, release flow |
+| `references/git-integration.md` | Branch management and SDD ↔ Git coupling (branching-strategy-neutral) |
 | `references/drift-verification.md` | `/dflow:verify` — rules.md ↔ behavior.md consistency check |
 
 ## Templates
