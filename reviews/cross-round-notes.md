@@ -27,3 +27,20 @@
 - 描述：R7 定案的 T1/T2/T3 判準是首次在 Dflow 明文化，T2 與 T3 的邊界（是否涉及 BR Delta）在實戰中是否會出現灰色地帶待觀察。例如：修改 UI 驗證提示文字（純文字）但底層驗證規則未變，算 T2 還是 T3？
 - 建議下一步：R7 Implement 完成後蹲點觀察 1-2 個 feature 跨 T2/T3 的實例，若邊界模糊再回頭調整
 - 影響檔案：`sdd-ddd-*-skill/references/modify-existing-flow.md`（雙版）、`SKILL.md`（Ceremony Scaling 段）
+
+### 議題 3：Dflow 長期散佈策略——npm install + 多 AI 工具相容
+
+- 來源：R7 Approve F-07 附帶討論（2026-04-22，使用者在讀 README 安裝路徑矛盾時延伸提出）
+- 描述：使用者提出長期散佈構想：
+  - **Dflow 以 npm 套件形式散佈**，降低對 Claude Code skill 分發機制的依賴
+  - 支援多 AI 工具：Claude Code / Codex / Gemini / GitHub Copilot 共用同一份 Dflow skill 內容
+  - `/dflow:init-project` Q5 的選擇性 scaffolding（如 Git-principles-gitflow / Git-principles-trunk 二版本）可由 npm install 時的 CLI 參數 / 互動選項取代，更符合開源生態慣例
+  - Git-principles 等 scaffolding 名稱若中文化（例如 `Git-原則.md`）對國際散佈不利，應在散佈層保持英文
+  - 使用者原話：「最終我是希望可以 npm 安裝，也同時也可以在 Codex、Gemini、GitHub Copilot 中使用，另外 npm 也可以提供一些選擇...這實施方式我覺得可能最適合的是 npm install。dflow init 時候處理，未必比 npm install 好」
+- **明確定位**：本議題**不列入 R7 範圍**（使用者自己強調「這項應該是最後處理，不在此案」）
+- 建議下一步：R7 Implement 完成、R1–R6 全體 Closeout 後，於 Wave D 精簡化審查階段或之後的獨立 wave 開新 proposal 評估：
+  - npm 套件結構 vs 現況 skill 目錄結構的 mapping
+  - 多 AI 工具相容所需的「skill 格式抽象層」
+  - `/dflow:init-project` 與 npm install 的職責切分（哪些動作留 `/dflow:init-project`，哪些改由 npm install）
+  - scaffolding 範本命名國際化（移除中文檔名如 `Git-原則.md`）
+- 影響範圍：repo 結構本身、README、可能新增 `package.json` / bin entrypoints、scaffolding 檔命名全面英文化

@@ -1,6 +1,6 @@
 ## PROPOSAL-009: Feature 目錄化 + 多階段規格 + 新命令
 
-**狀態**: `draft`
+**狀態**: `approved`
 
 **提出日期**: 2026-04-22
 
@@ -337,8 +337,19 @@ Obts 團隊針對候選 A 的背書結論：**採混血方案** —— V2 的 fe
 
 ### 評估紀錄（整合評估時填寫）
 
-**評估日期**:
+**評估日期**: 2026-04-22
 
-**結論**:
+**結論**: approved
 
-**理由**:
+**理由**: 經 R7 review（2026-04-22，Codex 產出 `reviews/round-7-report.md`）+ R7 approve（2026-04-22，本 session）處理 4 個 finding（accept-with-choice: F-01 Path A-3 / F-02 Path C / F-04 Path B，accept: F-03；無 reject / defer / clarify）。所有需修訂部分已在 R7 approve session 內完成：
+- § A 決議 4（feature 目錄三類檔案指向 § H）
+- § C 決議 9（/dflow:new-phase 嚴格 active-only）+ 決議 10（finish-feature 產出改為 Integration Summary、同步 BC 層）
+- § D 流程類新增 Ceremony 判準、BR Snapshot refresh、BC 層同步 bullet
+- **§ H（全新）決議 12-15**：phase-spec 重命名 + Delta 段、三層 Ceremony、`_index.md` 六段範本、lightweight-spec 實例化位置
+- **§ I（全新）決議 16-19**：Completed feature reopen 生命週期（Path C follow-up）
+- § 影響範圍 Flow / Templates 全部重寫定稿
+- § 關聯的 Proposal PROPOSAL-008 那列 scope 收斂
+- § 關鍵假設 5 改為已確認項
+- § 驗證點同步調整
+
+下一步進入 R7 Implement 階段（見 `reviews/round-7-decisions.md` § 下一步 + `field-reference-candidates.md` Phase 3）。

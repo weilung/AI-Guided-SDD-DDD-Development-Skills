@@ -3,7 +3,7 @@
 **對應 review 報告**: `reviews/round-7-report.md`
 **決議日期**: 2026-04-22（R7 Approve session）
 **決議者**: 使用者（Claude 整理選項 + 當場修訂 proposal）
-**檔案狀態**: **進行中**（每處理完一項 finding 當場追加；全部處理完後補 Proposal 狀態推進紀錄 + 下一步段）
+**檔案狀態**: **完成**（7 個 finding 處理完畢；三份 proposal 狀態推進完成）
 
 ---
 
@@ -15,9 +15,9 @@
 | F-02 | 009 | Major | D1 | **accept-with-choice（Path C）** | 選定：completed/ = 凍結歷史不搬回；reopen 走新建 follow-up feature（新 SPEC-ID + `follow-up-of` 欄位 + 反向 Follow-up Tracking 段）；`/dflow:new-phase` 嚴格只適用於 active feature |
 | F-03 | 009 | Major | D1 | **accept** | `/dflow:verify` scope 收斂：不擴張到跨 phase-spec 聚合；drift-verification 維持 `rules.md` ↔ `behavior.md` 現況對照；BR 現況聚合由 `_index.md` Current BR Snapshot 承擔（F-01 A-3 間接處理） |
 | F-04 | 009/010/011 | Major | D3 | **accept-with-choice（Path B）** | P009 `/dflow:finish-feature` 產出改為 Integration Summary（Git-strategy-neutral）；P010 兩版 Git-principles 各自補「Integration Commit 訊息慣例」段；P011 關聯表註記與解耦目標一致 |
-| F-05 | 010 | Major | D4 | _（待決）_ | |
-| F-06 | 011 | Major | D1 | _（待決）_ | |
-| F-07 | 010 | Minor | D2 | _（待決）_ | |
+| F-05 | 010 | Major | D4 | **accept** | /dflow:init-project 必產清單拆為 WebForms 版（migration/tech-debt.md）/ Core 版（architecture/tech-debt.md + architecture/decisions/ + domain/context-map.md）；`behavior.md` 從必產清單移除，由 P003/P007a 既有機制產生 |
+| F-06 | 011 | Major | D1 | **accept** | P011 scope 精準化：補入 drift-verification.md 雙版（移除「Before a release branch cut」觸發點）；移除 modify-existing-flow.md × 2 + pr-review-checklist.md × 2（Grep verify 現況無 Git Flow 字樣）|
+| F-07 | 010 | Minor | D2 | **accept** | P010 § 3 README 範例步驟 1 改為「Install the appropriate skill using the current Claude Code skill mechanism (see Claude Code official docs)」，不寫死 `.claude/skills/` 路徑，與風險 6 緩解說明一致 |
 
 ---
 
@@ -126,32 +126,136 @@
 
 **交叉影響**: 本 finding 是跨三份 proposal 的唯一 finding，處理上三份同時修訂。P011 的修訂最輕（僅關聯表補一句）；P009 的改動是「措辭中立化」；P010 的改動是「scaffolding 範本 scope 輕微擴張」（+2 段「Integration Commit 訊息慣例」）。Codex 點的 Codex F-04 三個行號（P009:77-85 / P011:49-54 / P010:106-110）全部 verify 過並處理。
 
+### F-05（accept：/dflow:init-project 必產清單拆分 + `behavior.md` 時機修正）
+
+**背景脈絡**：
+- Codex 指出 P010 § 1 把 `specs/architecture/tech-debt.md`、`architecture/decisions/`、`domain/context-map.md`、`behavior.md` 都列成 init 必產，但現況：
+  - WebForms 使用 `specs/migration/tech-debt.md`（無 `architecture/`）
+  - Core 才使用 `specs/architecture/tech-debt.md` + `domain/context-map.md`
+  - `behavior.md` 是 BC 級檔案（`specs/domain/{context}/behavior.md`），需先有 context 才能安放；由 P003 / P007a 機制於首個 BC 建立時產生
+- 本 finding 是純精準度修訂，無設計決策；直接採用 Codex 建議的拆分方案。
+
+**決定**：
+1. init 必產清單拆為 skill-version-specific（WebForms / Core 各一份）
+2. `behavior.md` 從必產清單移除；明確說明由 P003 completion flow 或 P007a baseline capture 機制產生
+3. 驗證點追加雙版分別確認條目
+
+**修訂檔案**: `proposals/PROPOSAL-010-dflow-init-and-scaffolding.md`
+
+**具體修訂段落**（3 處）：
+- § 1. 新增命令 `/dflow:init-project` 執行流程 step 4：必產清單拆為 WebForms / Core 兩版；`behavior.md` 移除並說明由 P003 / P007a 既有機制產生
+- § 關聯的 Proposal 表 PROPOSAL-007a 那列：追加「`behavior.md` 由此機制在首個 bounded context 建立時產生，不在 init 階段必產」
+- § 關鍵假設 / 驗證點段：追加 WebForms / Core 雙版產出結構的驗證條目
+
+**交叉影響**: 無跨 proposal 修訂。但本 finding 的正確處理讓 P010 的 `/dflow:init-project` 產出結構與現行 WebForms / Core skill 的 SKILL.md / templates/CLAUDE.md 對齊，避免實施後 scaffold 與既有 flow 脫節。
+
+### F-06（accept：P011 scope 精準化，補入 drift-verification.md 並移除誤列檔）
+
+**背景脈絡**：
+- Codex 指出 P011 scope 表同時有「漏列真實受影響檔」與「列入缺乏對應文本的檔」兩個精準度問題：
+  - **漏列**：`drift-verification.md` 兩版都保留「Before a release branch cut」觸發點，是 Git Flow 語境（P011 自己想移除的對象）
+  - **誤列**：`modify-existing-flow.md` 雙版 + `pr-review-checklist.md` 雙版，現況並沒有 release / hotfix 流程段可刪，只是一般性的 bug-fix / spec review 指引
+- R7 Approve session verify 過（用 Grep + 讀檔確認）：
+  - `drift-verification.md` 現況 `webforms:122` / `core:132` 確實有 "Before a release branch cut" 字樣 ✓
+  - `modify-existing-flow.md` 完全無 `release` / `hotfix` / `develop` / `Git Flow` 字樣 ✓
+  - `pr-review-checklist.md` 完全無對應字樣 ✓
+
+**決定**：
+1. scope 表**補入** `drift-verification.md` 雙版（移除「Before a release branch cut」觸發點；其他觸發點維持）
+2. scope 表**移除** `modify-existing-flow.md` 雙版 + `pr-review-checklist.md` 雙版（現況無 Git Flow 殘餘語句，列入會導致 reviewer 誤以為有實質改動）
+3. 繁中版同步修正同樣的 scope 變化
+
+**修訂檔案**: `proposals/PROPOSAL-011-git-flow-decoupling.md`
+
+**具體修訂段落**（4 處）：
+- § 4 `/dflow:bug-fix` 語意澄清段第 3 bullet：「modify-existing-flow 若有 hotfix 一律改」改為「現況已無 Git Flow 字樣（Grep verify 過），不列入必改 scope，實施時發現遺漏當場處理」
+- § 5 交叉影響的檔案段：新增 `drift-verification.md`（雙版）bullet；修改 `pr-review-checklist.md` bullet（改為「現況無 release branch 檢查項，不列必改」）
+- § 影響範圍表：移除 `modify-existing-flow.md` 雙版 + `pr-review-checklist.md` 雙版共 4 行；新增 `drift-verification.md` 雙版 2 行
+- § 影響範圍表繁中版段：從「modify-existing-flow_tw.md / pr-review-checklist_tw.md 同步措辭」改為「drift-verification_tw.md 同步措辭」並註明調整理由
+
+**交叉影響**: 無跨 proposal 修訂（僅動 P011）。但需注意 P009 § 影響範圍也列入 `drift-verification.md` 雙版修訂（路徑假設更新，F-03 縮回 scope 後）；兩份 proposal 動同一檔的**不同段落**（P011 動 When to Run 段、P009 動 Input 段），實施時按 Phase 3 順序（011 → 009 → 010）自然分段處理，不衝突。`pr-review-checklist.md` 雙版仍在 P009 scope 中（F-01 的「多份 phase spec 的檢查邏輯」），與本 finding 的移除不矛盾——P011 移除是「無 Git Flow 語句可動」，P009 保留是「feature 目錄化帶來的新邏輯需求」，兩者維度不同。
+
+### F-07（accept：P010 README 範例不寫死安裝路徑）
+
+**背景脈絡**：
+- Codex 指出 P010 § 3 更新 README.md 的範例段（現況 `proposals/PROPOSAL-010:114-121`）步驟 1 寫死 `copy ... to your .claude/skills/`，但同一份 proposal § 預期後果 / 風險 6（`:237-238`）明確說 README 安裝段「保持高層步驟 + link to Claude Code official docs，不寫死路徑細節」。proposal 內部自相矛盾。
+- 屬 Minor 精準度修訂，改動極輕。
+
+**決定**：範例步驟 1 改為中立措辭「Install the appropriate skill using the current Claude Code skill mechanism (see Claude Code official docs)」，與風險 6 緩解說明一致。
+
+**修訂檔案**: `proposals/PROPOSAL-010-dflow-init-and-scaffolding.md`
+
+**具體修訂段落**（1 處）：
+- § 3 更新 README.md 的範例段步驟 1：改為中立措辭並註明對應 R7 F-07 決議
+
+**交叉影響**: 無跨 proposal 修訂。
+
+**附帶討論（不在本 finding scope 內，已轉 cross-round-notes）**：使用者在 R7 Approve F-07 討論中提出「最終可考慮 npm install 作為多 AI 工具（Codex / Gemini / GitHub Copilot）通用的散佈機制，同時 npm 可作為 scaffolding 選擇介面（取代 `/dflow:init-project` Q5）」的延伸構想。此為長期散佈策略議題，明確超出 R7 scope，已記入 `reviews/cross-round-notes.md`（議題 3）。
+
 ---
 
 ## Reject / Defer 項目備忘
 
-_（暫無，待後續 finding 產出時填入）_
+本輪無 reject / defer 決議。7 個 finding 全部為 accept（4 項）或 accept-with-choice（3 項，F-01 Path A-3 / F-02 Path C / F-04 Path B）。
 
 ---
 
 ## Out-of-scope 項目
 
-_（暫無；若後續討論產生，轉記 `reviews/cross-round-notes.md`）_
+本輪無在範圍內但轉 out-of-scope 的 finding。R7 Approve 過程中延伸出 3 個 cross-round-notes 議題（非 finding 本身），已記入 `reviews/cross-round-notes.md`：
+- 議題 1：`lightweight-spec.md` 缺 OpenSpec `tasks.md` 對應「實作任務」段（F-01 附帶討論）
+- 議題 2：三層 Ceremony（T1/T2/T3）判準在長期實戰的調整（F-01 附帶討論）
+- 議題 3：Dflow 長期散佈策略——npm install + 多 AI 工具相容（F-07 附帶討論）
 
 ---
 
 ## Proposal 狀態推進紀錄
 
-_（待全部 finding 處理完後填入）_
+| Proposal | 推進前 | 推進後 | 推進理由 |
+|---|---|---|---|
+| **PROPOSAL-011** | draft | **approved** | F-04 / F-06 兩項 finding 全部 accept 或 accept-with-choice，全部修訂完成；無 reject / defer / clarify；滿足推進條件 (a)(b)(c)(d)(e) |
+| **PROPOSAL-009** | draft | **approved** | F-01 / F-02 / F-03 / F-04 四項 finding 全部 accept 或 accept-with-choice，全部修訂完成（含 § H 新增 4 項決議 + § I 新增 4 項決議）；無 reject / defer / clarify；滿足推進條件 |
+| **PROPOSAL-010** | draft | **approved** | F-04 / F-05 / F-07 三項 finding 全部 accept 或 accept-with-choice，全部修訂完成；無 reject / defer / clarify；滿足推進條件 |
+
+三份 proposal 的「評估紀錄」段已同步填入（評估日期 2026-04-22，結論 approved，理由詳列各段修訂對應 finding）。
 
 ---
 
 ## 下一步
 
-_（待全部 finding 處理完後填入）_
+### R7 Implement 階段（分 3 個 session）
+
+依 `field-reference-candidates.md` Phase 3 實施規劃的依賴順序與 AI 分派表執行：
+
+| Session | Proposal | 規模 | 建議模型 / 工具 | 依賴 |
+|---|---|---|---|---|
+| **Session 1** | **PROPOSAL-011** | small | Cursor Opus 4.7 High（見 Phase 3 AI 分派表）| 無前置 |
+| **Session 2** | **PROPOSAL-009** | large | Claude Code 主力 | 依賴 PROPOSAL-011 先完成 |
+| **Session 3** | **PROPOSAL-010** | medium | Cursor Opus 4.7 High | 依賴 PROPOSAL-011 / PROPOSAL-009 先完成 |
+
+### 各 session 啟動提示詞
+
+- 待 R7 Approve 完成（即本 session 結束）後另起：
+  - `reviews/prompts/round-7-implement-011.md`
+  - `reviews/prompts/round-7-implement-009.md`
+  - `reviews/prompts/round-7-implement-010.md`
+- 各 session 的實施輸入是 approved 後的 proposal + 本 decisions 文件 + F-01 / F-02 附帶討論的 context
+
+### R7 Implement 完成後
+
+仿 R1–R6 pattern 進入 **R7 實作品質審查（Codex）**：
+- Codex review 實作產物 vs proposal 意圖
+- Claude Approve session 處理 Codex 的 findings
+- Claude Implement session 修正
+
+### Closeout 階段（R7 全部完成後）
+
+- 繁中版同步（`*-tw/`）：本輪 proposal 修訂未納入繁中處理（依 review-workflow.md §七 C1 延後至 Post-Review Closeout）
+- Tutorial 重建（若相關）
+- 評估 cross-round-notes 三項議題的處理時機（議題 1-2 可納入 Wave D 精簡化審查；議題 3 可能需獨立 wave）
 
 ---
 
 ## 跨輪發現備忘
 
-R7 Approve 過程中延後處理的議題已寫入 `reviews/cross-round-notes.md`（見 § R7 Approve 發現、延後處理的議題）。
+R7 Approve 過程中延後處理的議題已寫入 `reviews/cross-round-notes.md`（見 § R7 Approve 發現、延後處理的議題，共 3 項）。

@@ -1,6 +1,6 @@
 ## PROPOSAL-011: Git Flow Decoupling
 
-**狀態**: `draft`
+**狀態**: `approved`
 
 **提出日期**: 2026-04-22
 
@@ -85,11 +85,12 @@ references/git-flow-integration.md  →  references/git-integration.md
 - 命令描述從「modify-existing-flow with lightweight ceremony」強化為：
   > **Lightweight-ceremony modification of existing functionality. Not tied to any branch strategy (not Git Flow's hotfix).**
 - 雙版 SKILL.md 的 Primary triggers 與決策樹同步調整
-- `modify-existing-flow.md` 內若有提及「hotfix」一律改為「bug fix / 輕量修改」；保留「輕量 ceremony」的概念
+- `modify-existing-flow.md` 實際現況已無 `hotfix` / `release` / `develop` 等 Git Flow 字樣（R7 Review F-06 verify 過）；本 proposal 不再把該檔列入必改 scope；若實施時發現遺漏的 Git Flow 殘餘語句，當場移除即可，不擴大 scope
 
 #### 5. 交叉影響的檔案
 
-- `references/pr-review-checklist.md`：移除 release branch 專屬檢查項；保留 feature/bugfix 前/後檢查
+- `references/drift-verification.md`（雙版）：**移除「Before a release branch cut」觸發點**（`webforms:122` / `core:132`，R7 Review F-06 verify 過——這是 Git Flow 專屬語境，本 proposal 自己想移除的對象，但原 draft scope 表遺漏）；保留其他觸發點（pre-PR、after refactor、onboarding）
+- `references/pr-review-checklist.md`：**現況無 release branch 專屬檢查項**（R7 Review F-06 verify 過）；本 proposal 不列入必改 scope；若未來發現遺漏的 Git Flow 語句當場移除即可
 - `templates/CLAUDE.md`：若有段落預設 Git Flow（例如「專案採 Git Flow」語句），改為中立措辭，或標示為「若採 Git Flow 可選採用」
 
 #### 6. 對既有使用者的影響
@@ -107,15 +108,13 @@ references/git-flow-integration.md  →  references/git-integration.md
 | `sdd-ddd-core-skill/references/git-flow-integration.md` | 重命名 + 修改 | 同上 |
 | `sdd-ddd-webforms-skill/SKILL.md` | 修改 | 更新 references 表內檔名 + `/dflow:bug-fix` 描述；決策樹中對應節點更新 |
 | `sdd-ddd-core-skill/SKILL.md` | 修改 | 同上 |
-| `sdd-ddd-webforms-skill/references/modify-existing-flow.md` | 修改 | 「hotfix」措辭改「bug fix / 輕量修改」；確認 `/dflow:bug-fix` 的 ceremony 描述不綁分支策略 |
-| `sdd-ddd-core-skill/references/modify-existing-flow.md` | 修改 | 同上 |
-| `sdd-ddd-webforms-skill/references/pr-review-checklist.md` | 修改 | 移除 release branch 專屬檢查項 |
-| `sdd-ddd-core-skill/references/pr-review-checklist.md` | 修改 | 同上 |
+| `sdd-ddd-webforms-skill/references/drift-verification.md` | 修改（輕量） | **移除「Before a release branch cut」觸發點**（現況 `webforms:122`）——R7 Review F-06 補入；其他觸發點（pre-PR、after refactor、onboarding）維持 |
+| `sdd-ddd-core-skill/references/drift-verification.md` | 修改（輕量） | 同上（現況 `core:132`）|
 | `sdd-ddd-webforms-skill/templates/CLAUDE.md` | 修改 | 檢查並中立化 Git Flow 預設措辭 |
 | `sdd-ddd-core-skill/templates/CLAUDE.md` | 修改 | 同上 |
 | `sdd-ddd-webforms-skill-tw/git-flow-integration_tw.md` | 重命名 + 修改 | → `git-integration_tw.md`（同步英文版變更）|
 | `sdd-ddd-core-skill-tw/git-flow-integration_tw.md` | 重命名 + 修改 | 同上 |
-| 繁中版其他對應檔 | 修改 | SKILL_tw.md / modify-existing-flow_tw.md / pr-review-checklist_tw.md 同步措辭 |
+| 繁中版其他對應檔 | 修改 | SKILL_tw.md / drift-verification_tw.md 同步措辭（R7 Review F-06 調整：modify-existing-flow_tw.md / pr-review-checklist_tw.md 現況無 Git Flow 語句，不列入必改）|
 
 ---
 
@@ -159,8 +158,14 @@ references/git-flow-integration.md  →  references/git-integration.md
 
 ### 評估紀錄（整合評估時填寫）
 
-**評估日期**:
+**評估日期**: 2026-04-22
 
-**結論**:
+**結論**: approved
 
-**理由**:
+**理由**: 經 R7 review（2026-04-22，Codex 產出 `reviews/round-7-report.md`）+ R7 approve（2026-04-22，本 session）處理 2 個 finding（accept-with-choice: F-04 Path B；accept: F-06；無 reject / defer / clarify）。所有需修訂部分已在 R7 approve session 內完成：
+- § 4 `/dflow:bug-fix` 語意澄清段第 3 bullet：`modify-existing-flow.md` 的 hotfix 規則改為「現況已 verify 無 Git Flow 字樣，不列必改 scope」（F-06）
+- § 5 交叉影響的檔案段：新增 `drift-verification.md`（雙版）bullet（移除「Before a release branch cut」觸發點，F-06）；修改 `pr-review-checklist.md` bullet（現況無 release branch 檢查項，不列必改）
+- § 影響範圍表：移除 `modify-existing-flow.md` 雙版 + `pr-review-checklist.md` 雙版共 4 行（F-06）；新增 `drift-verification.md` 雙版 2 行（F-06）；繁中版段同步修正
+- § 關聯的 Proposal PROPOSAL-009 那列：追加「009 的 `/dflow:finish-feature` Integration Summary 保持 Git-strategy-neutral」一致性備註（F-04）
+
+下一步進入 R7 Implement 階段（見 `reviews/round-7-decisions.md` § 下一步 + `field-reference-candidates.md` Phase 3）。

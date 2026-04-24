@@ -1,6 +1,6 @@
 ## PROPOSAL-010: `dflow init` 機制 + Scaffolding 範本集
 
-**狀態**: `draft`
+**狀態**: `approved`
 
 **提出日期**: 2026-04-22
 
@@ -65,14 +65,22 @@
        [ ] _conventions.md（規格撰寫慣例範本）
        [ ] Git-原則.md（專案 Git 規範範本，含 Git Flow 版本與 trunk-based 版本可選）
        [ ] CLAUDE.md 片段（若專案沒 CLAUDE.md 則必產；若已有，僅提供建議片段供使用者合併）
-4. AI 使用 Write 工具建立：
-   - 必產：
+4. AI 使用 Write 工具建立（**必產清單依 skill 版本分拆**，R7 Review F-05 決議）：
+   - **WebForms 版必產**：
+     ```
      specs/features/{active,completed,backlog}/
      specs/domain/glossary.md（空範本）
+     specs/migration/tech-debt.md（空範本——WebForms 版使用 migration/ 目錄，非 architecture/）
+     ```
+   - **Core 版必產**：
+     ```
+     specs/features/{active,completed,backlog}/
+     specs/domain/glossary.md（空範本）
+     specs/domain/context-map.md（空範本——Core 版必產，WebForms 版不產）
      specs/architecture/tech-debt.md（空範本）
      specs/architecture/decisions/（空目錄）
-     specs/domain/context-map.md（Core 版必產，WebForms 版選擇性）
-     behavior.md（P007a 引入的 system behavior）—— 視 skill 版本決定位置
+     ```
+   - **`behavior.md` 不在 init 階段產生**（R7 Review F-05 決議）：`behavior.md` 是 bounded-context 級檔案（`specs/domain/{context}/behavior.md`），需先有 context 名稱才能正確安放；由 P003 / P007a 既有機制於首個 bounded context 建立時（Step 8.3 / Step 5.3 completion flow 或 brownfield baseline capture）自動產生
    - 選擇性：依 Q5 勾選產生
 5. AI 提示下一步：
    「結構已建立。下一步建議：
@@ -117,11 +125,12 @@ sdd-ddd-core-skill/scaffolding/       ← 對應結構
 - 現況：偏「這個 repo 是什麼」
 - 新增：「How to adopt Dflow in your project」段
   ```
-  1. Install the skill (copy sdd-ddd-core-skill/ or sdd-ddd-webforms-skill/ to your .claude/skills/)
+  1. Install the appropriate skill using the current Claude Code skill mechanism (see Claude Code official docs)
   2. In your project root, run: /dflow:init-project
   3. Follow the prompts to set up specs/ structure and optional scaffolding
   4. Start your first feature: /dflow:new-feature
   ```
+  （R7 Review F-07 決議：步驟 1 不寫死 `.claude/skills/` 路徑，與 § 預期後果 / 風險 6 的緩解說明內部一致）
 - 對照 V2（`E:\工作區\SDD-Starter-Kit`）的分工說明：V2 是完整散佈 starter kit（含 onboarding 文件組），Dflow 是 AI-guided skill 本體；兩者可並用
 - **注意**：本 proposal 僅更新 repo 根 README，不新增 `SDD-AI協作開發模式介紹.md` / `使用說明.md` 等 V2 級別的完整 onboarding 文件——那屬 Closeout C2（Tutorial 重建）範圍
 
@@ -204,7 +213,7 @@ sdd-ddd-core-skill/scaffolding/       ← 對應結構
 | PROPOSAL-011 | 前置 | `Git-principles-trunk.md` scaffolding 範本的存在需先有 011 解耦作前提；若 011 未實施，Dflow 本體仍綁 Git Flow，scaffolding 提供 trunk 範本會自相矛盾 |
 | PROPOSAL-009 | 前置 | `/dflow:init-project` 產出的 `specs/features/active/` 必須符合 009 的 feature 目錄化規範；若 009 未實施，init 產出的結構會與 skill 本體不一致 |
 | PROPOSAL-007c | 互補 | `CLAUDE-md-snippet.md` 需沿用 007c 的標題分段（系統脈絡 / 開發流程）|
-| PROPOSAL-007a | 互補 | Brownfield scaffolding（`_overview.md`）引導使用者記錄現況，與 007a 的 baseline capture 形成對應（init 階段設 scaffold，baseline capture 階段填實）|
+| PROPOSAL-007a | 互補 | Brownfield scaffolding（`_overview.md`）引導使用者記錄現況，與 007a 的 baseline capture 形成對應（init 階段設 scaffold，baseline capture 階段填實）；**`behavior.md` 由此機制（P007a baseline capture 或 P003 completion flow）在首個 bounded context 建立時產生，不在 init 階段必產**（R7 Review F-05 決議）|
 | Closeout C2 | 互補 | C2 Tutorial 重建會納入「單一線性敘事版的 SDD 流程」；本 proposal 的 scaffolding 不重疊 C2 Tutorial 內容 |
 
 ---
@@ -219,6 +228,10 @@ sdd-ddd-core-skill/scaffolding/       ← 對應結構
 
 **驗證點（實施後）**：
 - 在乾淨目錄執行 `/dflow:init-project`，確認產出結構可直接承接 `/dflow:new-feature`
+- **WebForms / Core 兩版各自執行一次 `/dflow:init-project`**，確認（R7 Review F-05 決議）：
+  - WebForms 版產出 `specs/migration/tech-debt.md`（非 `architecture/`），不產 `specs/domain/context-map.md`
+  - Core 版產出 `specs/architecture/tech-debt.md` + `specs/architecture/decisions/` + `specs/domain/context-map.md`
+  - 兩版**都不**產 `specs/domain/{context}/behavior.md`（等首個 bounded context 於 completion flow 建立時才生成）
 - 在已有 `specs/` 目錄的專案執行，確認 AI 不覆寫、只補缺失
 - 用 `_overview.md` / `Git-principles-*.md` scaffolding 範本填實一次，確認 placeholder 完整、無殘留範本用語
 - README.md 的「How to adopt」能引導一個全新使用者在 30 分鐘內跑起第一個 feature
@@ -244,8 +257,16 @@ sdd-ddd-core-skill/scaffolding/       ← 對應結構
 
 ### 評估紀錄（整合評估時填寫）
 
-**評估日期**:
+**評估日期**: 2026-04-22
 
-**結論**:
+**結論**: approved
 
-**理由**:
+**理由**: 經 R7 review（2026-04-22，Codex 產出 `reviews/round-7-report.md`）+ R7 approve（2026-04-22，本 session）處理 3 個 finding（accept-with-choice: F-04 Path B；accept: F-05、F-07；無 reject / defer / clarify）。所有需修訂部分已在 R7 approve session 內完成：
+- § 1 `/dflow:init-project` 執行流程 step 4：必產清單拆為 WebForms / Core 雙版，`behavior.md` 移除（F-05）
+- § 2 Git-principles 二版本段：新增「Integration Commit 訊息慣例」段說明（F-04）
+- § 3 更新 README.md：步驟 1 改為中立措辭，不寫死 `.claude/skills/` 路徑（F-07）
+- § 影響範圍 scaffolding 段：Git-principles-gitflow / trunk 描述加「Integration Commit 訊息慣例」段（F-04）
+- § 關聯的 Proposal PROPOSAL-007a 那列：補「behavior.md 由此機制產生」說明（F-05）
+- § 關鍵假設 / 驗證點段：新增 WebForms / Core 雙版產出驗證條目（F-05）
+
+下一步進入 R7 Implement 階段（見 `reviews/round-7-decisions.md` § 下一步 + `field-reference-candidates.md` Phase 3）。
