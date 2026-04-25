@@ -130,6 +130,7 @@ specs/shared/CLAUDE-md-snippet.md
 - 不建立 `templates/en/` 或 `templates/zh-TW/`
 - 不重新翻譯 `scaffolding/` 內容
 - 不實作 npm package 或 CLI
+- 不將 Dflow 文件根目錄從 `specs/` 改為 `dflow/` / `.dflow/` / `docs/dflow/` 等其他名稱；根目錄命名策略已記錄於 `planning/public-distribution-backlog.md`，應留到 npm / CLI 發布前與相容策略一起決策
 - 不處理繁中版 skill 目錄同步
 
 這些事項已集中記錄於：
@@ -185,6 +186,7 @@ feature/SPEC-20260421-001-報表調整
 | `tutorial/` | Tutorial 重建屬 Closeout C2 或後續文件工作 |
 | `templates/_index.md`、`templates/phase-spec.md`、`templates/lightweight-spec.md` 的中文 heading | 文件內容語言延後到 npm 前整體決策 |
 | npm / package files | 公開散佈工程另案處理 |
+| Dflow 文件根目錄命名（`specs/` vs `dflow/` / `.dflow/` / `docs/dflow/`） | 牽涉所有 flow、template、verify、finish-feature 與既有專案相容；留到 npm / CLI 前整體決策 |
 
 ---
 
@@ -205,6 +207,7 @@ feature/SPEC-20260421-001-報表調整
 | PROPOSAL-011 | 延伸同一方向 | P011 已將 Git Flow 從 skill 本體解耦，朝社群散佈友善前進；本 proposal 對路徑 / 檔名採同一方向 |
 | `reviews/cross-round-notes.md` 議題 3 | 呼應 | 長期 npm / 多 AI 工具散佈策略已記錄，本 proposal 只處理其中的路徑與檔名預備調整 |
 | `planning/public-distribution-backlog.md` | 前置 / 邊界 | npm 前才處理的內容語言、template localization、package/CLI 等議題集中放在此 backlog，不納入本 proposal |
+| 後續「Dflow 文件根目錄命名策略」 | 延後 | 目前仍保留 `specs/` 作為文件根目錄；若 npm 前決定改為 `dflow/` 或其他根目錄，需另案處理 migration / compatibility |
 | 後續「System Document Template Coverage」proposal | 前置 | 先穩定 generated path，再補齊所有 Dflow-managed `.md` 的樣板覆蓋 |
 
 ---
