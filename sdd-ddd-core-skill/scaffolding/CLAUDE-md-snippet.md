@@ -142,7 +142,7 @@ AI 的完整決策樹、Workflow Transparency、Ceremony Scaling 三層判準
 ### Git 分支策略
 
 本專案採用：{填寫 Git Flow / trunk-based / GitHub Flow / 自訂}
-詳見 `specs/_共用/Git-principles-{gitflow|trunk}.md`。
+詳見 `specs/shared/Git-principles-{gitflow|trunk}.md`。
 
 ### AI 協作提醒
 

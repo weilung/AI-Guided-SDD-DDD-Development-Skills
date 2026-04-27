@@ -34,6 +34,9 @@ Presentation → Application → Domain ← Infrastructure
 
 ```
 specs/
+├── shared/                   # 專案級治理文件（由 /dflow:init-project 寫入）
+│   ├── _overview.md          # 系統現況與遷移策略
+│   └── _conventions.md       # 規格撰寫慣例
 ├── domain/
 │   ├── glossary.md
 │   ├── context-map.md

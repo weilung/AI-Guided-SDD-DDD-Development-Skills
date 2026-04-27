@@ -6,6 +6,43 @@
 
 ---
 
+## 2026-04-27 — R8a Implement：PROPOSAL-012 路徑英文化（`specs/_共用/` → `specs/shared/`）
+
+**前置**：R8a Review（Cursor Claude Opus 4.7，`reviews/round-8a-report.md`）+ R8a Approve（Claude Opus 4.7，`reviews/round-8a-decisions.md`）；PROPOSAL-012 處理 10 個 finding（accept 5 / accept-with-choice 3 / reject 2 / defer 0）後 approved
+**決議文件**：`reviews/round-8a-decisions.md`
+**實作範圍**：
+
+- **Path policy 落地**：`/dflow:init-project` 產生的專案級 scaffolding 目的地由 `specs/_共用/` 改為 `specs/shared/`，符合「machine-facing paths and filenames default to English」政策（P012 §1）
+- **Skill 引用同步**：
+  - 雙版 `SKILL.md § Templates & Scaffolding` 段路徑文字更新
+  - 雙版 `references/init-project-flow.md`（Step 2 Q5、Step 3 file-list preview、Step 4 `CLAUDE.md` special handling、Step 5 results report）全部 `_共用/` → `shared/`
+  - 雙版 `scaffolding/CLAUDE-md-snippet.md`：WebForms 5 處 inline 引用 + directory tree 範例（`_overview.md` / `_conventions.md` / `Git-principles-*.md` 從 `specs/` 直接子節點移到 `specs/shared/` 之下）；Core 1 處 inline 引用
+- **`templates/CLAUDE.md` tree 同步 + 兩版 oversight 補全**（per F-04 Path B）：
+  - WebForms `templates/CLAUDE.md` directory tree 將 `_overview.md` / `_conventions.md` 從 `specs/` 直接子節點移到 `specs/shared/`
+  - Core `templates/CLAUDE.md` directory tree 順手補上漏列的 `_overview.md` / `_conventions.md`（兩版 init-project-flow 都會產生，但 Core tree 是 P010 之前就存在的 oversight）
+- **`planning/project-review-brief.md` 過時引用更新**（per F-01 Path A）：line 51 移除「P012 後預期改名」前瞻性段落；§ 3.1 / § 3.2 directory tree 註解去除前瞻性 wording；§10 P012 候選議題段加註「（已由 P012 處理）」
+- **README.md 確認**（per P012 §影響範圍 「可能只需確認」）：grep verify README.md 無 `_共用` 字面引用，無需修改
+
+**歷史條目保持原樣**（per F-10 accept）：CHANGELOG.md 既有 line 17（R7 F-03 紀錄）、line 61（P010 init-project 紀錄）對 `specs/_共用/` 的引用是當時的事實紀錄，**不改寫**；implementer 不應對 CHANGELOG 做全域 grep-and-replace。
+
+**修改檔案（10 檔）**：
+- `sdd-ddd-{webforms|core}-skill/SKILL.md`（2 檔）
+- `sdd-ddd-{webforms|core}-skill/references/init-project-flow.md`（2 檔，replace_all）
+- `sdd-ddd-{webforms|core}-skill/scaffolding/CLAUDE-md-snippet.md`（2 檔；WebForms 含 tree restructure）
+- `sdd-ddd-{webforms|core}-skill/templates/CLAUDE.md`（2 檔；WebForms tree restructure；Core 補檔 + tree restructure）
+- `planning/project-review-brief.md`（4 處更新）
+- `CHANGELOG.md`（本段新增）
+
+**不納入**（per P012 §不納入影響範圍）：
+- 文件內容語言（中文 heading 不英文化；由 PROPOSAL-013 處理，包含 canonical English templates + `TEMPLATE-LANGUAGE-GLOSSARY.md`）
+- 繁中版（`sdd-ddd-*-skill-tw/`）（延到 Closeout C1）
+- npm / package files（延到 `planning/public-distribution-backlog.md § 2`）
+- Dflow 文件根目錄命名（`specs/` vs `dflow/`）（延到 backlog § 6）
+
+**剩餘待辦**：R8a Implement Review（仿 R7 pattern）；R8b（PROPOSAL-013）Implement 啟動依賴本實作完成。
+
+---
+
 ## 2026-04-24 — R7 Implement Review Fix：4 findings 修正
 
 **前置**：R7 Implement Review（Codex gpt-5.4 xhigh，`reviews/round-7-implement-review-report.md`）對 Wave 1-3 實施產物產出 4 個 findings（1 Critical / 2 Major / 1 Minor / 0 Question）

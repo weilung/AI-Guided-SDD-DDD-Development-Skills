@@ -121,15 +121,15 @@ forward-compatible.
 > "Besides the mandatory baseline, which optional starter files do
 > you want me to seed? You can check as many as apply:
 >
->   - [ ] `specs/_共用/_overview.md` — system overview template
->   - [ ] `specs/_共用/_conventions.md` — spec writing conventions
+>   - [ ] `specs/shared/_overview.md` — system overview template
+>   - [ ] `specs/shared/_conventions.md` — spec writing conventions
 >   - [ ] Git principles — **pick one** if your project has opinions
 >         about Git conventions (decision hint: **if you're not sure,
 >         pick trunk-based** — that's the default for GitHub / GitLab.
 >         Pick Git Flow only if you have a formal release cycle with
 >         dedicated release / hotfix branches):
->     - [ ] `specs/_共用/Git-principles-gitflow.md`
->     - [ ] `specs/_共用/Git-principles-trunk.md`
+>     - [ ] `specs/shared/Git-principles-gitflow.md`
+>     - [ ] `specs/shared/Git-principles-trunk.md`
 >   - [ ] `CLAUDE.md` snippet — mandatory if no `CLAUDE.md` exists in
 >         repo root (I'll create one); otherwise I'll drop the snippet
 >         as a standalone file so you can merge it manually"
@@ -191,11 +191,11 @@ destination path:
 
 | Scaffolding source | Destination in project |
 |---|---|
-| `scaffolding/_overview.md` | `specs/_共用/_overview.md` |
-| `scaffolding/_conventions.md` | `specs/_共用/_conventions.md` |
-| `scaffolding/Git-principles-gitflow.md` | `specs/_共用/Git-principles-gitflow.md` |
-| `scaffolding/Git-principles-trunk.md` | `specs/_共用/Git-principles-trunk.md` |
-| `scaffolding/CLAUDE-md-snippet.md` | repo root `CLAUDE.md` (if missing) OR `specs/_共用/CLAUDE-md-snippet.md` (if root `CLAUDE.md` exists) |
+| `scaffolding/_overview.md` | `specs/shared/_overview.md` |
+| `scaffolding/_conventions.md` | `specs/shared/_conventions.md` |
+| `scaffolding/Git-principles-gitflow.md` | `specs/shared/Git-principles-gitflow.md` |
+| `scaffolding/Git-principles-trunk.md` | `specs/shared/Git-principles-trunk.md` |
+| `scaffolding/CLAUDE-md-snippet.md` | repo root `CLAUDE.md` (if missing) OR `specs/shared/CLAUDE-md-snippet.md` (if root `CLAUDE.md` exists) |
 
 ### 3.3 Present the preview
 
@@ -213,8 +213,8 @@ skip, and wait for developer confirmation:
 > | `specs/features/backlog/.gitkeep` | (directory placeholder) |
 > | `specs/domain/glossary.md` | mandatory baseline |
 > | `specs/migration/tech-debt.md` | mandatory baseline |
-> | `specs/_共用/_overview.md` | optional (you picked it) |
-> | `specs/_共用/Git-principles-trunk.md` | optional (you picked it) |
+> | `specs/shared/_overview.md` | optional (you picked it) |
+> | `specs/shared/Git-principles-trunk.md` | optional (you picked it) |
 > | `CLAUDE.md` | optional — snippet seeded because repo has no CLAUDE.md |
 >
 > **Will skip ({M} files — already present):**
@@ -286,10 +286,10 @@ notice:
   `scaffolding/CLAUDE-md-snippet.md`, stripped of its outer "How to
   use this snippet" scaffolding wrapper — keep only the snippet body).
 - **Repo-root `CLAUDE.md` exists, developer wants the snippet:** write
-  `specs/_共用/CLAUDE-md-snippet.md` (a copy of the scaffolding file)
+  `specs/shared/CLAUDE-md-snippet.md` (a copy of the scaffolding file)
   and announce:
   > "Your project already has `CLAUDE.md` at repo root — I did not
-  > touch it. The snippet is now at `specs/_共用/CLAUDE-md-snippet.md`
+  > touch it. The snippet is now at `specs/shared/CLAUDE-md-snippet.md`
   > for you to merge manually. Preserve the `系統脈絡` / `開發流程`
   > H2 structure when merging — it matches what the Dflow skill
   > expects."
@@ -323,8 +323,8 @@ Init complete. Summary:
     ✓ specs/features/backlog/.gitkeep
     ✓ specs/domain/glossary.md
     ✓ specs/migration/tech-debt.md
-    ✓ specs/_共用/_overview.md
-    ✓ specs/_共用/Git-principles-trunk.md
+    ✓ specs/shared/_overview.md
+    ✓ specs/shared/Git-principles-trunk.md
     ✓ CLAUDE.md (seeded from scaffolding snippet)
 
   Skipped ({M} files already present):
@@ -351,7 +351,7 @@ Tailor the recommendation to the Step 1 scenario:
 **Brownfield**:
 
 > "Structure is ready. Recommended next step:
->  - First, open `specs/_共用/_overview.md` and fill in the 'Current
+>  - First, open `specs/shared/_overview.md` and fill in the 'Current
 >    System State' and 'Known Issues' sections — this gives Dflow
 >    context when you triage existing behavior later.
 >  - Then run `/dflow:modify-existing` to work from an incoming change
@@ -374,7 +374,7 @@ Remind the developer to review files that have `{placeholder}` tokens
 still in them:
 
 > "A few files still have `{placeholder}` tokens that need your input:
->  - `specs/_共用/_overview.md`: `{業務領域}`, `{團隊}`,
+>  - `specs/shared/_overview.md`: `{業務領域}`, `{團隊}`,
 >    `{使用者規模}`
 >  - `CLAUDE.md`: `{業務領域}`
 >

@@ -41,15 +41,16 @@ when merging into an existing `CLAUDE.md`.
 ASP.NET Core 做準備。
 
 {選填：補上團隊規模、使用者規模、主要 stakeholders 等 context，
-1-3 行即可。完整內容放在 `specs/_共用/_overview.md`。}
+1-3 行即可。完整內容放在 `specs/shared/_overview.md`。}
 
 ### 目錄結構
 
 ```
 specs/
-├── _overview.md              # 系統現況與遷移策略
-├── _conventions.md           # 規格撰寫慣例
-├── Git-principles-*.md       # Git 規範（gitflow 或 trunk 版）
+├── shared/                   # 專案級治理文件（由 /dflow:init-project 寫入）
+│   ├── _overview.md          # 系統現況與遷移策略
+│   ├── _conventions.md       # 規格撰寫慣例
+│   └── Git-principles-*.md   # Git 規範（gitflow 或 trunk 版）
 ├── domain/                   # 領域知識
 │   ├── glossary.md           # 術語表（Ubiquitous Language）
 │   └── {context}/            # 按 Bounded Context 分
@@ -112,9 +113,9 @@ AI 的完整決策樹、Workflow Transparency、Ceremony Scaling 三層判準
 
 （本 `CLAUDE.md` 只記這一層——Dflow skill 不管的專案決策）
 
-- **Git 分支策略**：見 `specs/_共用/Git-principles-{gitflow|trunk}.md`
-- **規格撰寫慣例**：見 `specs/_共用/_conventions.md`
-- **系統現況與遷移**：見 `specs/_共用/_overview.md`
+- **Git 分支策略**：見 `specs/shared/Git-principles-{gitflow|trunk}.md`
+- **規格撰寫慣例**：見 `specs/shared/_conventions.md`
+- **系統現況與遷移**：見 `specs/shared/_overview.md`
 - {其他專案特有規則，例如「JPY 金額必須以最小貨幣單位（yen）儲存」/
   「所有費用報銷需主管審核」/「跨時區行程以 UTC 記錄」}
 
@@ -135,7 +136,7 @@ AI 的完整決策樹、Workflow Transparency、Ceremony Scaling 三層判準
 - 回答 Domain 相關問題時，優先參考 `specs/domain/` 中的文件
 - 發現 Code-Behind 中的業務邏輯時，建議抽離到 `src/Domain/`
 - 建立分支前，確認命名符合規範且對應 spec 存在
-- 詳細 Git 操作規則見 `specs/_共用/Git-principles-{gitflow|trunk}.md`
+- 詳細 Git 操作規則見 `specs/shared/Git-principles-{gitflow|trunk}.md`
 ```
 
 ---

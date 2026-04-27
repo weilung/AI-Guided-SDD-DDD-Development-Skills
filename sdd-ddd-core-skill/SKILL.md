@@ -452,7 +452,7 @@ These are the feature-/spec-level building blocks that the flows instantiate dur
 
 ### Scaffolding (used by `/dflow:init-project`)
 
-The `scaffolding/` directory holds **project-level** templates seeded by `/dflow:init-project` into a project's `specs/_共用/` directory (or repo root for `CLAUDE.md`). They are **not** read by AI during normal flows; they are written to the target project once, then owned and maintained by the project.
+The `scaffolding/` directory holds **project-level** templates seeded by `/dflow:init-project` into a project's `specs/shared/` directory (or repo root for `CLAUDE.md`). They are **not** read by AI during normal flows; they are written to the target project once, then owned and maintained by the project.
 
 | Scaffolding file | Purpose |
 |---|---|
