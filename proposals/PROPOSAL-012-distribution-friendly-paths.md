@@ -1,6 +1,6 @@
 ## PROPOSAL-012: 目錄與檔名英文化的社群散佈預備調整
 
-**狀態**: `draft`
+**狀態**: `approved`
 
 **提出日期**: 2026-04-25
 
@@ -67,7 +67,7 @@ specs/_共用/CLAUDE-md-snippet.md
 | Skill repo 內部目錄 / 檔名 | 英文 | 例如 `templates/`、`scaffolding/`、`references/`、`Git-principles-trunk.md` |
 | `/dflow:init-project` 產生的系統目錄 / 檔名 | 英文 | 例如 `specs/shared/`、`specs/domain/glossary.md` |
 | 文件內容標題與段落 | 暫不強制英文化 | 可保留繁中，未來 npm 前再決定是否提供 en / zh-TW template variants |
-| 使用者提供的 feature slug | 跟隨討論語言 | 沿用 P009 決議 8：中文討論可產生中文 slug；這是使用者語境，不是 Dflow 固定系統路徑 |
+| 使用者提供的 feature slug | 跟隨討論語言 | 沿用 P009 決議 8。`SPEC-ID` 與目錄結構詞仍 ASCII；slug 段是「使用者命名空間」，不是 Dflow 固定系統路徑——使用者可自選 ASCII slug 以利國際化，但 Dflow 不強制。未來若公開散佈需要 `--ascii-slug` 選項，可另案處理（已記入 §6） |
 
 #### 2. 將 generated shared docs destination 改為 `specs/shared/`
 
@@ -168,15 +168,15 @@ feature/SPEC-20260421-001-報表調整
 |---|---|---|
 | `sdd-ddd-webforms-skill/SKILL.md` | 修改 | `Templates & Scaffolding` 段目的地由 `specs/_共用/` 改為 `specs/shared/`；如 Project Structure 範例列出 `_overview.md` / `_conventions.md`，同步調整 |
 | `sdd-ddd-core-skill/SKILL.md` | 修改 | 同 WebForms |
-| `sdd-ddd-webforms-skill/references/init-project-flow.md` | 修改 | Q5、file-list preview、write rules、results report 中的 `specs/_共用/` 改為 `specs/shared/` |
+| `sdd-ddd-webforms-skill/references/init-project-flow.md` | 修改 | Step 2 Q5、Step 3 file-list preview、Step 4 `CLAUDE.md` special handling、Step 5 results report 中的 `specs/_共用/` 改為 `specs/shared/` |
 | `sdd-ddd-core-skill/references/init-project-flow.md` | 修改 | 同 WebForms |
-| `sdd-ddd-webforms-skill/scaffolding/CLAUDE-md-snippet.md` | 修改 | 專案內引用路徑改為 `specs/shared/...` |
-| `sdd-ddd-core-skill/scaffolding/CLAUDE-md-snippet.md` | 修改 | 同 WebForms |
-| `sdd-ddd-webforms-skill/templates/CLAUDE.md` | 修改 | 專案結構範例如列出 `_overview.md` / `_conventions.md`，改放 `specs/shared/` |
-| `sdd-ddd-core-skill/templates/CLAUDE.md` | 修改 | 同 WebForms |
+| `sdd-ddd-webforms-skill/scaffolding/CLAUDE-md-snippet.md` | 修改 | inline 路徑引用（line 44, 115–117, 138）改為 `specs/shared/...`；directory tree 範例（line 48–69）將 `_overview.md` / `_conventions.md` / `Git-principles-*.md` 從 `specs/` 直接子節點移到 `specs/shared/` 子目錄之下，與 init-project-flow.md 實際寫入路徑一致 |
+| `sdd-ddd-core-skill/scaffolding/CLAUDE-md-snippet.md` | 修改 | line 145 單一 inline 引用改為 `specs/shared/...`；此檔無 directory tree 範例，tree 層不適用 |
+| `sdd-ddd-webforms-skill/templates/CLAUDE.md` | 修改 | directory tree（line 19–39）將 `_overview.md` / `_conventions.md` 從 `specs/` 直接子節點移到 `specs/shared/` 之下 |
+| `sdd-ddd-core-skill/templates/CLAUDE.md` | 修改 | directory tree（line 36–57）目前漏列 `_overview.md` / `_conventions.md`（兩版 init-project-flow 皆會產生這些檔，是 P010 之前就存在的兩版 oversight）；本 proposal 順手補上於 `specs/shared/` 之下，與 WebForms tree 一致 |
 | `README.md` | 修改 | 若 adoption / scaffolding 說明提及 `specs/_共用/`，改為 `specs/shared/`；目前 README 可能只需確認無顯式路徑 |
-| `CHANGELOG.md` | 修改 | 實作時新增一段，說明 `specs/_共用/` → `specs/shared/` 的路徑政策變更 |
-| `planning/public-distribution-backlog.md` | 已新增 / 可能補充 | 保留 npm 前處理的內容語言與 localization 議題；本 proposal 只引用，不實作其中項目 |
+| `CHANGELOG.md` | 修改 | 實作時於檔尾**新增**一段，說明 `specs/_共用/` → `specs/shared/` 的路徑政策變更。**歷史條目保持原樣**：line 17（R7 F-03 紀錄）、line 61（P010 init-project 紀錄）對 `specs/_共用/` 的引用是當時的事實紀錄，不改寫；implementer 不應對 CHANGELOG 做全域 grep-and-replace |
+| `planning/project-review-brief.md` | 修改 | 將 line 51, 59, 111 的「目前 flow 寫作 `specs/_共用/`；P012 後預期改名」前瞻性註解改為「目前 flow 寫作 `specs/shared/`」；§10 P012 候選議題段（line 367）的「`specs/_共用/` 是 machine-facing path」描述加上「（已由 P012 處理）」註記。此檔自陳為「暫時性工作筆記」，但仍作為 Dflow 產生系統專案目錄結構的脈絡描述，需保持可信度。 |
 
 ### 不納入影響範圍
 
@@ -184,7 +184,7 @@ feature/SPEC-20260421-001-報表調整
 |---|---|
 | `sdd-ddd-*-skill-tw/` | 目前先不處理繁中翻譯版；待 Closeout / localization 階段 |
 | `tutorial/` | Tutorial 重建屬 Closeout C2 或後續文件工作 |
-| `templates/_index.md`、`templates/phase-spec.md`、`templates/lightweight-spec.md` 的中文 heading | 文件內容語言延後到 npm 前整體決策 |
+| `templates/_index.md`、`templates/phase-spec.md`、`templates/lightweight-spec.md` 的中文 heading | 文件內容語言策略由 PROPOSAL-013（canonical English template + `TEMPLATE-LANGUAGE-GLOSSARY.md`）處理；雙語 template set 等更深的 localization 議題延後至 `planning/public-distribution-backlog.md § 1, § 4` |
 | npm / package files | 公開散佈工程另案處理 |
 | Dflow 文件根目錄命名（`specs/` vs `dflow/` / `.dflow/` / `docs/dflow/`） | 牽涉所有 flow、template、verify、finish-feature 與既有專案相容；留到 npm / CLI 前整體決策 |
 
@@ -214,10 +214,8 @@ feature/SPEC-20260421-001-報表調整
 
 ### 評估紀錄（整合評估時填寫）
 
-**評估日期**: {YYYY-MM-DD}
+**評估日期**: 2026-04-27
 
-**結論**: {approved / rejected / 需要修改}
+**結論**: approved
 
-**理由**: {為什麼做這個決定}
-
-**如果 rejected**: {不做的原因，留作日後參考}
+**理由**: 經 R8a Review（2026-04-27，Claude Opus 4.7）+ R8a Approve（2026-04-27，本 session）處理 10 個 finding（accept: 5、accept-with-choice: 3、reject: 2、defer: 0），所有需修訂部分已在 R8a Approve session 內完成。詳見 `reviews/round-8a-decisions.md`。下一步進入 R8a Implement 階段（建議啟動提示詞另起 `reviews/prompts/round-8a-implement.md`）。

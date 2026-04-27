@@ -25,6 +25,25 @@ Dflow 原本偏向公司內部使用，後續可能轉向社群散佈與 npm 安
 - 使用者填入的內容可依專案語言撰寫，例如繁體中文需求、業務規則、決策原因、任務描述。
 - 不建立 `templates/en/` / `templates/zh-TW/` 平行目錄；改以 `TEMPLATE-LANGUAGE-GLOSSARY.md` 提供英文 template 術語的繁中對照。
 - 仍需在公開文件中說明：Dflow 文件結構是英文，但內容可以使用團隊語言。
+- **註**：第 1-2 條的「結構性語言策略」與「Template Language Glossary」由 PROPOSAL-013 接管處理，於 P013 implemented 後本節 partially fulfilled；剩餘 content 語言策略（使用者填入內容可依語言撰寫的原則溝通）仍延後到本 backlog 處理。
+
+### 1.1 候選：anchor-enabled localized heading（P013 後）
+
+PROPOSAL-013 引入 `<!-- dflow:section X -->` anchor 機制後，AI 段落定位不再依賴 heading 文字。這啟用一個新的演進方向：
+
+- anchor id 維持 canonical English（programmatic identifier）
+- heading 文字可依專案語言本地化（人讀友善），例如同一個 anchor `lightweight-changes` 可對應 `## Lightweight Changes` 或 `## 變更紀錄`
+- 不需維護雙語 template set；單一 template 內 heading 在 `/dflow:init-project` 或 npm install 時依語言參數產生
+
+**Why（設計動機）**：anchor 機制的長期 ROI 不只是 heading 漂移的 fail-safe，更是「結構穩定 vs 人讀體驗」二者兼得的關鍵基礎契約。當 anchor stable 後，heading 漂移成本歸零 → 本地化 heading 不再需要折衷 AI 定位穩定性。
+
+**實證條件（npm 散佈後評估）**：
+
+- anchor 機制在實際使用中穩定（無大量 anchor versioning 問題）
+- 使用者反饋顯示 heading 中文化或其他語言有實質需求（不是設計者單方猜測）
+- 維護成本（一份 template + heading 變數）低於「統一英文 heading 多一條 glossary」方案
+
+**為何不在 P013 立刻 implement**：P013 階段先建立 anchor 機制 + canonical English heading 統一基礎；本地化是 advanced use case，需先有 anchor 機制實證 + 真實使用者偏好，再進入設計。屬本 backlog 範疇。
 
 ### 2. npm / CLI 散佈策略
 
