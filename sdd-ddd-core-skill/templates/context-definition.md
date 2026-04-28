@@ -7,51 +7,58 @@ created: {YYYY-MM-DD}
 
 # {ContextName} Bounded Context
 
-## 職責
+## Responsibilities
 
 > 這個 Context 負責什麼？用 2-3 句話描述。
 
-## 邊界
+## Boundaries
 
-### 這個 Context 處理：
+### In Scope
 - {職責 1}
 - {職責 2}
 
-### 這個 Context 不處理（由其他 Context 負責）：
+### Out of Scope
 - {排除項 1} → 由 {OtherContext} 處理
 - {排除項 2} → 由 {OtherContext} 處理
 
-## 核心 Domain 模型
+## Core Domain Models
 
 > 詳細定義在 `models.md`，這裡只列出概覽。
 
-### Entities（有唯一識別的物件）
+### Aggregates
+- **{AggregateName}** — {一句話描述}
+
+### Entities
 - **{EntityName}** — {一句話描述}
 
-### Value Objects（以值定義的物件）
+### Value Objects
 - **{VOName}** — {一句話描述}
 
-### Domain Services（不屬於特定 Entity 的業務操作）
+### Domain Services
 - **{ServiceName}** — {一句話描述}
 
-## 與其他 Context 的互動
+### Repository Interfaces
+- **{RepositoryName}** — {一句話描述}
 
-| 對方 Context | 互動方式 | 說明 |
+## Interactions with Other Contexts
+
+| Other Context | Interaction Type | Description |
 |---|---|---|
 | {OtherContext} | 呼叫 / 事件 / 共享資料 | {描述} |
 
-## 關鍵業務規則
+## Key Business Rules
 
 > 規則索引在 `rules.md`（BR-ID + 一行摘要），完整行為情境在 `behavior.md`（Given/When/Then）。這裡只列最重要的幾條。
 
 1. {最重要的規則}
 2. {第二重要的規則}
 
-## 對應的程式碼位置
+## Code Mapping
 
-### 目前（WebForms）
-- Pages: `src/Pages/{相關頁面}.aspx`
-- Domain: `src/Domain/{Context}/`
+### Current Implementation
+- Domain: `src/{Project}.Domain/{Context}/`
+- Application: `src/{Project}.Application/{Context}/`
+- Infrastructure: `src/{Project}.Infrastructure/`
 
-### 未來（ASP.NET Core）
-- 預計作為獨立模組/專案
+### Architecture Notes
+- 依 Clean Architecture dependency direction 維持 Domain 純淨。

@@ -16,7 +16,7 @@ Template note (for AI):
   - T1 Heavy → use templates/phase-spec.md instead
   - T2 Light → THIS template; produces an independent file
   - T3 Trivial → no independent file; just one inline row in _index.md
-                 輕量修改紀錄 with a tag like [cosmetic] / [text] / [format]
+                 Lightweight Changes with a tag like [cosmetic] / [text] / [format]
 
   Instance file location and naming:
     Place the instantiated file inside the corresponding feature directory:
@@ -31,7 +31,7 @@ Template note (for AI):
     feature directory.
 
   After finalizing this lightweight-spec, AI must:
-    1. Add an outbound-link row to the feature's _index.md 輕量修改紀錄 table
+    1. Add an outbound-link row to the feature's _index.md Lightweight Changes table
        (Tier = T2; description includes the link to this file)
     2. Refresh the feature's _index.md Current BR Snapshot table to reflect
        any BR ADDED / MODIFIED / REMOVED / RENAMED in this lightweight-spec
@@ -39,11 +39,11 @@ Template note (for AI):
 
 # {問題簡述}
 
-## 問題
+## Problem
 
 {什麼東西壞了？或什麼行為不正確？}
 
-## 行為變更（Delta）
+## Behavior Delta
 
 > 精簡 delta 格式：bug fix 多數只需 MODIFIED；若確實是新增規則可改用 ADDED、移除用 REMOVED、改名用 RENAMED。多項變更時照類別列。
 
@@ -56,14 +56,19 @@ Template note (for AI):
 <!-- 若需要 ADDED / REMOVED / RENAMED / UNCHANGED 請比照 references/modify-existing-flow.md 的 Delta 格式 -->
 
 
-## 根因
+## Root Cause
 
 {為什麼會這樣？是邏輯錯誤？資料問題？還是需求理解有誤？}
 
-## 修復方式
+## Fix Approach
 
 {怎麼修？有沒有抽到 Domain 層的機會？}
 
-## 發現的技術債（如有）
+<!-- dflow:section implementation-tasks -->
+## Implementation Tasks
+
+> Task checklist content is added by the P013 §7 lightweight-spec task guard.
+
+## Tech Debt Discovered (if any)
 
 {在修這個 bug 時發現的其他問題，記錄到 tech-debt.md}

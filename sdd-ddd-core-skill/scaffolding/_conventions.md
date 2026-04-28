@@ -26,7 +26,7 @@ specs/features/active/{SPEC-ID}-{slug}/
 ```
 
 T3 Trivial changes do **not** produce a separate file — they are
-recorded as one row in `_index.md` 輕量修改紀錄.
+recorded as one row in `_index.md` Lightweight Changes.
 
 ### SPEC-ID Format
 

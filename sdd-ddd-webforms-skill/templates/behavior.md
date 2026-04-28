@@ -15,6 +15,7 @@
 
 ---
 
+<!-- dflow:section behavior-scenarios -->
 ## {Feature Area 1}
 
 ### BR-001: {Rule Name}

@@ -4,16 +4,16 @@
 
 ---
 
-## 系統脈絡（What is this system?）
+## System Context
 
 > 技術棧、架構、業務領域、目錄結構
 
-### 背景
+### Background
 
 這是一個使用 Clean Architecture 和 Domain-Driven Design 的 ASP.NET Core 系統。
 採用 SDD 流程，所有開發工作必須遵循本文件定義的流程。
 
-### 架構（Clean Architecture）
+### Architecture (Clean Architecture)
 
 ```
 Presentation → Application → Domain ← Infrastructure
@@ -30,7 +30,7 @@ Presentation → Application → Domain ← Infrastructure
 | Infrastructure | EF Core、外部 API、檔案存取 | 包含業務邏輯 |
 | Presentation | HTTP 端點、Request/Response | 包含業務邏輯、直接操作 Domain 物件 |
 
-### 目錄結構
+### Project Structure
 
 ```
 specs/
@@ -73,18 +73,18 @@ tests/
 
 ---
 
-## 開發流程（How do we work?）
+## Development Workflow
 
 > SDD 流程、Git 整合、Domain 層規範、AI 協作
 
-### 核心原則
+### Core Principles
 1. **Spec Before Code** — 沒有規格就不寫實作
 2. **Domain at the Center** — 業務邏輯只存在於 Domain 層
 3. **Ubiquitous Language** — 使用 `specs/domain/glossary.md` 中定義的術語
 4. **One Aggregate per Transaction** — 單一操作只修改一個 Aggregate
 5. **Dependency Inversion** — Domain 定義介面，Infrastructure 實作
 
-### Ceremony 三層（T1 Heavy / T2 Light / T3 Trivial）
+### Three Ceremony Tiers
 
 不是每次修改都要跑完整流程。AI 依下列判準選 tier：
 
@@ -99,39 +99,39 @@ tests/
 純 typo / 純格式化 commit（`dotnet format` / `prettier` 自動整理）**低於 T3**：
 直接 `git commit`，不走 Dflow。
 
-### 新增功能（/dflow:new-feature）
+### New Feature
 1. 建 feature 目錄 `specs/features/active/{SPEC-ID}-{slug}/`
 2. 建 `_index.md`（feature dashboard）+ 第一份 `phase-spec-YYYY-MM-DD-{slug}.md`
 3. 設計 Aggregate（不變條件、狀態變更方法、Domain Events）
 4. 實作順序：Domain → Application → Infrastructure → Presentation
 5. 撰寫測試：Domain 單元測試 → Application 測試 → 整合測試
 
-### 新增階段（/dflow:new-phase）
+### New Phase
 1. 在已啟動的 active feature 上新增一份 phase-spec（含 Delta-from-prior-phases）
 2. 更新 `_index.md` 的 Phase Specs 表 + regenerate Current BR Snapshot
 3. 嚴格只適用於 active feature；completed 的 feature 不接受新 phase
 
-### 修改既有功能（/dflow:modify-existing）
+### Modify Existing
 1. AI 依 T1 / T2 / T3 判準分流
 2. 若偵測到改動與 completed feature 相關，主動詢問是否為 follow-up
    （follow-up 走新建 feature + `follow-up-of` 鏈回原 feature；不把 T2/T3
    寫回 completed 目錄）
 3. 確認 fix 在正確的 Clean Architecture 層
 
-### Bug 修復（/dflow:bug-fix）
+### Bug Fix
 1. 建立輕量規格
 2. 若 bug 不附掛既有 feature，先建最小 feature 目錄再放 lightweight-spec
 3. 找到問題所在的層
 4. 在正確的層修復
 
-### Feature 收尾（/dflow:finish-feature）
+### Feature Closeout
 1. 驗證 feature 目錄內所有 phase-spec `status: completed`
 2. 把 `_index.md` Current BR Snapshot 同步到 BC 層 `rules.md` /
    `behavior.md` / `events.md` / `context-map.md`
 3. `git mv` 整個 feature 目錄從 `active/` 搬到 `completed/`
 4. 產出 Integration Summary（Git-strategy-neutral；不自動 merge）
 
-### Git 整合
+### Git Integration
 
 > 本流程只規定 SDD 必要的最小 Git 耦合（feature branch per feature、
 > `git mv`、commit 對應 SPEC-ID）。實際採用的分支策略（Git Flow /
@@ -152,7 +152,7 @@ bugfix/{BUG-ID}-{short-description}      # Bug 修復（SDD 必須）
 > `/dflow:bug-fix` 不綁定任何分支策略；採 Git Flow 的專案可選擇把緊急修復
 > 放在 `hotfix/` 分支，但這是專案決策，Dflow 不代為規定。
 
-### Domain 層規範
+### Domain Layer Rules
 
 - ❌ 不可有任何 NuGet 套件依賴（純 .NET 類型）
 - ❌ 不可有 ORM 屬性（[Table], [Column] 等）
@@ -163,7 +163,7 @@ bugfix/{BUG-ID}-{short-description}      # Bug 修復（SDD 必須）
 - ✅ Aggregate Root 管理 DomainEvents 集合
 - ✅ 其他 Aggregate 只透過 ID 引用
 
-### AI 協作注意事項
+### AI Collaboration Notes
 
 - 開發者提出任何需求時，先引導建立 spec 和 Aggregate 設計
 - 確認實作順序：Domain → Application → Infrastructure → Presentation

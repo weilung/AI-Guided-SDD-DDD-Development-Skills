@@ -4,6 +4,7 @@
 
 > Declarative BR-ID index for one bounded context.
 
+<!-- dflow:section business-rules -->
 ## Rule Index
 
 | BR-ID | Rule summary | Behavior anchor | Aggregate | Status | Last updated |

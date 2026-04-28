@@ -14,11 +14,11 @@ Template note (for AI):
 
   Six required sections (see below):
     1. Metadata (YAML front matter above)
-    2. 目標與範圍 (prose)
+    2. Goals & Scope (prose)
     3. Phase Specs (T1 list)
     4. Current BR Snapshot (feature-level cumulative state)
-    5. 輕量修改紀錄 (T2 outbound link + T3 inline)
-    6. 接續入口 (Resume Pointer)
+    5. Lightweight Changes (T2 outbound link + T3 inline)
+    6. Resume Pointer
 
   Optional section (append at end if applicable):
     - Follow-up Tracking (when this feature has follow-up features derived)
@@ -34,13 +34,13 @@ Template note (for AI):
 
   Minimal usage:
     For a 1-commit / 1-phase feature this template can be ~30 lines —
-    fill metadata + a short 目標與範圍 + one row in Phase Specs +
-    initial BR Snapshot + 接續入口. The other sections can stay empty.
+    fill metadata + a short Goals & Scope + one row in Phase Specs +
+    initial BR Snapshot + Resume Pointer. The other sections can stay empty.
 -->
 
 # {Feature Title}
 
-## 目標與範圍
+## Goals & Scope
 
 > 1-3 段：本 feature 解決什麼問題？為誰解決？邊界在哪？
 >
@@ -53,10 +53,11 @@ Template note (for AI):
 > T1 Heavy ceremony 產出的 phase-spec 列表（一份 phase-spec ≈ 一次完整
 > Kickoff → Domain → Design → Build → Verify 循環）。
 
-| Phase | Date | Slug | Status | 檔案連結 |
+| Phase | Date | Slug | Status | File Link |
 |---|---|---|---|---|
 | 1 | {YYYY-MM-DD} | {phase-slug} | in-progress / completed | [phase-spec-{date}-{phase-slug}.md](./phase-spec-{date}-{phase-slug}.md) |
 
+<!-- dflow:section current-br-snapshot -->
 ## Current BR Snapshot
 
 > Feature 層的 BR 當前狀態（不是歷史）。AI 在以下時機 regenerate 本表：
@@ -68,11 +69,12 @@ Template note (for AI):
 > 完成時 `/dflow:finish-feature` 把本表推進到對應 BC 的 `rules.md` /
 > `behavior.md`（延續 Step 8.3 既有 sync 機制）。
 
-| BR-ID | 現況規則 | 首次出現（phase）| 最後修訂（phase）| Status |
+| BR-ID | Current Rule | First Seen (phase) | Last Updated (phase) | Status |
 |---|---|---|---|---|
 | BR-01 | {規則描述} | phase-1 / inherited from rules.md | phase-N | active / removed |
 
-## 輕量修改紀錄
+<!-- dflow:section lightweight-changes -->
+## Lightweight Changes
 
 > T2 行：描述含「見 `lightweight-{date}-{slug}.md`」外連
 > T3 行：inline 完整描述一句話 + 標籤（如 `[cosmetic]` / `[text]` /
@@ -80,12 +82,12 @@ Template note (for AI):
 >
 > Tier 判準見 SKILL.md § Ceremony Scaling 三層表。
 
-| Date | Tier | 描述 | commit |
+| Date | Tier | Description | Commit |
 |---|---|---|---|
 | {YYYY-MM-DD} | T2 | bug fix XYZ — 見 [`lightweight-{date}-{slug}.md`](./lightweight-{date}-{slug}.md) | {hash} |
 | {YYYY-MM-DD} | T3 | 按鈕顏色從藍改綠 `[cosmetic]` | {hash} |
 
-## 接續入口（Resume Pointer）
+## Resume Pointer
 
 > 一句話：目前進展到哪？下一個動作是什麼？
 > 開新對話接續工作時，從這裡讀起。
