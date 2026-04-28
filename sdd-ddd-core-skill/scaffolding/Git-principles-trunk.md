@@ -167,15 +167,15 @@ When squash-merging, the single resulting commit should look like this:
 ```
 feat({scope}): {title from Integration Summary}
 
-{Feature 目標 block, copied from Integration Summary}
+{Feature Goal block, copied from Integration Summary}
 
-變動範圍：
+Change Scope:
 - BC: {context-name}
 - Aggregate(s) touched: {Aggregate names}
-- Phase 數：{N}
-- 輕量修改：{n_t2} T2 + {n_t3} T3
+- Phase Count: {N}
+- Lightweight Changes: {n_t2} T2 + {n_t3} T3
 
-關聯 BR-ID：
+Related BR-IDs:
 - ADDED: BR-NN, BR-NN
 - MODIFIED: BR-NN
 - REMOVED: (none)
@@ -206,9 +206,9 @@ feat({scope}): {Phase N title} — closes {SPEC-ID}
 [{SPEC-ID}][Phase-N] {phase-level description}
 
 --- Feature integration summary ---
-{Feature 目標 block}
-變動範圍: ... (as in §4.1)
-關聯 BR-ID: ...
+{Feature Goal block}
+Change Scope: ... (as in §4.1)
+Related BR-IDs: ...
 Domain Events: ...
 
 Co-Authored-By: Claude <noreply@anthropic.com>
@@ -229,10 +229,10 @@ Before making key Git operations:
 ### Before `git commit`
 
 - [ ] If the change corresponds to a phase-spec, that phase-spec's
-      `實作任務` section items are checked (or remaining items have
+      `Implementation Tasks` section items are checked (or remaining items have
       justification in the spec's notes section)
 - [ ] `_index.md` status reflects the current work (Phase Specs row
-      updated, 接續入口 refreshed if the commit reaches a meaningful
+      updated, `Resume Pointer` refreshed if the commit reaches a meaningful
       checkpoint)
 - [ ] Clean Architecture layer rules hold (Domain has no external
       package deps, no business logic leaked into handlers /

@@ -14,8 +14,8 @@
 >   `CLAUDE.md`. No auto-merge — you keep editorial control.
 
 The snippet follows the Dflow `templates/CLAUDE.md` H2 segmentation
-(established in PROPOSAL-007c): **系統脈絡** (what the system is) and
-**開發流程** (how we work). Keep those two H2 sections as the backbone
+(established in PROPOSAL-007c): **System Context** (what the system is)
+and **Development Workflow** (how we work). Keep those two H2 sections as the backbone
 when merging into an existing `CLAUDE.md`.
 
 ---
@@ -29,11 +29,11 @@ when merging into an existing `CLAUDE.md`.
 
 ---
 
-## 系統脈絡（What is this system?）
+## System Context
 
 > 技術棧、業務領域、目錄結構
 
-### 背景
+### Background
 
 這是一個運行中的 ASP.NET WebForms 系統，{一句話描述業務領域：例如
 「提供員工費用報銷」/「處理 HR 人事流程」/「訂單管理」}。採用 Dflow
@@ -43,7 +43,7 @@ ASP.NET Core 做準備。
 {選填：補上團隊規模、使用者規模、主要 stakeholders 等 context，
 1-3 行即可。完整內容放在 `specs/shared/_overview.md`。}
 
-### 目錄結構
+### Project Structure
 
 ```
 specs/
@@ -78,18 +78,18 @@ src/
 
 ---
 
-## 開發流程（How do we work?）
+## Development Workflow
 
 > SDD 流程、Git 整合、Domain 層規範、術語表、AI 協作
 
-### 核心原則
+### Core Principles
 
 1. **Spec Before Code** — 沒有規格就不寫實作（依 Ceremony Scaling 調整嚴謹度）
 2. **Domain Extraction** — 業務邏輯屬於 `src/Domain/`，不屬於 Code-Behind
 3. **Ubiquitous Language** — 使用 `specs/domain/glossary.md` 中定義的術語
 4. **Migration Awareness** — 每個決策都要考慮未來 ASP.NET Core 遷移
 
-### Dflow Skill — 完整決策邏輯位於 Skill 本體
+### Dflow Skill — Canonical Decision Logic Lives in the Skill
 
 AI 的完整決策樹、Workflow Transparency、Ceremony Scaling 三層判準
 （T1/T2/T3）、各 `/dflow:` 命令的具體流程，**全部定義於 Dflow skill
@@ -109,7 +109,7 @@ AI 的完整決策樹、Workflow Transparency、Ceremony Scaling 三層判準
 - `/dflow:verify` — rules.md ↔ behavior.md 漂移檢查
 - `/dflow:status` / `/dflow:next` / `/dflow:cancel` — 狀態管理
 
-### 專案級補充規則
+### Project-Level Supplemental Rules
 
 （本 `CLAUDE.md` 只記這一層——Dflow skill 不管的專案決策）
 
@@ -119,7 +119,7 @@ AI 的完整決策樹、Workflow Transparency、Ceremony Scaling 三層判準
 - {其他專案特有規則，例如「JPY 金額必須以最小貨幣單位（yen）儲存」/
   「所有費用報銷需主管審核」/「跨時區行程以 UTC 記錄」}
 
-### Domain 層規範（`src/Domain/`）
+### Domain Layer Rules (`src/Domain/`)
 
 此目錄中的程式碼必須遵守（與 Dflow skill 的 Domain Layer Rules 一致）：
 
@@ -130,7 +130,7 @@ AI 的完整決策樹、Workflow Transparency、Ceremony Scaling 三層判準
 - ✅ 純 C# 類別，可直接搬到 ASP.NET Core 專案
 - ✅ 所有公開行為都能在沒有 Web 基礎設施的情況下測試
 
-### AI 協作注意事項
+### AI Collaboration Notes
 
 - 遇到開發需求時，優先引導使用 `/dflow:` 命令
 - 回答 Domain 相關問題時，優先參考 `specs/domain/` 中的文件
@@ -145,15 +145,15 @@ AI 的完整決策樹、Workflow Transparency、Ceremony Scaling 三層判準
 
 When merging this snippet into an existing `CLAUDE.md`:
 
-1. **Keep the two H2 sections** (`系統脈絡` / `開發流程`) as the
+1. **Keep the two H2 sections** (`System Context` / `Development Workflow`) as the
    backbone. This alignment with the Dflow skill's
    `templates/CLAUDE.md` is important — AI assistants navigate by
    these headings.
-2. **Under `系統脈絡`**: merge the background paragraph and the
+2. **Under `System Context`**: merge the background paragraph and the
    directory tree. If your project already documents directory
    structure elsewhere, keep the tree pointing to `specs/` and
    `src/Domain/` at minimum (those are Dflow-specific).
-3. **Under `開發流程`**: merge the core principles, the Dflow skill
+3. **Under `Development Workflow`**: merge the core principles, the Dflow skill
    pointer, and the project-level supplementary rules. The Domain
    layer rules and AI collaboration rules can be kept here or
    cross-referenced from the scaffolding `Git-principles-*.md`.

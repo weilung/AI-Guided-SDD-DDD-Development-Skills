@@ -154,10 +154,10 @@ before making key Git operations:
 ### Before `git commit`
 
 - [ ] If the change corresponds to a phase-spec, that phase-spec's
-      `實作任務` section items are checked (or remaining items have
+      `Implementation Tasks` section items are checked (or remaining items have
       justification in the spec's notes section)
 - [ ] `_index.md` status reflects the current work (Phase Specs row
-      updated, 接續入口 refreshed if the commit reaches a meaningful
+      updated, `Resume Pointer` refreshed if the commit reaches a meaningful
       checkpoint)
 
 ### Before merging a feature branch to `develop`
@@ -187,14 +187,14 @@ visible). The recommended merge commit format is:
 ```
 Merge feature/{SPEC-ID}-{slug} into develop
 
-{Feature 目標 block, copied from Integration Summary}
+{Feature Goal block, copied from Integration Summary}
 
-變動範圍：
+Change Scope:
 - BC: {context-name}
-- Phase 數：{N}
-- 輕量修改：{n_t2} T2 + {n_t3} T3
+- Phase Count: {N}
+- Lightweight Changes: {n_t2} T2 + {n_t3} T3
 
-關聯 BR-ID：
+Related BR-IDs:
 - ADDED: BR-NN, BR-NN
 - MODIFIED: BR-NN
 - REMOVED: (none)
@@ -209,9 +209,9 @@ git checkout develop
 git pull origin develop
 git merge --no-ff feature/SPEC-20260421-001-jpy-support \
   -m "Merge feature/SPEC-20260421-001-jpy-support into develop" \
-  -m "Feature 目標：支援 JPY 幣別，涵蓋報銷與匯率換算" \
-  -m "變動範圍：BC Expense; 2 phase-specs; 1 T2 lightweight" \
-  -m "關聯 BR-ID: ADDED BR-07, BR-08; MODIFIED BR-03" \
+  -m "Feature Goal: 支援 JPY 幣別，涵蓋報銷與匯率換算" \
+  -m "Change Scope: BC Expense; Phase Count 2; Lightweight Changes 1 T2" \
+  -m "Related BR-IDs: ADDED BR-07, BR-08; MODIFIED BR-03" \
   -m "Related SPEC-IDs: SPEC-20260421-001"
 git push origin develop
 ```

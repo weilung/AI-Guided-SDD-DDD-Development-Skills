@@ -118,10 +118,10 @@ and circle the chosen one.
 ### Gate Checks — Before `git commit`
 
 - [ ] If the change corresponds to a phase-spec, that phase-spec's
-      `實作任務` section items are checked (or remaining items have
+      `Implementation Tasks` section items are checked (or remaining items have
       justification in the spec's notes section)
 - [ ] `_index.md` status reflects the current work (Phase Specs row
-      updated, 接續入口 refreshed if the commit reaches a meaningful
+      updated, `Resume Pointer` refreshed if the commit reaches a meaningful
       checkpoint)
 
 ### Gate Checks — Before merging a feature PR to `main`
@@ -153,18 +153,18 @@ When GitHub / GitLab squashes the feature branch into `main`, the PR
 title + description becomes the squash commit. Recommended format:
 
 ```
-feat({scope}): {1-line summary from Integration Summary Feature 目標}
+feat({scope}): {1-line summary from Integration Summary Feature Goal}
 
 {Integration Summary body, lightly formatted:}
 
-Feature 目標：{copied from Integration Summary}
+Feature Goal: {copied from Integration Summary}
 
-變動範圍：
+Change Scope:
 - BC: {context-name}
-- Phase 數：{N}
-- 輕量修改：{n_t2} T2 + {n_t3} T3
+- Phase Count: {N}
+- Lightweight Changes: {n_t2} T2 + {n_t3} T3
 
-關聯 BR-ID：
+Related BR-IDs:
 - ADDED: BR-NN, BR-NN
 - MODIFIED: BR-NN
 - REMOVED: (none)
@@ -179,14 +179,14 @@ Example:
 ```
 feat(expense): add JPY currency support (SPEC-20260421-001)
 
-Feature 目標：支援 JPY 幣別，涵蓋報銷與匯率換算。
+Feature Goal: 支援 JPY 幣別，涵蓋報銷與匯率換算。
 
-變動範圍：
+Change Scope:
 - BC: Expense
-- Phase 數：2（phase-spec-2026-04-21-core / phase-spec-2026-04-23-ui）
-- 輕量修改：1 T2（BUG-042-rounding）
+- Phase Count: 2 (phase-spec-2026-04-21-core / phase-spec-2026-04-23-ui)
+- Lightweight Changes: 1 T2 (BUG-042-rounding)
 
-關聯 BR-ID：
+Related BR-IDs:
 - ADDED: BR-07, BR-08
 - MODIFIED: BR-03
 

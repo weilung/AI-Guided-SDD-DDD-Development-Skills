@@ -154,10 +154,10 @@ Before making key Git operations:
 ### Before `git commit`
 
 - [ ] If the change corresponds to a phase-spec, that phase-spec's
-      `實作任務` section items are checked (or remaining items have
+      `Implementation Tasks` section items are checked (or remaining items have
       justification in the spec's notes section)
 - [ ] `_index.md` status reflects the current work (Phase Specs row
-      updated, 接續入口 refreshed if the commit reaches a meaningful
+      updated, `Resume Pointer` refreshed if the commit reaches a meaningful
       checkpoint)
 - [ ] Clean Architecture layer rules hold (Domain has no external
       package deps, no business logic leaked into handlers /
@@ -193,15 +193,15 @@ visible). The recommended merge commit format is:
 ```
 Merge feature/{SPEC-ID}-{slug} into develop
 
-{Feature 目標 block, copied from Integration Summary}
+{Feature Goal block, copied from Integration Summary}
 
-變動範圍：
+Change Scope:
 - BC: {context-name}
 - Aggregate(s) touched: {Aggregate names}
-- Phase 數：{N}
-- 輕量修改：{n_t2} T2 + {n_t3} T3
+- Phase Count: {N}
+- Lightweight Changes: {n_t2} T2 + {n_t3} T3
 
-關聯 BR-ID：
+Related BR-IDs:
 - ADDED: BR-NN, BR-NN
 - MODIFIED: BR-NN
 - REMOVED: (none)
@@ -218,9 +218,9 @@ git checkout develop
 git pull origin develop
 git merge --no-ff feature/SPEC-20260421-001-submit-expense-report \
   -m "Merge feature/SPEC-20260421-001-submit-expense-report into develop" \
-  -m "Feature 目標：實作 ExpenseReport 提交流程，含狀態機與事件發佈。" \
-  -m "變動範圍：BC Expense; Aggregate ExpenseReport; 2 phase-specs; 0 T2" \
-  -m "關聯 BR-ID: ADDED BR-12; MODIFIED BR-05" \
+  -m "Feature Goal: 實作 ExpenseReport 提交流程，含狀態機與事件發佈。" \
+  -m "Change Scope: BC Expense; Aggregate ExpenseReport; Phase Count 2; Lightweight Changes 0 T2" \
+  -m "Related BR-IDs: ADDED BR-12; MODIFIED BR-05" \
   -m "Domain Events: ExpenseReportSubmitted" \
   -m "Related SPEC-IDs: SPEC-20260421-001"
 git push origin develop

@@ -16,11 +16,11 @@
 - **If your project has no `CLAUDE.md`**: `/dflow:init-project` will
   create one using this snippet as the base
 - **If your project already has a `CLAUDE.md`**: do NOT overwrite.
-  Merge the **two H2 blocks** below (`系統脈絡` / `開發流程`) into your
+  Merge the **two H2 blocks** below (`System Context` / `Development Workflow`) into your
   existing file, preserving any project-specific content you already
   have
 
-The two-H2 structure (`系統脈絡` / `開發流程`) is intentional and must be
+The two-H2 structure (`System Context` / `Development Workflow`) is intentional and must be
 preserved — it matches the Dflow skill's `templates/CLAUDE.md` and
 keeps every project's `CLAUDE.md` scannable for AI in the same shape.
 
@@ -35,20 +35,20 @@ keeps every project's `CLAUDE.md` scannable for AI in the same shape.
 
 ---
 
-## 系統脈絡（What is this system?）
+## System Context
 
 > 技術棧、架構、業務領域、目錄結構
 
-### 背景
+### Background
 
-- **業務領域**：{業務領域概述，e.g. "企業差旅費用申報與核銷"}
-- **使用者 / 客戶**：{使用者 / 客戶描述}
-- **團隊**：{團隊組成；e.g. "全端工程團隊，3-5 人；DDD 經驗中等"}
-- **採用 Dflow 的情境**：{新專案 greenfield / 既有系統導入 / 遷移等}
-- **技術棧**：ASP.NET Core {版本}；EF Core / MediatR / {其他};
+- **Business Domain**: {業務領域概述，e.g. "企業差旅費用申報與核銷"}
+- **Users / Customers**: {使用者 / 客戶描述}
+- **Team**: {團隊組成；e.g. "全端工程團隊，3-5 人；DDD 經驗中等"}
+- **Dflow Adoption Context**: {新專案 greenfield / 既有系統導入 / 遷移等}
+- **Tech Stack**: ASP.NET Core {版本}；EF Core / MediatR / {其他};
   .NET {版本}
 
-### 架構（Clean Architecture）
+### Architecture (Clean Architecture)
 
 ```
 Presentation → Application → Domain ← Infrastructure
@@ -56,14 +56,14 @@ Presentation → Application → Domain ← Infrastructure
 
 依賴方向永遠朝內。Domain 層是核心，不依賴任何外部套件。
 
-| 層 | 職責 | 不可以做的事 |
+| Layer | Responsibilities | Must NOT |
 |---|---|---|
 | Domain | 業務規則、Aggregate、Value Object、Domain Event | 依賴外部套件、存取資料庫、處理 HTTP |
 | Application | 編排領域操作、CQRS、驗證、DTO | 包含業務邏輯、直接存取資料庫 |
 | Infrastructure | EF Core、外部 API、檔案存取 | 包含業務邏輯 |
 | Presentation | HTTP 端點、Request/Response | 包含業務邏輯、直接操作 Domain 物件 |
 
-### 目錄結構
+### Project Structure
 
 完整 specs 目錄結構見 Dflow skill `SKILL.md` § "Project Structure Reference"。
 以下只列本專案當前狀態（`/dflow:init-project` 建立後可能還未全填）：
@@ -87,11 +87,11 @@ specs/
 
 ---
 
-## 開發流程（How do we work?）
+## Development Workflow
 
 > SDD 流程、Git 整合、Domain 層規範、AI 協作
 
-### Dflow Skill — 完整決策邏輯位於 Skill 本體
+### Dflow Skill — Canonical Decision Logic Lives in the Skill
 
 AI 的完整決策樹、Workflow Transparency、Ceremony Scaling 三層判準
 （T1 Heavy / T2 Light / T3 Trivial）、所有 slash command 的 step-by-step
@@ -109,7 +109,7 @@ AI 的完整決策樹、Workflow Transparency、Ceremony Scaling 三層判準
 - `/dflow:finish-feature` — Feature 收尾 + 整合摘要
 - `/dflow:pr-review` — PR 審查檢查點
 
-### 核心原則（本專案再次確認）
+### Core Principles (Project Reaffirmed)
 
 1. **Spec Before Code** — 沒有規格就不寫實作
 2. **Domain at the Center** — 業務邏輯只存在於 Domain 層
@@ -117,7 +117,7 @@ AI 的完整決策樹、Workflow Transparency、Ceremony Scaling 三層判準
 4. **One Aggregate per Transaction** — 單一操作只修改一個 Aggregate
 5. **Dependency Inversion** — Domain 定義介面，Infrastructure 實作
 
-### Domain 層規範（硬性不變條件）
+### Domain Layer Rules (Hard Invariants)
 
 - ❌ 不可有任何 NuGet 套件依賴（純 .NET 類型）
 - ❌ 不可有 ORM 屬性（`[Table]`、`[Column]` 等）
@@ -128,7 +128,7 @@ AI 的完整決策樹、Workflow Transparency、Ceremony Scaling 三層判準
 - ✅ Aggregate Root 管理 `DomainEvents` 集合
 - ✅ 其他 Aggregate 只透過 ID 引用
 
-### 專案級補充規則
+### Project-Level Supplemental Rules
 
 {此段由專案自行填入。例如：}
 
@@ -139,12 +139,12 @@ AI 的完整決策樹、Workflow Transparency、Ceremony Scaling 三層判準
   CI 流程中自動跑
 - **{其他團隊協議}**
 
-### Git 分支策略
+### Git Branching Strategy
 
 本專案採用：{填寫 Git Flow / trunk-based / GitHub Flow / 自訂}
 詳見 `specs/shared/Git-principles-{gitflow|trunk}.md`。
 
-### AI 協作提醒
+### AI Collaboration Notes
 
 - 開發者提出任何需求時，先引導建立 spec 和 Aggregate 設計
 - 確認實作順序：Domain → Application → Infrastructure → Presentation
