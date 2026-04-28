@@ -100,9 +100,9 @@ Template note (for AI):
 > 一句話：目前進展到哪？下一個動作是什麼？
 > 開新對話接續工作時，從這裡讀起。
 
-**目前進展**：{一句話}
+**Current Progress**: {one-line summary}
 
-**下一個動作**：{建議的下一個動作}
+**Next Action**: {suggested next action}
 
 <!--
 ## Follow-up Tracking

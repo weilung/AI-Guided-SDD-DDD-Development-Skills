@@ -474,5 +474,6 @@ The `scaffolding/` directory holds **project-level** templates seeded by `/dflow
 | `scaffolding/Git-principles-gitflow.md` | Git Flow edition of project Git conventions — includes Integration Commit Message Conventions that pair with `/dflow:finish-feature` output |
 | `scaffolding/Git-principles-trunk.md` | Trunk-based / GitHub Flow edition of project Git conventions — includes squash/rebase Integration Commit Message formats |
 | `scaffolding/CLAUDE-md-snippet.md` | Starter block for a project's root `CLAUDE.md`, preserving the `System Context` / `Development Workflow` H2 layout |
+| `scaffolding/architecture-decisions-README.md` | ADR directory README seeded into `specs/architecture/decisions/README.md` (mandatory baseline; per PROPOSAL-013 §5 baseline 比對表) |
 
 See `references/init-project-flow.md` for how the scaffolding files are selected and written.

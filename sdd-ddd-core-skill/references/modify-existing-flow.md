@@ -126,8 +126,8 @@ these follow-up-specific differences:
   ```
 - **`_index.md` Current BR Snapshot baseline**: AI reads the BC's
   `specs/domain/{context}/rules.md` and inherits the BRs that are
-  in-scope for this follow-up. Mark each inherited row with 首次出現
-  = `inherited from rules.md` and 最後修訂 = (empty until the new
+  in-scope for this follow-up. Mark each inherited row with First Seen
+  = `inherited from rules.md` and Last Updated = (empty until the new
   feature's first phase Delta touches it)
 
 **Reverse-link into the old `_index.md`**: AI also updates
@@ -175,28 +175,28 @@ Use ADDED / MODIFIED / REMOVED / RENAMED + an optional UNCHANGED section. Keep G
 ```markdown
 ## Behavior Delta
 
-### ADDED — 新增的行為
-#### 規則：BR-NN 規則名稱
+### ADDED - BR / behavior added
+#### Rule: BR-NN {規則名稱}
 Given {Aggregate 初始狀態}
 When {呼叫的 Command 或 Aggregate 方法}
 Then {新的 Aggregate 狀態}
 And {產生的 Domain Event}
 
-### MODIFIED — 修改的行為
-#### 規則：BR-NN 規則名稱
-**原本**：Given … When … Then {舊結果} / {舊事件}
-**改為**：Given … When … Then {新結果} / {新事件}
-**原因**：{為什麼改}
+### MODIFIED - BR / behavior modified
+#### Rule: BR-NN {規則名稱}
+**Before**: Given … When … Then {old result} / {old event}
+**After**: Given … When … Then {new result} / {new event}
+**Reason**: {why this change}
 
-### REMOVED — 移除的行為
-#### 規則：BR-NN 規則名稱
-**原因**：{為什麼移除}
+### REMOVED - BR removed
+#### Rule: BR-NN {規則名稱}
+**Reason**: {why removed}
 
-### RENAMED — 重新命名
-#### 規則：{舊名稱} → {新名稱}
-**原因**：{為什麼改名，例如術語演化 / Aggregate 拆分 / 對齊 glossary}
+### RENAMED - BR renamed
+#### Rule: {old name} -> {new name}
+**Reason**: {why renamed — e.g. terminology evolution / Aggregate split / glossary alignment}
 
-### UNCHANGED — 明確不受影響（可選）
+### UNCHANGED - explicitly unaffected (optional)
 - BR-003 金額上限
 - BR-005 提交後不可修改
 ```

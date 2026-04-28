@@ -106,17 +106,17 @@ And {產生的 Domain Event}
 
 ### MODIFIED - BR / behavior modified in this phase
 #### Rule: BR-NN {規則名稱}
-**原本**：Given … When … Then {舊結果} / {舊事件}
-**改為**：Given … When … Then {新結果} / {新事件}
-**原因**：{為什麼改}
+**Before**: Given … When … Then {old result} / {old event}
+**After**: Given … When … Then {new result} / {new event}
+**Reason**: {why this change}
 
 ### REMOVED - BR removed in this phase
 #### Rule: BR-NN {規則名稱}
-**原因**：{為什麼移除}
+**Reason**: {why removed}
 
 ### RENAMED - BR renamed in this phase
-#### Rule: {舊名稱} -> {新名稱}
-**原因**：{為什麼改名}
+#### Rule: {old name} -> {new name}
+**Reason**: {why renamed}
 
 ### UNCHANGED - explicitly unaffected (optional)
 - BR-003 金額上限

@@ -48,13 +48,13 @@ specs/
 ├── features/
 │   ├── active/               # 進行中的 feature
 │   │   └── {SPEC-ID}-{slug}/ # 一個 feature 一個目錄
-│   │       ├── _index.md     # Feature dashboard：目標 / Phase Specs / BR Snapshot / 接續入口
+│   │       ├── _index.md     # Feature dashboard：Goals & Scope / Phase Specs / Current BR Snapshot / Lightweight Changes / Resume Pointer
 │   │       ├── phase-spec-YYYY-MM-DD-{slug}.md   # T1 Heavy：每 phase 一份
 │   │       └── lightweight-YYYY-MM-DD-{slug}.md  # T2 Light（或 BUG-NNN-{slug}.md）
 │   ├── completed/            # 整個 feature 目錄 git mv 到這裡
 │   └── backlog/
 │   # SPEC-ID 格式：SPEC-YYYYMMDD-NNN；slug 跟隨討論語言（中文/英文皆可）
-│   # T3 無獨立檔，只在 _index.md 輕量修改紀錄寫一列
+│   # T3 無獨立檔，只在 _index.md Lightweight Changes 寫一列
 └── architecture/
     ├── decisions/              # ADR
     └── tech-debt.md
@@ -94,7 +94,7 @@ tests/
   但無 Aggregate / 資料結構動）→ 建獨立 lightweight spec 置於 feature 目錄內
 - **T3 Trivial** — 按鈕顏色、文案修正、typo、排版、純註解（無 BR 變動、
   無 Domain 概念動、無資料結構動、只改 UI 表層 / 註解 / 格式化）→
-  只在 `_index.md` 輕量修改紀錄 inline 寫一列
+  只在 `_index.md` Lightweight Changes inline 寫一列
 
 純 typo / 純格式化 commit（`dotnet format` / `prettier` 自動整理）**低於 T3**：
 直接 `git commit`，不走 Dflow。

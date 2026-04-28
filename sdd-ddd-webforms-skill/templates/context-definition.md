@@ -42,7 +42,7 @@ created: {YYYY-MM-DD}
 
 ## Key Business Rules
 
-> 規則索引在 `rules.md`（BR-ID + 一行摘要），完整行為情境在 `behavior.md`（Given/When/Then）。這裡只列最重要的幾條。
+> 規則索引在 `rules.md`（BR-ID + 一行摘要），完整 Behavior Scenarios 在 `behavior.md`（Given/When/Then）。這裡只列最重要的幾條。
 
 1. {最重要的規則}
 2. {第二重要的規則}

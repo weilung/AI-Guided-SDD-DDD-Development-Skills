@@ -97,8 +97,10 @@ Dflow 的 SDD/DDD 流程會產生兩類文件：
 | `dflow:section current-br-snapshot` | `Current BR Snapshot` | `_index.md` | feature-level BR snapshot 更新與 finish-feature sync |
 | `dflow:section lightweight-changes` | `Lightweight Changes` | `_index.md` | T2/T3 修改紀錄 |
 | `dflow:section behavior-scenarios` | `Behavior Scenarios` | `phase-spec.md`, `behavior.md` | Given/When/Then 行為規格定位 |
-| `dflow:section business-rules` | `Business Rules` | `rules.md`, `_index.md` | BR-ID / anchor 對應與 drift verification |
+| `dflow:section business-rules` | `Business Rules` | `rules.md` | BR-ID / anchor 對應與 drift verification |
 | `dflow:section open-questions` | `Open Questions` | specs / living docs as applicable | 未決問題收斂 |
+
+> **Same-section single-anchor rule**（per F-06 Path A）：`_index.md` 的 Business Rules 概念由 `current-br-snapshot` anchor 涵蓋；同一段不重複注入兩個 stable id，避免 namespacing 衝突與 drift-verification 索引困惑。`business-rules` anchor 的權威使用位置為 `rules.md`。
 
 **Anchor coexistence rule**（per F-08）：`<!-- dflow:section X -->` HTML comment anchor 與 P008 drift-verification 既有的 markdown auto-id heading anchor 是**不同維度**：
 
@@ -109,7 +111,7 @@ Dflow 的 SDD/DDD 流程會產生兩類文件：
 
 **Anchor naming rules**（per F-15 Path B）：
 
-- **Namespacing**：anchor id 採全 repo 共用語意——同 id 在不同 template / instance 表示同類段落（例如 `business-rules` 在 `rules.md` 與 `_index.md` 都是 BR 索引段，AI 讀到任一處都應理解為同類）。anchor id 為 document-type-agnostic 的 stable identifier。
+- **Namespacing**：anchor id 採全 repo 共用語意——同 id 在不同 template / instance 表示同類段落（例如 `implementation-tasks` 在 `phase-spec.md` 與 `lightweight-spec.md` 都是 task checklist 段，AI 讀到任一處都應理解為同類）。anchor id 為 document-type-agnostic 的 stable identifier。
 - **Versioning（延後設計）**：anchor id 重命名 / deprecation 規則屬 backlog § 7「Dflow Version Upgrade / Migration Strategy」範疇；npm 散佈後與其他 versioning 議題（路徑遷移、heading 遷移）一起設計，本 proposal 不在現階段定義具體過渡語法或時長。
 
 **Design intent**：anchor 機制不只是「heading 漂移的 fail-safe」，更是**啟用 localized heading 的基礎契約**。當 anchor 是 stable identifier 後，heading 文字可在未來 npm 散佈階段依專案語言本地化（中文 / 英文 / 其他），而不影響 AI 段落定位。本 proposal 階段先把 anchor 機制建立 + canonical English heading 統一；本地化 heading 屬 `planning/public-distribution-backlog.md` § 1.1 候選方向，留待 npm 散佈後依實證評估。

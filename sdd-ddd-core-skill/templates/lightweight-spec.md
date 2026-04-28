@@ -47,11 +47,11 @@ Template note (for AI):
 
 > 精簡 delta 格式：bug fix 多數只需 MODIFIED；若確實是新增規則可改用 ADDED、移除用 REMOVED、改名用 RENAMED。多項變更時照類別列。
 
-### MODIFIED — 修改的行為
-#### 規則：BR-NN {規則名稱}
-**原本**：Given {Aggregate 目前狀態} When {操作} Then {目前的（錯誤）結果} / {事件}
-**改為**：Given {相同狀態} When {相同操作} Then {正確的結果} / {事件}
-**原因**：{為什麼改 — bug / 不變條件違反 / 需求澄清}
+### MODIFIED - behavior modified in this fix
+#### Rule: BR-NN {規則名稱}
+**Before**: Given {current Aggregate state} When {action} Then {current (incorrect) result} / {event}
+**After**: Given {same state} When {same action} Then {correct result} / {event}
+**Reason**: {why this change — bug / invariant violation / requirement clarification}
 
 <!-- 若需要 ADDED / REMOVED / RENAMED / UNCHANGED 請比照 references/modify-existing-flow.md 的 Delta 格式 -->
 

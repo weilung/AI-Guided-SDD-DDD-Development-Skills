@@ -6,6 +6,23 @@ This file is a human reading aid and review reference for Dflow template termino
 
 Template headings, field labels, anchors, and placeholder names use canonical English. Developer-authored content inside those sections may use the project language.
 
+## Inclusion Criteria
+
+A term is included in this glossary when it meets **any** of these:
+
+1. **Cross-file structural term** — appears as a heading / column / inline label in two or more templates (e.g. `Implementation Tasks`, `Business Rules`).
+2. **Translation-sensitive concept** — direct Chinese translation may lose precision or differ from common usage (e.g. `Behavior Delta` vs 「行為變更」, `Resume Pointer` vs 「接續入口」).
+3. **Workflow-critical inline label** — bold inline labels that AI / tooling reads as fixed fields within a section (e.g. `**Before** / **After** / **Reason**`).
+4. **Commit message convention label** — labels used in Integration Commit Message Conventions (e.g. `Feature Goal`, `Change Scope`, `Phase Count`).
+
+A term is **NOT** included when:
+
+- The English heading is self-explanatory and its Chinese translation is unambiguous (e.g. `Open Questions`, `Edge Cases`, `Test Strategy`, `Implementation Notes`, `Goals & Scope`, `Phase Specs`, `Problem`, `Root Cause`, `Fix Approach`, `Tech Debt Discovered`).
+- It only appears once in a single template as a section heading without cross-file reference.
+- It is a placeholder example (e.g. `{one-line summary}`) rather than a structural term.
+
+The "使用位置" column refers to file paths where the term appears structurally (as heading / column / label), not necessarily a specific section. For example, `Domain Models` appears as the H1 of `models.md`, representing the file's central concept; `Implementation Tasks` appears as an H2 in two different templates.
+
 ## Glossary
 
 | English term | 繁體中文對照 | 使用位置 | 說明 |
@@ -23,3 +40,8 @@ Template headings, field labels, anchors, and placeholder names use canonical En
 | Lightweight Changes | 輕量修改紀錄 | `_index.md` | `_index.md` 中登記 T2 外連 + T3 inline 的 section heading |
 | Resume Pointer | 接續入口 | `_index.md` | `_index.md` 末段「目前進展 + 下一動作」的 section heading |
 | Behavior Delta | 行為變更 | `lightweight-spec.md` | lightweight-spec 中 BR delta 段的 section heading |
+| Current Progress | 目前進展 | `_index.md` | Resume Pointer 段內描述當下狀態的 inline bold label（per F-04 / DD-A Path A）|
+| Next Action | 下一個動作 | `_index.md` | Resume Pointer 段內描述下一動作的 inline bold label（per F-04 / DD-A Path A）|
+| Before | 原本 | `lightweight-spec.md`, `phase-spec.md`, `references/modify-existing-flow.md` | Behavior Delta MODIFIED 段內描述變更前狀態的 inline bold label（per F-08 / DD-A Path A）|
+| After | 改為 | `lightweight-spec.md`, `phase-spec.md`, `references/modify-existing-flow.md` | Behavior Delta MODIFIED 段內描述變更後狀態的 inline bold label（per F-08 / DD-A Path A）|
+| Reason | 原因 | `lightweight-spec.md`, `phase-spec.md`, `references/modify-existing-flow.md` | Behavior Delta 段內描述變更原因的 inline bold label（per F-08 / DD-A Path A）|

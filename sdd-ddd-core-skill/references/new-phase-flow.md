@@ -54,7 +54,7 @@ AI must locate the target feature and load its current state:
    - Read the feature's `_index.md` — Metadata, Goals & Scope, Phase Specs,
      Current BR Snapshot, Resume Pointer
    - Read the most recent phase-spec to understand where the prior phase
-     left off (its 業務規則 and Delta-from-prior-phases sections in
+     left off (its Business Rules and Delta-from-prior-phases sections in
      particular)
    - Cross-reference the bounded context's `specs/domain/{context}/rules.md`
      and `behavior.md` if the new phase is likely to touch system-level
@@ -140,7 +140,7 @@ required).
 Walk the developer through each section, in the same way `new-feature-flow`
 Step 4 does — Behavior (with Aggregate state transitions and Domain
 Events) / Business Rules / Delta / Edge Cases / Domain Events / layer-by-
-layer implementation plan — but only list NEW or MODIFIED BRs in 業務規則;
+layer implementation plan — but only list NEW or MODIFIED BRs in Business Rules;
 UNCHANGED BRs from prior phases stay in the Current BR Snapshot table on
 `_index.md` and are NOT re-copied here. The Delta section uses the same
 ADDED / MODIFIED / REMOVED / RENAMED + optional UNCHANGED format defined
@@ -173,16 +173,16 @@ Update the feature's `_index.md`:
 
 2. **Current BR Snapshot table** — regenerate to reflect the new phase's
    Delta:
-   - **ADDED** entries → new rows (首次出現 = `phase-{N+1}`, 最後修訂 =
+   - **ADDED** entries → new rows (First Seen = `phase-{N+1}`, Last Updated =
      `phase-{N+1}`, Status = `active`)
-   - **MODIFIED** entries → update 現況規則 + bump 最後修訂 to `phase-{N+1}`
-   - **REMOVED** entries → flip Status to `removed`, bump 最後修訂 to
+   - **MODIFIED** entries → update Current Rule + bump Last Updated to `phase-{N+1}`
+   - **REMOVED** entries → flip Status to `removed`, bump Last Updated to
      `phase-{N+1}` (do NOT delete the row — keep the audit trail)
-   - **RENAMED** entries → update BR-ID / 現況規則 as appropriate; bump
-     最後修訂
+   - **RENAMED** entries → update BR-ID / Current Rule as appropriate; bump
+     Last Updated
 
-3. **Resume Pointer** — update to "phase-{N+1} 進行中：
-   {一句話 about what's actively being worked on}" and "下一個動作:
+3. **Resume Pointer** — update to "phase-{N+1} in progress:
+   {one-line about what's actively being worked on}" and "Next Action:
    implement DOMAIN-1 / write Aggregate ... / etc."
 
 The Snapshot is the feature-level CURRENT STATE, not history. Do not let

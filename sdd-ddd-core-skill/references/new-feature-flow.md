@@ -157,7 +157,7 @@ specs/features/active/{SPEC-ID}-{slug}/
    - Current BR Snapshot: initialise from the first phase's planned BRs
      (will be refreshed when the phase-spec finalises)
    - Lightweight Changes: empty table at start
-   - Resume Pointer: "phase-1 進行中：drafting phase-spec." / "下一個動作：finish phase-spec, then implement Domain layer."
+   - Resume Pointer: "phase-1 in progress: drafting phase-spec." / "Next Action: finish phase-spec, then implement Domain layer."
 3. **Create the first phase-spec** at `phase-spec-{YYYY-MM-DD}-{slug}.md`
    using `templates/phase-spec.md`. The "Delta from prior phases" section
    is filled with "首 phase，無前置 Delta" (first phase has nothing to

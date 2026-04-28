@@ -22,7 +22,7 @@
 - 修改 `templates/_index.md` / `phase-spec.md` / `lightweight-spec.md` / `behavior.md` / `context-definition.md`（雙版共 10 檔）
 - 修改 `templates/aggregate-design.md`（Core only）
 - 修改 `templates/CLAUDE.md`（雙版，per F-01 Path A 全 H2/H3 英文化）
-- 修改 `scaffolding/_overview.md` / `_conventions.md`（雙版共 4 檔，檢查級別）
+- 修改 `scaffolding/_conventions.md`（雙版，per F-04 cascade 將「輕量修改紀錄」改為 `Lightweight Changes`）；`scaffolding/_overview.md` 雙版檢查 verify 為已英文化結構，無需修改
 - 修改 `scaffolding/Git-principles-{gitflow,trunk}.md`（雙版共 4 檔，per F-14 精化 Integration Commit labels）
 - 修改 `scaffolding/CLAUDE-md-snippet.md`（雙版，per F-01 Path A 同步全英化）
 - 注入 6 個 initial `<!-- dflow:section X -->` anchor 到對應 templates

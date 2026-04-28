@@ -82,8 +82,8 @@ branch: feature/{SPEC-ID}-{slug}
 Also update the **Resume Pointer** to reflect closeout:
 
 ```
-**目前進展**：feature 已完成（{date}），所有 phase-spec status = completed。
-**下一個動作**：merge / push（依專案 Git-principles）。
+**Current Progress**: feature completed ({date}); all phase-specs status = completed.
+**Next Action**: merge / push (per project Git-principles).
 ```
 
 **→ Transition (step-internal)**: Step 2 complete. Announce "Step 2 complete (status flipped). Entering Step 3: Sync BR Snapshot to BC layer." and continue.
@@ -208,9 +208,9 @@ Phase List:
 - ...
 
 Next Steps (developer):
-- 依專案 Git-principles 決定 merge strategy（merge commit / squash / rebase /
-  fast-forward）並執行
-- 推送到遠端 / 開 PR
+- Per the project's Git-principles, choose a merge strategy (merge commit /
+  squash / rebase / fast-forward) and execute
+- Push to remote / open a PR
 ```
 
 Print the summary to the conversation; do not write it to a file (it is

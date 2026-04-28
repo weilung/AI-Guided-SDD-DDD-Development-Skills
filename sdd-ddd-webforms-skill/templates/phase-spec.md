@@ -103,17 +103,17 @@ Then {新的預期結果}
 
 ### MODIFIED - BR / behavior modified in this phase
 #### Rule: BR-NN {規則名稱}
-**原本**：Given … When … Then {舊結果}
-**改為**：Given … When … Then {新結果}
-**原因**：{為什麼改}
+**Before**: Given … When … Then {old result}
+**After**: Given … When … Then {new result}
+**Reason**: {why this change}
 
 ### REMOVED - BR removed in this phase
 #### Rule: BR-NN {規則名稱}
-**原因**：{為什麼移除}
+**Reason**: {why removed}
 
 ### RENAMED - BR renamed in this phase
-#### Rule: {舊名稱} -> {新名稱}
-**原因**：{為什麼改名}
+#### Rule: {old name} -> {new name}
+**Reason**: {why renamed}
 
 ### UNCHANGED - explicitly unaffected (optional)
 - BR-003 金額上限
