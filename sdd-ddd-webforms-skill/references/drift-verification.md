@@ -48,6 +48,16 @@ If a future need arises to add an `_index.md` Current BR Snapshot ↔
 `rules.md` cross-check, that belongs in a follow-up PROPOSAL-008
 extension, not in this command's current scope.
 
+### Anchor coexistence with `dflow:section`
+
+`dflow:section` HTML comment anchors and markdown heading anchors serve different purposes:
+
+- Markdown heading anchors (e.g., `behavior.md#br-001-rule-name`) remain the primary link target for BR-ID verification.
+- `<!-- dflow:section ... -->` anchors are helper markers for AI/tool section positioning only.
+- `dflow:section` does **not** replace BR-ID markdown anchors, and does **not** change the drift-verification algorithm.
+
+So this command still uses BR-ID + markdown auto-id anchors as its primary index; `dflow:section` is auxiliary metadata.
+
 ## Usage
 
 ```
@@ -68,8 +78,10 @@ For each Bounded Context:
 - If either is missing, report and stop for that context:
   ```
   ✗ Expense: rules.md exists but behavior.md is missing
-    → Create behavior.md using templates/behavior.md, or run the completion
-      flow to populate it from existing completed specs
+    → Create the missing file using the matching template:
+      - rules.md → templates/rules.md
+      - behavior.md → templates/behavior.md
+      Or run the completion flow to populate it from existing completed specs
   ```
 
 ### Step 2: Extract BR-IDs from rules.md

@@ -62,6 +62,12 @@ For each new concept:
 2. Check if it already exists in models.md — extend if needed
 3. If entirely new, add to the appropriate context's models.md
 
+If foundational domain docs are missing, create them from templates before writing content:
+- `specs/domain/glossary.md` → `templates/glossary.md`
+- `specs/domain/{context}/models.md` → `templates/models.md`
+- `specs/domain/{context}/rules.md` → `templates/rules.md`
+- `specs/domain/{context}/behavior.md` → `templates/behavior.md`
+
 **→ Phase Gate: Step 3 → Step 3.5**
 
 Announce to developer:
@@ -119,13 +125,13 @@ specs/features/active/{SPEC-ID}-{slug}/
 1. **Create the directory**: `specs/features/active/{SPEC-ID}-{slug}/`
 2. **Create `_index.md`** using `templates/_index.md`:
    - Metadata: fill `spec-id`, `slug`, `status: in-progress`, `created`, `branch`
-   - 目標與範圍: 1-3 sentences capturing what / for whom / boundary
+   - Goals & Scope: 1-3 sentences capturing what / for whom / boundary
    - Phase Specs: one row for the first phase
      (`| 1 | {date} | {slug} | in-progress | [phase-spec-{date}-{slug}.md](./phase-spec-{date}-{slug}.md) |`)
    - Current BR Snapshot: initialise from the first phase's planned BRs
      (will be refreshed when the phase-spec finalises)
-   - 輕量修改紀錄: empty table at start
-   - 接續入口: "phase-1 進行中：drafting phase-spec." / "下一個動作：finish phase-spec, then implement."
+   - Lightweight Changes: empty table at start
+   - Resume Pointer: "phase-1 進行中：drafting phase-spec." / "下一個動作：finish phase-spec, then implement."
 3. **Create the first phase-spec** at `phase-spec-{YYYY-MM-DD}-{slug}.md`
    using `templates/phase-spec.md`. The "Delta from prior phases" section
    is filled with "首 phase，無前置 Delta" (first phase has nothing to
@@ -220,7 +226,7 @@ public interface IExpenseRepository
 
 ### Generate Implementation Tasks List
 
-After the plan is agreed, AI generates a concrete task list and writes it into the spec's `實作任務` section (see feature-spec template). Each task follows the format `[LAYER]-[NUMBER]：description`:
+After the plan is agreed, AI generates a concrete task list and writes it into the spec's `Implementation Tasks` section (see `templates/phase-spec.md`). Each task follows the format `[LAYER]-[NUMBER]：description`:
 
 - `DOMAIN` — Domain classes, VOs, Services, Interfaces
 - `PAGE`    — Code-Behind / ASPX changes
@@ -287,7 +293,7 @@ Triggered by the Step 7 → Step 8 Phase Gate. AI runs the completion checklist 
 
 AI reports `✓` / `✗` for every item before touching docs. Items marked *(post-8.3)* are re-verified after the documentation merge in 8.3 lands:
 
-- [ ] `實作任務` section: all tasks checked, or unchecked items explicitly labelled as follow-up (linked to spec / tech-debt entry)
+- [ ] `Implementation Tasks` section: all tasks checked, or unchecked items explicitly labelled as follow-up (linked to spec / tech-debt entry)
 - [ ] Every `Given/When/Then` scenario in the spec is covered by implementation or tests
 - [ ] Every `BR-*` business rule is covered by implementation or tests
 - [ ] Every `EC-*` edge case is handled
@@ -305,7 +311,7 @@ AI lists findings one at a time and waits for the developer to confirm each:
 - [ ] Are the edge case handling decisions appropriate? (AI lists EC → handling; developer judges)
 - [ ] Did we miss any tech debt worth recording? (AI lists what it saw; developer adds misses)
 - [ ] Do the scenarios merged into `behavior.md` faithfully express the intended behavior? (AI lists merged anchors; developer judges)
-- [ ] Should the `實作任務` section in the spec be collapsed / removed now that it's complete? (team convention — developer decides)
+- [ ] Should the `Implementation Tasks` section in the spec be collapsed / removed now that it's complete? (team convention — developer decides)
 
 Ask these one-by-one; do not dump all five at once.
 

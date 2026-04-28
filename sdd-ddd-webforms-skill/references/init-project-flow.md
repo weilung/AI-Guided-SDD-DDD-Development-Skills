@@ -164,9 +164,9 @@ specs/
 │   ├── completed/            # directory (empty)
 │   └── backlog/              # directory (empty)
 ├── domain/
-│   └── glossary.md           # empty Ubiquitous Language template
+│   └── glossary.md           # ← templates/glossary.md
 └── migration/
-    └── tech-debt.md          # empty tech-debt template
+    └── tech-debt.md          # ← templates/tech-debt.md
 ```
 
 Key WebForms-edition notes:
@@ -211,8 +211,8 @@ skip, and wait for developer confirmation:
 > | `specs/features/active/.gitkeep` | (directory placeholder) |
 > | `specs/features/completed/.gitkeep` | (directory placeholder) |
 > | `specs/features/backlog/.gitkeep` | (directory placeholder) |
-> | `specs/domain/glossary.md` | mandatory baseline |
-> | `specs/migration/tech-debt.md` | mandatory baseline |
+> | `specs/domain/glossary.md` | `templates/glossary.md` (mandatory baseline) |
+> | `specs/migration/tech-debt.md` | `templates/tech-debt.md` (mandatory baseline) |
 > | `specs/shared/_overview.md` | optional (you picked it) |
 > | `specs/shared/Git-principles-trunk.md` | optional (you picked it) |
 > | `CLAUDE.md` | optional — snippet seeded because repo has no CLAUDE.md |
@@ -290,7 +290,7 @@ notice:
   and announce:
   > "Your project already has `CLAUDE.md` at repo root — I did not
   > touch it. The snippet is now at `specs/shared/CLAUDE-md-snippet.md`
-  > for you to merge manually. Preserve the `系統脈絡` / `開發流程`
+  > for you to merge manually. Preserve the `System Context` / `Development Workflow`
   > H2 structure when merging — it matches what the Dflow skill
   > expects."
 

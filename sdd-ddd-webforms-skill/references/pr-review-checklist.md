@@ -16,7 +16,7 @@ touches and read them all.
       `specs/features/completed/{SPEC-ID}-{slug}/` if the PR is the
       closeout commit and the dir was already `git mv`d)
 - [ ] Read `_index.md` first — it gives you the feature-level overview,
-      Current BR Snapshot, list of phase-specs, and 接續入口 (where the
+      Current BR Snapshot, list of phase-specs, and Resume Pointer (where the
       author left off)
 - [ ] Identify which **phase-spec(s)** and / or **lightweight-spec(s)**
       this PR diff touches. There may be:
@@ -25,9 +25,9 @@ touches and read them all.
         Delta-from-prior-phases section reads correctly relative to the
         prior phase
       - A new lightweight-spec (T2) — read in full
-      - Just T3 inline rows added to `_index.md` 輕量修改紀錄 (no
+      - Just T3 inline rows added to `_index.md` Lightweight Changes (no
         spec file changed) — confirm the row description is precise
-- [ ] If a `行為變更（Delta）` / Delta-from-prior-phases section exists,
+- [ ] If a `Behavior Delta` / Delta-from-prior-phases section exists,
       read **ADDED / MODIFIED / REMOVED / RENAMED**; note any
       **UNCHANGED** scope declaration
 - [ ] State in one sentence: "This PR intends to {change} because

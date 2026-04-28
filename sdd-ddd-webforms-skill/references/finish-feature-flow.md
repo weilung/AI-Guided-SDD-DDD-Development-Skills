@@ -42,7 +42,7 @@ proceeding (do not flip status, do not archive, do not emit summary).
 - [ ] Every phase-spec file referenced in the Phase Specs table exists at
       the path the table claims
 - [ ] Every phase-spec file's frontmatter has `status: completed`
-- [ ] `_index.md` has no obvious open items in 接續入口 (e.g. "phase-N
+- [ ] `_index.md` has no obvious open items in Resume Pointer (e.g. "phase-N
       drafting" / "implementation pending" / "TODO" markers)
 - [ ] Current BR Snapshot table is non-empty (or feature is intentionally
       a no-BR feature — confirm with developer if uncertain)
@@ -79,7 +79,7 @@ branch: feature/{SPEC-ID}-{slug}
 ---
 ```
 
-Also update the **接續入口（Resume Pointer）** to reflect closeout:
+Also update the **Resume Pointer** to reflect closeout:
 
 ```
 **目前進展**：feature 已完成（{date}），所有 phase-spec status = completed。
@@ -95,6 +95,10 @@ Step 8.3 (`specs/domain/{context}/rules.md` + `behavior.md` updates). The
 input is the feature's `_index.md` Current BR Snapshot table; the output
 is the BC's `rules.md` and `behavior.md` updated to reflect the
 feature's net effect.
+
+Before syncing, ensure required BC files exist. If missing, create from templates:
+- `specs/domain/{context}/rules.md` → `templates/rules.md`
+- `specs/domain/{context}/behavior.md` → `templates/behavior.md`
 
 For each row in Current BR Snapshot where Status = `active`:
 
@@ -178,7 +182,7 @@ developer adapts to whichever merge strategy their project uses
 
 For projects that adopted the optional PROPOSAL-010 scaffolding, the
 applicable `scaffolding/Git-principles-{gitflow|trunk}.md` "Integration
-Commit 訊息慣例" section explains how to format the actual commit
+Commit Message Conventions" section explains how to format the actual commit
 message from this summary.
 
 Format:
@@ -186,24 +190,24 @@ Format:
 ```
 == Integration Summary: {SPEC-ID}-{slug} ==
 
-Feature 目標：{1-2 sentences from _index.md 目標與範圍}
+Feature Goal: {1-2 sentences from _index.md Goals & Scope}
 
-變動範圍：
+Change Scope:
 - BC: {context-name}
-- Phase 數：{N} (phase-spec-{date1}-{slug1} ... phase-spec-{dateN}-{slugN})
-- 輕量修改：{n_t2} T2 lightweight specs + {n_t3} T3 inline rows
+- Phase Count: {N} (phase-spec-{date1}-{slug1} ... phase-spec-{dateN}-{slugN})
+- Lightweight Changes: {n_t2} T2 lightweight specs + {n_t3} T3 inline rows
 
-關聯 BR-ID（feature 完成後狀態）：
+Related BR-IDs (post-closeout state):
 - ADDED: BR-NN, BR-NN, ...
 - MODIFIED: BR-NN, BR-NN, ...
 - REMOVED: BR-NN, BR-NN, ...
 
-Phase 清單：
+Phase List:
 - phase-1 ({date}): {phase-slug} — {1 line}
 - phase-2 ({date}): {phase-slug} — {1 line}
 - ...
 
-下一步（developer）：
+Next Steps (developer):
 - 依專案 Git-principles 決定 merge strategy（merge commit / squash / rebase /
   fast-forward）並執行
 - 推送到遠端 / 開 PR

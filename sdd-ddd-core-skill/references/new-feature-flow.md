@@ -85,6 +85,14 @@ Those things form an Aggregate. Everything else is eventually consistent."
 - Service interfaces for external systems
 - Define in Domain layer, implement in Infrastructure
 
+If foundational domain docs are missing, create them from templates before writing content:
+- `specs/domain/glossary.md` → `templates/glossary.md`
+- `specs/domain/{context}/models.md` → `templates/models.md`
+- `specs/domain/{context}/rules.md` → `templates/rules.md`
+- `specs/domain/{context}/behavior.md` → `templates/behavior.md`
+- `specs/domain/{context}/events.md` (when Domain Events are involved) → `templates/events.md`
+- `specs/domain/context-map.md` (when cross-context relationships are involved) → `templates/context-map.md`
+
 **→ Phase Gate: Step 3 → Step 3.5**
 
 Announce to developer:
@@ -142,14 +150,14 @@ specs/features/active/{SPEC-ID}-{slug}/
 1. **Create the directory**: `specs/features/active/{SPEC-ID}-{slug}/`
 2. **Create `_index.md`** using `templates/_index.md`:
    - Metadata: fill `spec-id`, `slug`, `status: in-progress`, `created`, `branch`
-   - 目標與範圍: 1-3 sentences capturing what / for whom / boundary; mention
+   - Goals & Scope: 1-3 sentences capturing what / for whom / boundary; mention
      the BC and Aggregate(s) involved
    - Phase Specs: one row for the first phase
      (`| 1 | {date} | {slug} | in-progress | [phase-spec-{date}-{slug}.md](./phase-spec-{date}-{slug}.md) |`)
    - Current BR Snapshot: initialise from the first phase's planned BRs
      (will be refreshed when the phase-spec finalises)
-   - 輕量修改紀錄: empty table at start
-   - 接續入口: "phase-1 進行中：drafting phase-spec." / "下一個動作：finish phase-spec, then implement Domain layer."
+   - Lightweight Changes: empty table at start
+   - Resume Pointer: "phase-1 進行中：drafting phase-spec." / "下一個動作：finish phase-spec, then implement Domain layer."
 3. **Create the first phase-spec** at `phase-spec-{YYYY-MM-DD}-{slug}.md`
    using `templates/phase-spec.md`. The "Delta from prior phases" section
    is filled with "首 phase，無前置 Delta" (first phase has nothing to
@@ -214,7 +222,7 @@ Wait for confirmation (`/dflow:next`, verbal OK, or implicit — see SKILL.md §
 
 ### Generate Implementation Tasks List
 
-After the layer-by-layer plan is agreed, AI generates a concrete task list and writes it into the spec's `實作任務` section (see feature-spec template). Each task follows `[LAYER]-[NUMBER]：description` and maps to Clean Architecture layers:
+After the layer-by-layer plan is agreed, AI generates a concrete task list and writes it into the spec's `Implementation Tasks` section (see `templates/phase-spec.md`). Each task follows `[LAYER]-[NUMBER]：description` and maps to Clean Architecture layers:
 
 - `DOMAIN` — Aggregate / Entity / VO / Domain Event / Domain Service / Repository Interface
 - `APP`    — Command/Query / Handler / Validator / DTO / Event Handler
@@ -302,7 +310,7 @@ Triggered by the Step 7 → Step 8 Phase Gate. AI runs the completion checklist 
 
 AI reports `✓` / `✗` for every item before touching docs. Items marked *(post-8.3)* are re-verified after the documentation merge in 8.3 lands:
 
-- [ ] `實作任務` section: all tasks checked, or unchecked items explicitly labelled as follow-up (linked to spec / tech-debt entry)
+- [ ] `Implementation Tasks` section: all tasks checked, or unchecked items explicitly labelled as follow-up (linked to spec / tech-debt entry)
 - [ ] Every `Given/When/Then` scenario in the spec is covered by implementation or tests
 - [ ] Every `BR-*` business rule is covered by implementation or tests
 - [ ] Every `EC-*` edge case is handled
@@ -324,7 +332,7 @@ AI lists findings one at a time and waits for the developer to confirm each:
 - [ ] Are Domain Event payloads and handler placements (same-context sync vs cross-context async) correct? (AI lists; developer confirms)
 - [ ] Did we miss any tech debt worth recording?
 - [ ] Do the scenarios merged into `behavior.md` (incl. Aggregate transitions + Events) faithfully express the intended behavior? (AI lists merged anchors; developer judges)
-- [ ] Should the `實作任務` section in the spec be collapsed / removed now that it's complete? (team convention — developer decides)
+- [ ] Should the `Implementation Tasks` section in the spec be collapsed / removed now that it's complete? (team convention — developer decides)
 
 Ask these one-by-one; do not dump all six at once.
 

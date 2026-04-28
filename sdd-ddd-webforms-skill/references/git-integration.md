@@ -325,3 +325,5 @@ These checks could eventually be automated in CI:
 - Lint commit messages for spec ID format
 
 For now, the AI handles these checks conversationally during development.
+
+<!-- R8b verified: no Chinese structural terms in scope; per F-17 Path A. -->

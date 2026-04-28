@@ -269,6 +269,8 @@ public class ExpenseApprovalService
 
 ## Bounded Context Relationships
 
+If `specs/domain/context-map.md` does not exist yet, create it from `templates/context-map.md` before documenting relationships.
+
 Document in `specs/domain/context-map.md`:
 
 | Relationship | Pattern | Example |

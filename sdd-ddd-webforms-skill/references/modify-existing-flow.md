@@ -32,8 +32,8 @@ produce:
 | Tier | When to choose | Production |
 |---|---|---|
 | **T1 Heavy** | Architectural change / new BR / new Domain concept / new data structure → escalate to `/dflow:new-phase` (if extending an active feature) or `/dflow:new-feature` (if it's truly a new concern) | Full phase-spec via the appropriate flow |
-| **T2 Light** | Bug fix / UI input validation tweak / flow branch change — **has BR Delta** but no Domain or data-structure overhaul | Independent `lightweight-{date}-{slug}.md` placed in feature directory + outbound-link row in `_index.md` 輕量修改紀錄 |
-| **T3 Trivial** | Button colour / copy fix / typo / formatting / pure comments — **all four T3 criteria** must hold (no BR change, no Domain concept change, no data structure change, only UI surface / comments / formatting) | **Inline row in `_index.md` 輕量修改紀錄 only** (no independent spec file) |
+| **T2 Light** | Bug fix / UI input validation tweak / flow branch change — **has BR Delta** but no Domain or data-structure overhaul | Independent `lightweight-{date}-{slug}.md` placed in feature directory + outbound-link row in `_index.md` Lightweight Changes |
+| **T3 Trivial** | Button colour / copy fix / typo / formatting / pure comments — **all four T3 criteria** must hold (no BR change, no Domain concept change, no data structure change, only UI surface / comments / formatting) | **Inline row in `_index.md` Lightweight Changes only** (no independent spec file) |
 
 If any T3 criterion fails → drop to T2. If Domain / BR / data structure
 is touched → escalate to T1.
@@ -50,7 +50,7 @@ Walk through these in order:
    yes, use that as the host (T1 → `/dflow:new-phase`; T2 → place
    lightweight-spec inside; T3 → inline row in that `_index.md`).
 2. **Completed features**: scan `specs/features/completed/*/_index.md`
-   目標與範圍 sections. If the change description is semantically
+   Goals & Scope sections. If the change description is semantically
    related to a completed feature, this becomes the **completed feature
    reopen** scenario — go to Step 1.5 below.
 3. **Standalone**: if no related feature exists (active or completed),
@@ -73,7 +73,7 @@ files:
 
 ```
 "I notice this change overlaps with completed feature
-`{SPEC-ID}-{slug}` (目標與範圍: '{first 1-2 sentences}', completed on
+`{SPEC-ID}-{slug}` (Goals & Scope: '{first 1-2 sentences}', completed on
 {date}).
 
 Is this a follow-up to that feature, or an independent new concern?
@@ -115,7 +115,7 @@ these follow-up-specific differences:
 - **`_index.md` Metadata**: `follow-up-of: {原 SPEC-ID}` is REQUIRED
   (uncomment the optional line in the template; can be a YAML array if
   the follow-up spans multiple originals)
-- **`_index.md` 目標與範圍** auto-prepended note:
+- **`_index.md` Goals & Scope** auto-prepended note:
   ```
   > 本 feature 為 `{原 SPEC-ID}-{原 slug}` 的 follow-up，原 feature
   > 完成於 `{date}`，詳見 `completed/{原 SPEC-ID}-{原 slug}/_index.md`。
@@ -160,12 +160,19 @@ Create a spec with status `in-progress` that includes:
 - Current business rules (extracted from Code-Behind)
 - The proposed change clearly marked — use the **Delta** format below
 
+If baseline domain docs are missing, create them from templates before filling content:
+- `specs/domain/glossary.md` → `templates/glossary.md`
+- `specs/domain/{context}/models.md` → `templates/models.md`
+- `specs/domain/{context}/rules.md` → `templates/rules.md`
+- `specs/domain/{context}/behavior.md` → `templates/behavior.md`
+- `specs/migration/tech-debt.md` (if missing) → `templates/tech-debt.md`
+
 ### Delta Spec Format (for modifications)
 
 Use ADDED / MODIFIED / REMOVED / RENAMED + an optional UNCHANGED section. Keep Given/When/Then for each rule; the Delta section lives inside the spec and does not accumulate into `specs/domain/{context}/behavior.md` (git history already covers the trail).
 
 ```markdown
-## 行為變更（Delta）
+## Behavior Delta
 
 ### ADDED — 新增的行為
 #### 規則：BR-NN 規則名稱
@@ -273,9 +280,13 @@ Decision framework:
 - **Defer extraction** if: the change is a one-line fix and the surrounding code is too tangled
 - **Always record** the extraction opportunity in tech-debt.md even if deferring
 
-### Generate Implementation Tasks List (full spec only)
+### Generate Implementation Tasks List
 
-If the modification uses the full feature-spec template (not the lightweight template), AI generates a concrete task list and writes it into the spec's `實作任務` section. Use the same `[LAYER]-[NUMBER]：description` format as new-feature-flow Step 5 (DOMAIN / PAGE / DATA / TEST). Skip this step for bug-fix mode using lightweight-spec.
+For a phase-spec modification, AI generates a concrete task list and writes it into the spec's `Implementation Tasks` section using `[LAYER]-[NUMBER]：description` (DOMAIN / PAGE / DATA / TEST).
+
+For a lightweight-spec (T2), AI still generates a concise `Implementation Tasks` checklist instead of skipping task generation.
+
+If the lightweight checklist looks larger than a short-fix checklist, AI must pause and ask the developer whether to keep T2 or upgrade to T1. Do not auto-upgrade based on task count alone.
 
 **→ Phase Gate: Step 4 → Step 5**
 
@@ -328,7 +339,7 @@ Wait for confirmation before entering Step 6. This phase gate is where the compl
 
 ## Step 6: Update Artifacts
 
-Triggered by the Step 5 → Step 6 Phase Gate. AI runs the completion checklist in the order below; do **not** skip a section. For bug-fix mode with lightweight-spec, items marked `(full spec only)` are skipped.
+Triggered by the Step 5 → Step 6 Phase Gate. AI runs the completion checklist in the order below; do **not** skip a section. `Implementation Tasks` checks apply to both `phase-spec.md` and `lightweight-spec.md` (T3 inline-only has no task section).
 
 ### 6.1 Verification — AI runs independently
 
@@ -337,7 +348,7 @@ Items marked *(post-6.3)* are re-verified after the documentation merge in 6.3 l
 - [ ] Every ADDED / MODIFIED / REMOVED / RENAMED entry in the Delta section is covered by implementation or tests
 - [ ] Domain layer has **no** `System.Web` references (grep `src/Domain/`)
 - [ ] Extracted logic (if Step 4 decided "extract now") lives under `src/Domain/` with pure C# only
-- [ ] `實作任務` section: all tasks checked, or unchecked items explicitly labelled as follow-up *(full spec only)*
+- [ ] `Implementation Tasks` section (`phase-spec.md` or `lightweight-spec.md`): all tasks checked, or unchecked items explicitly labelled as follow-up
 - [ ] *(post-6.3)* `specs/domain/{context}/behavior.md` has a section anchor for every `BR-*` in ADDED / MODIFIED entries; REMOVED entries' anchors have been deleted (mechanical input for `/dflow:verify`)
 - [ ] *(post-6.3)* `specs/domain/{context}/behavior.md` `last-updated` is later than this spec's `created` date (mechanical drift guard)
 
@@ -349,7 +360,7 @@ If any item fails, report the gap and pause — don't proceed to 6.2.
 - [ ] Did we miss any tech debt worth recording during the Step 3 analysis pass?
 - [ ] If extraction was deferred, is the tech-debt entry in `tech-debt.md` clear enough for a future picker?
 - [ ] Do the scenarios merged into `behavior.md` faithfully express the Delta's final-state behavior? (AI lists updated anchors; developer judges)
-- [ ] Should the `實作任務` section in the spec be collapsed / removed now that it's complete? *(full spec only — team convention)*
+- [ ] Should the `Implementation Tasks` section in the spec be collapsed / removed now that it's complete? (team convention — developer decides; applies to both phase-spec and lightweight-spec)
 
 Ask these one-by-one.
 
@@ -382,12 +393,12 @@ do NOT move individual phase-spec files. Instead:
 
 If this modification was a **T2 lightweight** spec, archival is
 similarly at the feature level — the lightweight-spec stays in the
-feature directory and `_index.md`'s 輕量修改紀錄 row references it. No
+feature directory and `_index.md`'s Lightweight Changes row references it. No
 file move at this point. The whole feature directory moves to
 `completed/` when the developer eventually runs `/dflow:finish-feature`.
 
 If this modification was a **T3 inline-only** change, no spec file
-exists — archival is just leaving the row in `_index.md` 輕量修改紀錄.
+exists — archival is just leaving the row in `_index.md` Lightweight Changes.
 
 If the modification was a **standalone follow-up feature** (created
 via Step 1.6), the same rule applies: this flow does not archive the

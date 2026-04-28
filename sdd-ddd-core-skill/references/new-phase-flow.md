@@ -51,8 +51,8 @@ AI must locate the target feature and load its current state:
    history. The follow-up path is the only correct route.
 
 3. **Load context for the new phase**
-   - Read the feature's `_index.md` — Metadata, 目標與範圍, Phase Specs,
-     Current BR Snapshot, 接續入口
+   - Read the feature's `_index.md` — Metadata, Goals & Scope, Phase Specs,
+     Current BR Snapshot, Resume Pointer
    - Read the most recent phase-spec to understand where the prior phase
      left off (its 業務規則 and Delta-from-prior-phases sections in
      particular)
@@ -63,7 +63,7 @@ AI must locate the target feature and load its current state:
 Share what you found:
 
 > "OK — `{SPEC-ID}-{slug}` has {N} prior phases in BC `{context}`. The
-> most recent (phase-{N}) ended with {一句話 from 接續入口}. Current BR
+> most recent (phase-{N}) ended with {一句話 from Resume Pointer}. Current BR
 > Snapshot has {count} active BRs. Ready to scope the new phase."
 
 **→ Transition (step-internal)**: Step 1 complete. Announce "Step 1 complete (active feature context loaded). Entering Step 2: Confirm Phase Scope." and continue.
@@ -147,7 +147,7 @@ ADDED / MODIFIED / REMOVED / RENAMED + optional UNCHANGED format defined
 in `references/modify-existing-flow.md` (Aggregate state transitions and
 Domain Events go in the Given/When/Then within each Delta entry).
 
-After the spec body is drafted, generate the `實作任務` section
+After the spec body is drafted, generate the `Implementation Tasks` section
 (format `[LAYER]-[NUMBER]：description` with Core layer tags
 DOMAIN / APP / INFRA / API / TEST — see `new-feature-flow.md` Step 5 for
 the detailed list, recommended order: DOMAIN → APP → INFRA → API).
@@ -181,7 +181,7 @@ Update the feature's `_index.md`:
    - **RENAMED** entries → update BR-ID / 現況規則 as appropriate; bump
      最後修訂
 
-3. **接續入口（Resume Pointer）** — update to "phase-{N+1} 進行中：
+3. **Resume Pointer** — update to "phase-{N+1} 進行中：
    {一句話 about what's actively being worked on}" and "下一個動作:
    implement DOMAIN-1 / write Aggregate ... / etc."
 
@@ -195,6 +195,6 @@ After the refresh, summarize for the developer:
 > "Phase-spec ready, `_index.md` refreshed. Snapshot now shows
 > {n_active} active BRs ({n_added} added in this phase, {n_modified}
 > modified, {n_removed} removed). Ready to start implementation —
-> follow the phase-spec's 實作任務 list (DOMAIN → APP → INFRA → API),
+> follow the phase-spec's Implementation Tasks list (DOMAIN → APP → INFRA → API),
 > then run `/dflow:finish-feature` when all phases are completed and the
 > feature is ready to wrap up."

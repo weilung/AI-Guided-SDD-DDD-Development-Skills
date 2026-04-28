@@ -172,10 +172,10 @@ The Step 7 → Step 8 Phase Gate (new-feature-flow) and Step 4 → Step 5 Phase 
 Once triggered, execute the checklist in strict order:
 
 1. **AI-independent verification** (Section 8.1 / 5.1): run every item without asking the developer; report `✓` / `✗` as a single list. Items fall into two timing categories:
-   - **Pre-merge** (default): verified before touching any docs — Given/When/Then and BR/EC coverage, Domain Events raised, Domain project purity (zero external NuGet), Aggregate invariants preserved, EF Fluent API only, `實作任務` section completeness.
+   - **Pre-merge** (default): verified before touching any docs — Given/When/Then and BR/EC coverage, Domain Events raised, Domain project purity (zero external NuGet), Aggregate invariants preserved, EF Fluent API only, `Implementation Tasks` section completeness.
    - **Post-8.3 / Post-5.3** (marked `*(post-...)*`): re-verified after the 8.3 / 5.3 merge step lands — `behavior.md` BR-* anchor correspondence (incl. deletions for REMOVED deltas) and `last-updated` date (mechanical input for `/dflow:verify`).
    If any item fails, pause and fix before continuing.
-2. **Developer-confirmation verification** (Section 8.2 / 5.2): ask one question at a time (intent fit, Aggregate boundary sanity, Domain Event placements, missed tech debt); wait for the developer's judgment. Do **not** dump all questions at once. P005b adds two questions: whether the scenarios merged into `behavior.md` (incl. Aggregate transitions + Events) faithfully express the intended behavior, and whether the spec's `實作任務` section should be collapsed / removed per team convention.
+2. **Developer-confirmation verification** (Section 8.2 / 5.2): ask one question at a time (intent fit, Aggregate boundary sanity, Domain Event placements, missed tech debt); wait for the developer's judgment. Do **not** dump all questions at once. P005b adds two questions: whether the scenarios merged into `behavior.md` (incl. Aggregate transitions + Events) faithfully express the intended behavior, and whether the spec's `Implementation Tasks` section should be collapsed / removed per team convention.
 3. **Documentation updates** (Section 8.3 / 5.3): update glossary / models / rules / events / context-map / tech-debt. The `behavior.md` merge includes two sub-steps: promote any Phase 3 draft sections (B3 mid-sync) to formal sections, and update the corresponding `rules.md` anchor's `last-updated` date (B4). If the spec was abandoned mid-way, clean up the `## 提案中變更` section (keep history or explicitly REMOVE).
 4. **Archival** (Section 8.4 / 5.4): move spec to `completed/`, flip `status`.
 
@@ -239,8 +239,8 @@ or `/dflow:bug-fix` decides which tier fits a modification.
 | Tier | 情境 | 產出 | 命令 / 觸發 |
 |---|---|---|---|
 | **T1 Heavy** | New feature, new phase, new Aggregate / BC, architectural change, new BR | Independent `phase-spec-YYYY-MM-DD-{slug}.md` placed in the feature directory + `_index.md` Phase Specs row + refresh BR Snapshot. For new Aggregate / BC also use `templates/aggregate-design.md` + update `context-map.md` + `events.md`. | `/dflow:new-feature` / `/dflow:new-phase` |
-| **T2 Light** | Bug fix (logic error), UI input validation tweak, flow branch change — has BR Delta | Independent `lightweight-{YYYY-MM-DD}-{slug}.md` (or `BUG-{NUMBER}-{slug}.md`) inside the feature directory + `_index.md` 輕量修改紀錄 row (outbound link) + refresh BR Snapshot. Confirm the fix lands in the correct architectural layer. | `/dflow:bug-fix` or `/dflow:modify-existing` (lightweight branch) |
-| **T3 Trivial** | Button colour, copy/text fix, typo, formatting, pure comments — **no BR change, no Domain concept change, no data structure change** | **Inline row in `_index.md` 輕量修改紀錄 only** (no independent spec file) | `/dflow:modify-existing` (`_index-only` branch) |
+| **T2 Light** | Bug fix (logic error), UI input validation tweak, flow branch change — has BR Delta | Independent `lightweight-{YYYY-MM-DD}-{slug}.md` (or `BUG-{NUMBER}-{slug}.md`) inside the feature directory + `_index.md` Lightweight Changes row (outbound link) + refresh BR Snapshot. Confirm the fix lands in the correct architectural layer. | `/dflow:bug-fix` or `/dflow:modify-existing` (lightweight branch) |
+| **T3 Trivial** | Button colour, copy/text fix, typo, formatting, pure comments — **no BR change, no Domain concept change, no data structure change** | **Inline row in `_index.md` Lightweight Changes only** (no independent spec file) | `/dflow:modify-existing` (`_index-only` branch) |
 
 **T3 criteria** (AI must satisfy **all four** before classifying T3):
 1. No BR-ID change (no ADDED / MODIFIED / REMOVED / RENAMED business rule)
@@ -280,7 +280,7 @@ ExpenseTracker/
 │   ├── features/
 │   │   ├── active/
 │   │   │   └── {SPEC-ID}-{slug}/     # One feature = one directory
-│   │   │       ├── _index.md         # Feature dashboard + BR Snapshot + 接續入口
+│   │   │       ├── _index.md         # Feature dashboard + BR Snapshot + Resume Pointer
 │   │   │       ├── phase-spec-YYYY-MM-DD-{slug}.md   # T1: 0..N phase specs
 │   │   │       └── lightweight-YYYY-MM-DD-{slug}.md  # T2: 0..N lightweight specs
 │   │   │                                              #     (or BUG-{NUMBER}-{slug}.md)
@@ -288,7 +288,7 @@ ExpenseTracker/
 │   │   └── backlog/
 │   │   #
 │   │   # SPEC-ID format: SPEC-YYYYMMDD-NNN; slug follows discussion language (中文/英文 both OK).
-│   │   # T3 trivial changes have NO independent file — just a row in _index.md 輕量修改紀錄.
+│   │   # T3 trivial changes have NO independent file — just a row in _index.md Lightweight Changes.
 │   └── architecture/
 │       ├── decisions/                   # Architecture Decision Records
 │       └── tech-debt.md
@@ -384,7 +384,7 @@ This is analogous to how OpenSpec's `specs/` directory serves as the system beha
 
 ## Guiding Questions by Phase
 
-**Phase markers in phase-spec template**: each section in `templates/phase-spec.md` carries an HTML comment (e.g., `<!-- 填寫時機：Phase 2 -->`) indicating the phase in which that section should be filled. These markers align with the phases below and are used by `/dflow:status` and the completion checklist to track progress. When guiding a developer, fill sections in phase order; do not jump ahead to Phase 4 (implementation planning) before Phase 3 (spec writing) is agreed. The `實作任務` section at the end of the template is produced by AI at the end of Phase 4 — see new-feature-flow.md Step 5 / new-phase-flow.md Step 4 / modify-existing-flow.md Step 3.
+**Phase markers in phase-spec template**: each section in `templates/phase-spec.md` carries an HTML comment (e.g., `<!-- Fill timing: Phase 2 -->`) indicating the phase in which that section should be filled. These markers align with the phases below and are used by `/dflow:status` and the completion checklist to track progress. When guiding a developer, fill sections in phase order; do not jump ahead to Phase 4 (implementation planning) before Phase 3 (spec writing) is agreed. The `Implementation Tasks` section at the end of the template is produced by AI at the end of Phase 4 — see new-feature-flow.md Step 5 / new-phase-flow.md Step 4 / modify-existing-flow.md Step 3.
 
 ### Phase 1: Understanding (What & Why)
 - What problem does this solve? Who asked for it?
@@ -443,13 +443,25 @@ These are the feature-/spec-level building blocks that the flows instantiate dur
 
 | Template | Purpose |
 |---|---|
-| `templates/_index.md` | Feature-level dashboard (per-feature directory) — Metadata / 目標與範圍 / Phase Specs / Current BR Snapshot / 輕量修改紀錄 / 接續入口 |
+| `templates/_index.md` | Feature-level dashboard (per-feature directory) — Metadata / Goals & Scope / Phase Specs / Current BR Snapshot / Lightweight Changes / Resume Pointer |
 | `templates/phase-spec.md` | One phase inside a feature — full SDD cycle output (T1 Heavy ceremony); contains Delta-from-prior-phases section for phase 2+ |
 | `templates/lightweight-spec.md` | T2 Light ceremony — instance file placed inside the feature directory |
 | `templates/context-definition.md` | New Bounded Context |
+| `templates/glossary.md` | Living document template for project/domain terminology |
+| `templates/models.md` | Living document template for bounded-context DDD model catalog |
+| `templates/rules.md` | Living document template for BR-ID rule index |
+| `templates/context-map.md` | Living document template for bounded-context relationships |
+| `templates/tech-debt.md` | Living document template for architecture debt backlog |
 | `templates/behavior.md` | Consolidated behavior spec for a Bounded Context |
+| `templates/events.md` | Living document template for domain event catalog |
 | `templates/aggregate-design.md` | New Aggregate design worksheet |
 | `templates/CLAUDE.md` | Project-level CLAUDE.md |
+
+Maintenance contracts at repo root:
+- `TEMPLATE-COVERAGE.md` — review reference + maintenance contract for WebForms/Core template parity and section-anchor coverage.
+- `TEMPLATE-LANGUAGE-GLOSSARY.md` — canonical English template terms with Traditional Chinese mapping for human reading.
+
+These two files are not runtime inputs for workflows; use them during review, maintenance, and when adding new templates.
 
 ### Scaffolding (used by `/dflow:init-project`)
 
@@ -461,6 +473,6 @@ The `scaffolding/` directory holds **project-level** templates seeded by `/dflow
 | `scaffolding/_conventions.md` | Project-level spec-writing conventions (references the skill's T1 / T2 / T3 tiers and DDD-specific spec conventions such as Aggregate identification, Domain Event documentation, CQRS split) |
 | `scaffolding/Git-principles-gitflow.md` | Git Flow edition of project Git conventions — includes Integration Commit Message Conventions that pair with `/dflow:finish-feature` output |
 | `scaffolding/Git-principles-trunk.md` | Trunk-based / GitHub Flow edition of project Git conventions — includes squash/rebase Integration Commit Message formats |
-| `scaffolding/CLAUDE-md-snippet.md` | Starter block for a project's root `CLAUDE.md`, preserving the `系統脈絡` / `開發流程` H2 layout |
+| `scaffolding/CLAUDE-md-snippet.md` | Starter block for a project's root `CLAUDE.md`, preserving the `System Context` / `Development Workflow` H2 layout |
 
 See `references/init-project-flow.md` for how the scaffolding files are selected and written.
