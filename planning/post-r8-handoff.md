@@ -205,7 +205,16 @@ Co-Authored-By: Claude Opus 4.7 <noreply@anthropic.com>
 
 （連假期間若有需使用者拍板的議題，列在這裡，使用者回主 session 時一次處理）
 
-- （無）
+### 議題 1（已記錄，待 V1 ships 前拍板）：`/dflow:init-project` 是否從 skill 上移到 CLI
+
+- **來源**：使用者於 2026-04-28 Post-R8 規劃時提出
+- **詳細記錄位置**：`planning/public-distribution-backlog.md § 2.1`
+- **影響 Tutorial 規劃**：劇情 1 段 1（`tutorial/01-greenfield-core/01-init-project.md`）若議題拍板「init 移到 CLI」，需重寫該段（從「Alice 觸發 /dflow:init-project」改為「Alice 在 shell 跑 dflow init」）。其他 Tutorial 段（02-06）不受影響
+- **連假期間 Tutorial 工作策略**：
+  - 安全做法：**先做劇情 1 段 2-6 + 劇情 2 段 1-6**（共 11 段），跳過任何需依賴 init 入口決策的細節
+  - 等使用者回來拍板議題後，**僅補做 / 重寫劇情 1 段 1 + 劇情 2 段 1**（init 段）
+- **拍板時機**：V1 ships 前（連假後規劃改名遷移時順便拍板，可能起草 PROPOSAL-014）
+- **不擋 Tutorial 進度**（除 init 段）
 
 ---
 
