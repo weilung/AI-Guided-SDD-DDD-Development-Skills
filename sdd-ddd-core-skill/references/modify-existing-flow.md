@@ -13,7 +13,7 @@ All other step transitions are **step-internal**: announce "Step N complete, ent
 
 **Note on step count**: Core version has 5 steps (WebForms has 6) because Clean Architecture's layered structure already separates concerns — there's no "extract from Code-Behind" step to perform.
 
-**Ceremony adjustment when triggered by `/dflow:bug-fix`**: treat as lightweight — use the Lightweight Spec Template (see `templates/lightweight-spec.md`) instead of the full spec, and Step 3 may default to "no DDD impact, fix in place" unless the bug itself is in Domain logic.
+**Ceremony adjustment when triggered by `/dflow:bug-fix`**: treat as lightweight — use the Lightweight Spec Template (see `templates/lightweight-spec.md`) instead of the full spec, and Step 3 may default to "no DDD impact, fix in place" unless the bug itself is in Domain logic. T2 still generates a concise `Implementation Tasks` checklist (see Step 3).
 
 ## Step 1: Assess the Change — Ceremony Tier + Feature Linkage + Layer
 

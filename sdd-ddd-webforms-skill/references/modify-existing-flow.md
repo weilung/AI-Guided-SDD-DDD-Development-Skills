@@ -9,7 +9,7 @@ Step-by-step guide for when a developer triggers `/dflow:modify-existing` or `/d
 
 All other step transitions are **step-internal**: announce "Step N complete, entering Step N+1" and proceed without waiting. See SKILL.md § Workflow Transparency for the full transparency protocol and confirmation signals.
 
-**Ceremony adjustment when triggered by `/dflow:bug-fix`**: treat as lightweight — use the Lightweight Spec Template at the end of this file instead of the full spec, and Step 4 (extraction) may default to "defer and record in tech-debt.md" unless the bug itself is in extractable logic.
+**Ceremony adjustment when triggered by `/dflow:bug-fix`**: treat as lightweight — use the Lightweight Spec Template at the end of this file instead of the full spec, and Step 4 (extraction) may default to "defer and record in tech-debt.md" unless the bug itself is in extractable logic. T2 still generates a concise `Implementation Tasks` checklist (see Step 4).
 
 ## Mindset
 

@@ -67,7 +67,15 @@ Template note (for AI):
 <!-- dflow:section implementation-tasks -->
 ## Implementation Tasks
 
-> Task checklist content is added by the P013 §7 lightweight-spec task guard.
+> Keep T2 Light tasks concise. If the fix scope starts to expand, AI should pause and ask the developer whether to keep this as T2 or upgrade it to T1. Do not auto-upgrade based on task count alone.
+>
+> Recommended layer tags (WebForms): `DOMAIN` / `PAGE` / `DATA` / `TEST` / `DOC`
+
+- [ ] {LAYER}-1: {minimal required change}
+- [ ] TEST-1: {minimal verification / regression test}
+- [ ] DOC-1: Update `_index.md` Lightweight Changes and Current BR Snapshot
+
+Layer tag list above is the recommended set; the developer may extend with project-specific tags as needed.
 
 ## Tech Debt Discovered (if any)
 

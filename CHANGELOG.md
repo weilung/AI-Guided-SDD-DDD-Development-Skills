@@ -6,6 +6,51 @@
 
 ---
 
+## 2026-04-28 — R8b 實施：PROPOSAL-013 系統文件樣板覆蓋與 Template Coverage Matrix
+
+**前置**：R8a / PROPOSAL-012 已 implemented；R8b Review + Approve 處理 17 個 finding（accept: 11 / accept-with-choice: 6）；4 項設計決策拍板 per `reviews/round-8b-decisions.md`
+**Proposal**：`proposals/PROPOSAL-013-system-document-template-coverage.md`（approved）
+
+**Sub-wave 1 — 純新增**
+- 新增 `templates/glossary.md` / `models.md` / `rules.md` / `context-map.md` / `tech-debt.md` 雙版共 10 檔
+- 新增 `templates/events.md`（Core only）
+- 新增 `scaffolding/architecture-decisions-README.md`（Core only，per F-07 / F-16 修補 P010 baseline）
+- 新增 `<repo root>/TEMPLATE-COVERAGE.md`（含 Section anchors 欄，per F-06 Path A）
+- 新增 `<repo root>/TEMPLATE-LANGUAGE-GLOSSARY.md`（per F-11 Path A 雙版共用）
+
+**Sub-wave 2 — 既有 templates / scaffolding canonical English + anchor 注入**
+- 修改 `templates/_index.md` / `phase-spec.md` / `lightweight-spec.md` / `behavior.md` / `context-definition.md`（雙版共 10 檔）
+- 修改 `templates/aggregate-design.md`（Core only）
+- 修改 `templates/CLAUDE.md`（雙版，per F-01 Path A 全 H2/H3 英文化）
+- 修改 `scaffolding/_overview.md` / `_conventions.md`（雙版共 4 檔，檢查級別）
+- 修改 `scaffolding/Git-principles-{gitflow,trunk}.md`（雙版共 4 檔，per F-14 精化 Integration Commit labels）
+- 修改 `scaffolding/CLAUDE-md-snippet.md`（雙版，per F-01 Path A 同步全英化）
+- 注入 6 個 initial `<!-- dflow:section X -->` anchor 到對應 templates
+- 擴充 `<repo root>/TEMPLATE-LANGUAGE-GLOSSARY.md`
+
+**Sub-wave 3 — references cascade + SKILL.md**
+- 修改 `references/init-project-flow.md` / `new-feature-flow.md` / `modify-existing-flow.md` / `finish-feature-flow.md` / `drift-verification.md` / `pr-review-checklist.md` / `git-integration.md`（雙版共 14 檔）+ `ddd-modeling-guide.md`（Core only）
+- `finish-feature-flow.md` Step 5 Integration Summary labels 英文化（per F-04）
+- `drift-verification.md` 補 Anchor coexistence rule 段（per F-08）
+- `pr-review-checklist.md` section name cascade 同步（per F-03）
+- `git-integration.md` 檢查級別，加 R8b verified 註記（per F-17）
+- `ddd-modeling-guide.md` 補 context-map.md 缺檔處理（per F-13）
+- 修改 `SKILL.md`（雙版，per F-05：Templates 表 + Coverage Matrix 引用 + section name cascade）
+
+**Sub-wave 4 — lightweight-spec Implementation Tasks + task guard**
+- 修改 `templates/lightweight-spec.md`（雙版）：補 `Implementation Tasks` 段 per §7 + 雙版 layer tags
+- 修改 `references/modify-existing-flow.md`（雙版）：完善 task guard 流程（不以項目數自動升級；AI 主動詢問）
+
+**繁中版同步**：延至 Post-Review Closeout C1（依 review-workflow.md §七）
+
+**設計動機補寫**（R8b approve 階段識別並落地於 P013）：
+- §1 補 Anchor coexistence rule 段 + Anchor naming rules（namespacing only，versioning 延後到 backlog § 7）+ Design intent 段（明示 anchor 機制啟用 localized heading 的長期動機）
+- `planning/public-distribution-backlog.md` § 1 加註 P013 接管；新增 §1.1「anchor-enabled localized heading（P013 後）」候選方向
+
+**下一步**：R8b Implement Review（仿 R7 Implement Review pattern）
+
+---
+
 ## 2026-04-27 — R8a Implement：PROPOSAL-012 路徑英文化（`specs/_共用/` → `specs/shared/`）
 
 **前置**：R8a Review（Cursor Claude Opus 4.7，`reviews/round-8a-report.md`）+ R8a Approve（Claude Opus 4.7，`reviews/round-8a-decisions.md`）；PROPOSAL-012 處理 10 個 finding（accept 5 / accept-with-choice 3 / reject 2 / defer 0）後 approved
