@@ -44,3 +44,14 @@
   - `/dflow:init-project` 與 npm install 的職責切分（哪些動作留 `/dflow:init-project`，哪些改由 npm install）
   - scaffolding 範本命名國際化（移除中文檔名如 `Git-原則.md`）
 - 影響範圍：repo 結構本身、README、可能新增 `package.json` / bin entrypoints、scaffolding 檔命名全面英文化
+
+## R8a Implement Review 發現、屬於 P011 後 cleanup 的備忘
+
+### 議題 4：`README.md` 引用舊檔名 `git-flow-integration.md`（P011 rename 後未同步）
+
+- 來源：R8a Implement Review（2026-04-27，Cursor Claude Opus 4.7）跨輪議題段
+- 位置：`README.md:55`、`README.md:79`；`planning/project-review-brief.md:296` 也已自陳觀察到「`AGENTS.md` 裡仍提到 `git-flow-integration.md`」
+- 描述：P011（Git Flow Decoupling）已將 `references/git-flow-integration.md` rename 為 `references/git-integration.md`，但 README.md 內的 references 表（兩版各一列）仍寫舊檔名 `git-flow-integration.md`。屬 P011 落地後的 cleanup 漏網。
+- 建議下一步：Closeout 期間（Global Sweep 或 README 重寫前）一併處理。修正範圍：兩處 `git-flow-integration.md` → `git-integration.md`；同步描述去除「Git Flow」字眼以反映 P011 中立化原則。
+- 影響檔案：`README.md`、可能含 `AGENTS.md`（待 verify）
+- **不擋 R8a 進度**：本議題與 P012 無關；R8a Implement Review F-01 已修，整體 R8a 落地不受此議題影響

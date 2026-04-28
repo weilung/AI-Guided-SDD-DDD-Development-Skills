@@ -23,9 +23,9 @@
 - **`planning/project-review-brief.md` 過時引用更新**（per F-01 Path A）：line 51 移除「P012 後預期改名」前瞻性段落；§ 3.1 / § 3.2 directory tree 註解去除前瞻性 wording；§10 P012 候選議題段加註「（已由 P012 處理）」
 - **README.md 確認**（per P012 §影響範圍 「可能只需確認」）：grep verify README.md 無 `_共用` 字面引用，無需修改
 
-**歷史條目保持原樣**（per F-10 accept）：CHANGELOG.md 既有 line 17（R7 F-03 紀錄）、line 61（P010 init-project 紀錄）對 `specs/_共用/` 的引用是當時的事實紀錄，**不改寫**；implementer 不應對 CHANGELOG 做全域 grep-and-replace。
+**歷史條目保持原樣**（per F-10 accept）：CHANGELOG.md 既有 **2026-04-24 R7 Implement Review Fix 段下的 F-03 條目**、**2026-04-22 R7 Wave 3 段下的 P010 init-project `CLAUDE.md` 特別處理條目** 對 `specs/_共用/` 的引用是當時的事實紀錄，**不改寫**；implementer 不應對 CHANGELOG 做全域 grep-and-replace。（內容式自指；P012 §影響範圍 row 10 描述的 line 17 / line 61 行號是 R8a 修訂期、新段尚未插入時的位置，新段加入後行號位移屬正常）
 
-**修改檔案（10 檔）**：
+**實際修改檔案（10 檔；P012 §影響範圍 11 列中 `README.md` 經 verify 無 `_共用` 引用、無需修改）**：
 - `sdd-ddd-{webforms|core}-skill/SKILL.md`（2 檔）
 - `sdd-ddd-{webforms|core}-skill/references/init-project-flow.md`（2 檔，replace_all）
 - `sdd-ddd-{webforms|core}-skill/scaffolding/CLAUDE-md-snippet.md`（2 檔；WebForms 含 tree restructure）

@@ -249,8 +249,9 @@ The instantiated file is placed inside the feature directory (see
 WebFormsProject/
 ├── CLAUDE.md                         # AI workflow rules
 ├── specs/
-│   ├── _overview.md                  # System status & migration strategy
-│   ├── _conventions.md               # Spec writing conventions
+│   ├── shared/                       # Project-level governance docs (seeded by /dflow:init-project)
+│   │   ├── _overview.md              # System status & migration strategy
+│   │   └── _conventions.md           # Spec writing conventions
 │   ├── domain/                       # Domain knowledge (DDD preparation)
 │   │   ├── glossary.md               # Ubiquitous Language
 │   │   └── {bounded-context}/        # e.g., expense/, hr/, leave/

@@ -265,8 +265,9 @@ You can `git commit` directly without writing even a T3 inline row.
 ExpenseTracker/
 ├── CLAUDE.md
 ├── specs/
-│   ├── _overview.md
-│   ├── _conventions.md
+│   ├── shared/                         # Project-level governance docs (seeded by /dflow:init-project)
+│   │   ├── _overview.md
+│   │   └── _conventions.md
 │   ├── domain/
 │   │   ├── glossary.md
 │   │   ├── context-map.md              # Bounded Context relationships
