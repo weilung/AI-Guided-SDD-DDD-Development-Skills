@@ -15,12 +15,16 @@
 | BR-004 | 同一 ExpenseReport 內，相同 ReceiptReference 只允許出現一次；重複加入須警告（MVP 處理方式：拒絕並回 ValidationError，提示用戶確認）。 | [BR-004](./behavior.md#br-004-duplicate-receipt-rejected) | ExpenseReport | active | 2026-04-28 |
 | BR-005 <!-- phase-2 ADDED --> | 主管不可審核自己提交的 ExpenseReport；`SubmitterId != ApproverId` 必須由 Domain 層強制。 | [BR-005](./behavior.md#br-005-approver-cannot-approve-own-report) | ApprovalDecision | active | 2026-04-29 |
 | BR-006 <!-- phase-2 ADDED --> | 只有 Status = Submitted 的 ExpenseReport 能被 Approve / Reject；其他狀態一律 raise DomainException。 | [BR-006](./behavior.md#br-006-only-submitted-report-can-be-approved-or-rejected) | ExpenseReport | active | 2026-04-29 |
-| BR-007 <!-- phase-2 ADDED --> | Reject 必須附註原因；ApprovalReason 至少 10 字元，否則 raise DomainException。 | [BR-007](./behavior.md#br-007-reject-requires-reason) | ApprovalDecision | active | 2026-04-29 |
+| BR-007 <!-- phase-2 ADDED --> <!-- 2026-04-30 lightweight MODIFIED --> | Reject 必須附註原因；ApprovalReason 至少 5 個中文字或至少 10 個英數字，否則 raise DomainException；空白不計，半形 / 全形視覺等價，emoji 算字。 | [BR-007](./behavior.md#br-007-reject-requires-reason) | ApprovalDecision | active | 2026-04-30 |
 
 <!-- phase 2 Delta:
 - MODIFIED BR-002：phase 1 原文「ExpenseReport 提交成功後狀態變為 Submitted，且不可再被編輯。」更新為 Rejected 可重編並再次 Submit。
 - ADDED BR-005..007：主管不可自審、只有 Submitted 可審、Reject reason 必填且至少 10 字元。
 behavior.md 仍由 finish-feature / Step 8.3 從 phase-spec 場景 merge；anchor 可能暫時是 pending link。
+-->
+
+<!-- 2026-04-30 lightweight Delta:
+- MODIFIED BR-007：Reject reason 從「至少 10 字元」放寬為「至少 5 個中文字 OR 至少 10 個英數字」；空白不計，半形 / 全形視覺等價，emoji 算字。
 -->
 
 ## Status Legend

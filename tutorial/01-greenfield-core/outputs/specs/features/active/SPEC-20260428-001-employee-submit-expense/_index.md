@@ -43,7 +43,7 @@ branch: feature/SPEC-20260428-001-employee-submit-expense
 | BR-004 | 同一 ExpenseReport 內，相同 ReceiptReference 不允許重複加入。 | phase-1 (mvp) | phase-1 (mvp) | active |
 | BR-005 | 主管不可審核自己提交的 ExpenseReport；`SubmitterId != ApproverId` 必須由 Domain 層強制。 | phase-2 (supervisor-approval) | phase-2 (supervisor-approval) | active |
 | BR-006 | 只有 Status = Submitted 的 ExpenseReport 能被 Approve / Reject；其他狀態一律 raise DomainException。 | phase-2 (supervisor-approval) | phase-2 (supervisor-approval) | active |
-| BR-007 | Reject 必須附註原因；ApprovalReason 至少 10 字元，否則 raise DomainException。 | phase-2 (supervisor-approval) | phase-2 (supervisor-approval) | active |
+| BR-007 | Reject 必須附註原因；ApprovalReason 至少 5 個中文字或至少 10 個英數字，否則 raise DomainException；空白不計，半形 / 全形視覺等價，emoji 算字。 | phase-2 (supervisor-approval) | lightweight-2026-04-30 | active |
 
 <!-- dflow:section lightweight-changes -->
 ## Lightweight Changes
@@ -53,7 +53,7 @@ branch: feature/SPEC-20260428-001-employee-submit-expense
 
 | Date | Tier | Description | Commit |
 |---|---|---|---|
-| _(none yet)_ | — | — | — |
+| 2026-04-30 | T2 | Reject reason 從至少 10 字元放寬為 5 中文字 OR 10 英數字。見 [lightweight-2026-04-30-approval-reason-bilingual-length.md](./lightweight-2026-04-30-approval-reason-bilingual-length.md) | `{pending}` |
 
 ## Open Questions
 
@@ -64,6 +64,6 @@ branch: feature/SPEC-20260428-001-employee-submit-expense
 > 一句話：目前進展到哪？下一個動作是什麼？
 > 開新對話接續工作時，從這裡讀起。
 
-**Current Progress**: phase-2 (supervisor-approval) phase-spec drafted; `_index.md` Current BR Snapshot regenerated from phase 2 Delta; ApprovalDecision added as second Aggregate in Expense BC.
+**Current Progress**: phase-2 (supervisor-approval) is in progress; T2 lightweight change `approval-reason-bilingual-length` drafted and BR-007 Current BR Snapshot regenerated.
 
-**Next Action**: 開 phase 2 實作 branch / sync branch（依專案 trunk-based 規則），從 `phase-spec-2026-04-29-supervisor-approval.md` 的 DOMAIN-1 開始實作。
+**Next Action**: Implement the `ApprovalReason` VO validation change and unit tests from `lightweight-2026-04-30-approval-reason-bilingual-length.md`, then continue phase 2 implementation work.
