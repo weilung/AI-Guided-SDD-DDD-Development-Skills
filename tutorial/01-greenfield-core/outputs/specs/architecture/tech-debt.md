@@ -12,4 +12,5 @@
 
 ## Follow-up Notes
 
+- related-feature: SPEC-20260428-001 (completed 2026-05-07)
 - BUG-001 only fixes reject reason truncation and Domain malformed-input handling. A broader i18n character-counting policy should be handled as a separate architecture review, not expanded inside the T2 bug-fix.
