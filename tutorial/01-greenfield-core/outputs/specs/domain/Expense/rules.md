@@ -29,17 +29,17 @@ behavior.md 仍由 finish-feature / Step 8.3 從 phase-spec 場景 merge；ancho
 
 ## Lifecycle
 
-> Final reconciliation from `SPEC-20260428-001-employee-submit-expense` completion on 2026-05-07. The Current BR Snapshot in the completed feature is the feature-level audit source; this `rules.md` table is the Expense BC system-level current state.
+> 2026-05-07 從 `SPEC-20260428-001-employee-submit-expense` 完成狀態做最終 reconciliation。completed feature 中的 Current BR Snapshot 是 feature-level 稽核來源；此 `rules.md` 表是 Expense BC system-level current state。
 
 | BR-ID | First Seen | Last Updated From Feature Snapshot | Finalized From | Finalized Date | Lifecycle State |
 |---|---|---|---|---|---|
-| BR-001 | phase-1 (mvp) | phase-1 (mvp) | SPEC-20260428-001 completion | 2026-05-07 | active |
-| BR-002 | phase-1 (mvp) | phase-2 (supervisor-approval) | SPEC-20260428-001 completion | 2026-05-07 | active |
-| BR-003 | phase-1 (mvp) | phase-1 (mvp) | SPEC-20260428-001 completion | 2026-05-07 | active |
-| BR-004 | phase-1 (mvp) | phase-1 (mvp) | SPEC-20260428-001 completion | 2026-05-07 | active |
-| BR-005 | phase-2 (supervisor-approval) | phase-2 (supervisor-approval) | SPEC-20260428-001 completion | 2026-05-07 | active |
-| BR-006 | phase-2 (supervisor-approval) | phase-2 (supervisor-approval) | SPEC-20260428-001 completion | 2026-05-07 | active |
-| BR-007 | phase-2 (supervisor-approval) | lightweight-2026-04-30 | SPEC-20260428-001 completion | 2026-05-07 | active |
+| BR-001 | phase-1 (mvp) | phase-1 (mvp) | SPEC-20260428-001 完成 | 2026-05-07 | active |
+| BR-002 | phase-1 (mvp) | phase-2 (supervisor-approval) | SPEC-20260428-001 完成 | 2026-05-07 | active |
+| BR-003 | phase-1 (mvp) | phase-1 (mvp) | SPEC-20260428-001 完成 | 2026-05-07 | active |
+| BR-004 | phase-1 (mvp) | phase-1 (mvp) | SPEC-20260428-001 完成 | 2026-05-07 | active |
+| BR-005 | phase-2 (supervisor-approval) | phase-2 (supervisor-approval) | SPEC-20260428-001 完成 | 2026-05-07 | active |
+| BR-006 | phase-2 (supervisor-approval) | phase-2 (supervisor-approval) | SPEC-20260428-001 完成 | 2026-05-07 | active |
+| BR-007 | phase-2 (supervisor-approval) | lightweight-2026-04-30 | SPEC-20260428-001 完成 | 2026-05-07 | active |
 
 ## Status Legend
 
@@ -51,5 +51,5 @@ behavior.md 仍由 finish-feature / Step 8.3 從 phase-spec 場景 merge；ancho
 
 ## Deferred / Monitoring Questions
 
-- Batch approval is deferred from phase 2. If trial feedback proves it is needed, create a follow-up feature under `specs/features/backlog/`; do not reopen `SPEC-20260428-001`.
+- Batch approval 已從 phase 2 延後。如果試用回饋證明需要，請在 `specs/features/backlog/` 下建立 follow-up feature；不要重新開啟 `SPEC-20260428-001`。
 - Approval policy 若出現金額門檻、二階主管、代理簽核或 SLA escalation，可能需要重新評估是否拆出 Approval BC。

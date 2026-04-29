@@ -8,9 +8,9 @@
 
 | Item | Layer | Decision / debt | Impact | Follow-up | Status |
 |---|---|---|---|---|---|
-| Unicode character counting strategy under i18n | Domain / Presentation | Reported 2026-05-04 from BUG-001. Reject reason bug exposed that user-facing length limits do not yet have a shared character counting strategy. | Scope: `ApprovalReason` VO and any future user-facing length limits. Risk: UI counters, API payloads, and Domain validation can disagree for emoji, composed characters, fullwidth forms, or malformed Unicode. | Proposed approach: evaluate grapheme cluster vs codepoint vs UTF-16 unit semantics; standardize shared helpers; use `Intl.Segmenter` in Presentation where available and evaluate ICU library support for Domain-side counting. Priority: medium. Blocked-by: none. | open |
+| Unicode i18n 下的字元計數策略 | Domain / Presentation | 2026-05-04 由 BUG-001 回報。Reject reason bug 暴露出使用者可見的長度限制目前還沒有共用的字元計數策略。 | 範圍：`ApprovalReason` VO 與未來任何使用者可見的長度限制。風險：UI counter、API payload 與 Domain validation 對 emoji、組合字元、全形形式或 malformed Unicode 可能得出不一致結果。 | 建議做法：評估 grapheme cluster、codepoint、UTF-16 unit 三種語意；標準化共用 helper；Presentation 可用時使用 `Intl.Segmenter`，並評估 Domain 端計數的 ICU library 支援。優先度：medium。Blocked-by：none。 | open |
 
 ## Follow-up Notes
 
-- related-feature: SPEC-20260428-001 (completed 2026-05-07)
-- BUG-001 only fixes reject reason truncation and Domain malformed-input handling. A broader i18n character-counting policy should be handled as a separate architecture review, not expanded inside the T2 bug-fix.
+- related-feature: SPEC-20260428-001（2026-05-07 完成）
+- BUG-001 只修 reject reason truncation 與 Domain malformed-input handling。更廣泛的 i18n 字元計數 policy 應該作為獨立 architecture review 處理，不要擴張到這次 T2 bug-fix 裡。

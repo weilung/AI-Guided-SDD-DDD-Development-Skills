@@ -19,9 +19,9 @@ slug: emoji-surrogate-truncation
 
 2026-05-04 早上，財務部主管 Carol 回報：她在 2026-05-03 週日加班時想 reject 一張差旅單，退回原因輸入「金額對不上👍」。前端 counter 顯示「6 字 ✓」，但送出後 API 回應「reject reason 不合法」。
 
-Alice 用 browser dev tools 重現後確認：React form 在限制 reject reason 長度時使用 `value.substring(0, maxLen)`，在 emoji 的 UTF-16 surrogate pair 中間截斷。送到 API 的字串包含 invalid surrogate，Domain layer 的 `ApprovalReason` Value Object 在字數計算路徑中拋出 generic error，導致一個符合 BR-007 意圖的 reason 被拒絕。
+Alice 用 browser dev tools 重現後確認：React form 在限制 reject reason 長度時使用 `value.substring(0, maxLen)`，在 emoji 的 UTF-16 surrogate pair 中間截斷。送到 API 的字串包含 invalid surrogate，Domain Layer 的 `ApprovalReason` Value Object 在字數計算路徑中拋出泛用錯誤，導致一個符合 BR-007 意圖的 reason 被拒絕。
 
-這是 bug-fix，不是新的審核需求。BR-007 的 rule wording 維持不變；修正範圍是 Presentation layer 的截字邏輯，以及 Domain layer 對 malformed Unicode input 的防衛與錯誤訊息。
+這是 bug-fix，不是新的審核需求。BR-007 的 rule wording 維持不變；修正範圍是 Presentation Layer 的截字邏輯，以及 Domain Layer 對 malformed Unicode input 的防衛與錯誤訊息。
 
 ## Reason for Change
 
@@ -37,11 +37,11 @@ _(none)_
 
 #### Rule: BR-007 Reject 必須附註原因
 
-**Before**: Given 一份 ExpenseReport 處於 Submitted 狀態 And `ApproverId != SubmitterId` When 主管在 React reject form 輸入 `金額對不上👍` And 前端 counter 顯示 `6 字 ✓` And form 用 `substring(0, maxLen)` 截斷 value Then payload 可能包含 invalid surrogate And `ApprovalReason` 在字數計算時拋出 generic error And reject 被拒絕。
+**Before**: Given 一份 ExpenseReport 處於 Submitted 狀態 And `ApproverId != SubmitterId` When 主管在 React reject form 輸入 `金額對不上👍` And 前端 counter 顯示 `6 字 ✓` And form 用 `substring(0, maxLen)` 截斷 value Then payload 可能包含 invalid surrogate And `ApprovalReason` 在字數計算時拋出泛用錯誤 And reject 被拒絕。
 
-**After**: Given 同樣輸入 `金額對不上👍` When React reject form 需要限制長度 Then Presentation layer 使用 grapheme-aware 截斷，不會切開 surrogate pair And payload 保持 valid Unicode string And `ApprovalReason` normalize 後依 BR-007 接受該 reason，reject 可繼續完成。
+**After**: Given 同樣輸入 `金額對不上👍` When React reject form 需要限制長度 Then Presentation Layer 使用 grapheme-aware 截斷，不會切開 surrogate pair And payload 保持 valid Unicode string And `ApprovalReason` normalize 後依 BR-007 接受該 reason，reject 可繼續完成。
 
-**Reason**: BR-007 本身已允許中文短語與 emoji visual characters；錯誤在 implementation-level Unicode handling，而不是 business rule wording。
+**Reason**: BR-007 本身已允許中文短語與 emoji 視覺字元；錯誤在 implementation-level Unicode handling，而不是 business rule wording。
 
 ### REMOVED - BR removed
 
@@ -63,27 +63,27 @@ _(none)_
 
 ## Root Cause
 
-React reject form 使用 UTF-16 code unit-based `value.substring(0, maxLen)` 做輸入截斷。當使用者輸入 emoji 且截斷點落在 surrogate pair 中間時，前端會產生包含 unpaired surrogate 的 invalid string。
+React reject form 使用以 UTF-16 code unit 為基礎的 `value.substring(0, maxLen)` 做輸入截斷。當使用者輸入 emoji 且截斷點落在 surrogate pair 中間時，前端會產生包含 unpaired surrogate 的 invalid string。
 
-API 收到 malformed payload 後仍進入 Domain validation。`ApprovalReason` 的字數計算路徑假設 input 是 well-formed Unicode，對 invalid surrogate 沒有先做 detection，因此拋出 generic calculation error。結果是前端 counter 顯示可送出，但 Domain layer 拒絕同一段文字。
+API 收到 malformed payload 後仍進入 Domain validation。`ApprovalReason` 的字數計算路徑假設 input 是 well-formed Unicode，對 invalid surrogate 沒有先做 detection，因此拋出泛用 calculation error。結果是前端 counter 顯示可送出，但 Domain Layer 拒絕同一段文字。
 
 ## Fix Approach
 
-Primary fix in **Presentation layer**:
+主要修正在 **Presentation Layer**：
 
-- Replace `value.substring(0, maxLen)` with grapheme-aware truncation.
-- Prefer `Intl.Segmenter` for visual-character segmentation when available.
-- Use `Array.from(str)` as minimum fallback so surrogate pairs are not split, while full grapheme-cluster strategy remains tracked as tech debt.
-- Ensure the visible counter and truncated value use the same counting strategy for reject reason input.
+- 將 `value.substring(0, maxLen)` 改成 grapheme-aware 截斷。
+- 可用時優先使用 `Intl.Segmenter` 做 visual-character 分段。
+- 使用 `Array.from(str)` 作為最低 fallback，確保 surrogate pairs 不會被切開；完整 grapheme-cluster strategy 則持續追蹤為 tech debt。
+- 確保 reject reason input 的可見 counter 與截斷後的 value 使用相同計數策略。
 
-Secondary guard in **Domain layer**:
+次要防衛在 **Domain Layer**：
 
-- Normalize `ApprovalReason` input to Unicode NFC before length checks.
-- Detect invalid / unpaired surrogate before counting characters.
-- Throw a specific `InvalidApprovalReasonException` with a clear message for malformed Unicode input instead of leaking a generic calculation error.
-- Keep BR-007 thresholds unchanged; do not add BR-008.
+- 在 length checks 前，將 `ApprovalReason` input normalize 成 Unicode NFC。
+- 在 counting characters 前偵測 invalid / unpaired surrogate。
+- 對 malformed Unicode input 拋出明確訊息的 `InvalidApprovalReasonException`，不要洩漏泛用 calculation error。
+- BR-007 thresholds 維持不變；不要新增 BR-008。
 
-No Application contract, API route, database schema, Aggregate boundary, or Domain Event changes.
+不改 Application contract、API route、database schema、Aggregate boundary 或 Domain Event。
 
 <!-- dflow:section implementation-tasks -->
 ## Implementation Tasks
@@ -92,25 +92,25 @@ No Application contract, API route, database schema, Aggregate boundary, or Doma
 >
 > Recommended layer tags (Core): `DOMAIN` / `APP` / `INFRA` / `API` / `TEST` / `DOC`
 
-- [ ] PRESENTATION-1: Replace reject reason `substring(0, maxLen)` truncation with grapheme-aware truncation (`Intl.Segmenter` preferred; `Array.from(str)` fallback must not split surrogate pairs).
-- [ ] PRESENTATION-2: Make the reject reason counter use the same counting strategy as the truncation logic.
-- [ ] DOMAIN-1: Normalize `ApprovalReason` input to NFC before BR-007 length checks.
-- [ ] DOMAIN-2: Detect invalid / unpaired surrogate before length calculation and throw `InvalidApprovalReasonException` with a clear message.
-- [ ] TEST-1: Add Presentation test that `金額對不上👍` remains a valid string after truncation and the counter still shows `6 字 ✓`.
-- [ ] TEST-2: Add Domain unit test that `ApprovalReason("金額對不上👍")` passes BR-007.
-- [ ] TEST-3: Add regression test that manually constructed half-surrogate input raises `InvalidApprovalReasonException`, not a generic calculation error.
-- [ ] TEST-4: Add integration/API test that reject with `金額對不上👍` reaches the normal reject path.
-- [ ] DOC-1: Update `_index.md` Lightweight Changes and `specs/architecture/tech-debt.md`; do not regenerate Current BR Snapshot because BR wording is unchanged.
+- [ ] PRESENTATION-1: 將 reject reason 的 `substring(0, maxLen)` truncation 改為 grapheme-aware 截斷（優先使用 `Intl.Segmenter`；`Array.from(str)` fallback 不可切開 surrogate pairs）。
+- [ ] PRESENTATION-2: 讓 reject reason counter 使用與 truncation logic 相同的 counting strategy。
+- [ ] DOMAIN-1: 在 BR-007 length checks 前，將 `ApprovalReason` input normalize 成 NFC。
+- [ ] DOMAIN-2: 在 length calculation 前偵測 invalid / unpaired surrogate，並拋出有明確訊息的 `InvalidApprovalReasonException`。
+- [ ] TEST-1: 新增 Presentation test，確認 `金額對不上👍` truncation 後仍是 valid string，且 counter 仍顯示 `6 字 ✓`。
+- [ ] TEST-2: 新增 Domain unit test，確認 `ApprovalReason("金額對不上👍")` 通過 BR-007。
+- [ ] TEST-3: 新增 regression test，確認手動建出的 half-surrogate input 會 raise `InvalidApprovalReasonException`，而不是泛用 calculation error。
+- [ ] TEST-4: 新增 integration/API test，確認使用 `金額對不上👍` reject 會進入正常 reject path。
+- [ ] DOC-1: 更新 `_index.md` Lightweight Changes 與 `specs/architecture/tech-debt.md`；不要 regenerate Current BR Snapshot，因為 BR wording 不變。
 
-Layer tag list above is the recommended set; this bug-fix adds `PRESENTATION` because the primary defect is in the React form.
+Layer tag list above is the recommended set；這次 bug-fix 額外使用 `PRESENTATION`，因為主要缺陷在 React form。
 
 <!-- dflow:section open-questions -->
 ## Open Questions
 
-- Resolved 2026-05-04: Do not add BR-008 for invalid surrogate / invisible character counting. Invalid surrogate is malformed input sanitization, not a business rule.
-- Deferred: full i18n character counting strategy for all user-facing length limits. See `Unicode character counting strategy under i18n` in [specs/architecture/tech-debt.md](../../../architecture/tech-debt.md).
-- Deferred: adopting ICU or a shared i18n library is outside this T2 bug-fix.
+- 已於 2026-05-04 決議：不要為 invalid surrogate / invisible character counting 新增 BR-008。Invalid surrogate 是 malformed input sanitization，不是 business rule。
+- 暫緩：所有使用者可見長度限制的完整 i18n 字元計數策略。見 [specs/architecture/tech-debt.md](../../../architecture/tech-debt.md) 中的 `Unicode character counting strategy under i18n`。
+- 暫緩：採用 ICU 或共用 i18n library 不在這次 T2 bug-fix 範圍內。
 
 ## Tech Debt Discovered (if any)
 
-Added `Unicode character counting strategy under i18n` to [specs/architecture/tech-debt.md](../../../architecture/tech-debt.md), reported 2026-05-04 from BUG-001.
+已將 `Unicode character counting strategy under i18n` 加入 [specs/architecture/tech-debt.md](../../../architecture/tech-debt.md)，由 BUG-001 於 2026-05-04 回報。

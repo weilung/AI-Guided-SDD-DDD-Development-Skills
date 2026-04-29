@@ -10,7 +10,7 @@ last-updated: 2026-04-29
 
 ## Responsibilities
 
-負責員工差旅 / 公務費用申報資料的整個生命週期：建立草稿、加入費用項、提交給主管審核、主管核准 / 退回、（後續 phase）核銷狀態追蹤。Expense BC 是「費用單據」與其審核結果的 source of truth。
+負責員工差旅 / 公務費用申報資料的整個生命週期：建立草稿、加入費用項、提交給主管審核、主管核准 / 退回、（後續 phase）核銷狀態追蹤。Expense BC 是「費用單據」與其審核結果的真實來源。
 
 ## Boundaries
 
@@ -34,7 +34,7 @@ last-updated: 2026-04-29
 
 ### Aggregates
 - **ExpenseReport** — 一份費用申報單，內含 1..N 個 ExpenseItem，是核銷流程的主體 Aggregate Root
-- **ApprovalDecision** — phase 2 新增；主管對一次 Submit 做出的審核決定，保存 audit trail
+- **ApprovalDecision** — phase 2 新增；主管對一次 Submit 做出的審核決定，保存稽核軌跡
 
 ### Entities
 - **ExpenseItem** — ExpenseReport 內的單筆費用項目
@@ -73,14 +73,14 @@ last-updated: 2026-04-29
 
 ### Approval 留在 Expense BC（phase 2 decided）
 
-phase 1 的 open question 是「Approval 是新 BC 還是 Expense 內另一 Aggregate？」phase 2 決定：**留在 Expense BC 內，新增 ApprovalDecision Aggregate**。
+phase 1 的未決問題是「Approval 是新 BC 還是 Expense 內另一 Aggregate？」phase 2 決定：**留在 Expense BC 內，新增 ApprovalDecision Aggregate**。
 
 理由：
 - phase 2 審核仍緊密圍繞 ExpenseReport 生命週期，不是獨立業務能力。
 - 目前沒有多階簽核、代理人、SLA、政策引擎或跨組織任務池。
-- 拆 BC 會過早引入 integration boundary，增加小團隊實作成本。
+- 拆 BC 會過早引入整合邊界，增加小團隊實作成本。
 
-Review trigger：未來若 Approval policy 出現金額門檻、二階主管、代理簽核、SLA escalation 或跨系統審核任務，再重新評估是否拆出 Approval BC。
+重新評估觸發條件：未來若 Approval policy 出現金額門檻、二階主管、代理簽核、SLA escalation 或跨系統審核任務，再重新評估是否拆出 Approval BC。
 
 ## Code Mapping
 

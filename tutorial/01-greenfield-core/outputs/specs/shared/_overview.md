@@ -16,16 +16,11 @@ AI) can quickly understand what they are working on.
 
 ## System Summary
 
-ExpenseTracker is the company's internal **企業差旅費用申報與核銷** system:
-employees submit travel-expense reports after a trip, line managers review
-and approve them, and the finance team issues reimbursement. The system
-replaces a spreadsheet-driven process and aims to give finance an auditable
-trail from submission through to bank transfer.
+ExpenseTracker 是公司內部的**企業差旅費用申報與核銷**系統：員工在出差後提交差旅費用申報，直屬主管審核並核准，財務團隊則進行核銷匯款。系統取代以試算表為主的流程，目標是讓財務從提交到銀行轉帳都有可稽核的軌跡。
 
 ### Business Domain
 
-- **Primary domain**: 企業差旅費用申報與核銷 (corporate travel expense
-  submission and reimbursement)
+- **Primary domain**: 企業差旅費用申報與核銷（公司差旅費用申報與核銷）
 - **Key stakeholders**: {e.g. 出差員工、直屬主管、財務團隊、稽核}
   <!-- TODO: 與 PO 確認 stakeholder 細節 -->
 - **User scale**: {e.g. ~200 內部員工、單一公司}

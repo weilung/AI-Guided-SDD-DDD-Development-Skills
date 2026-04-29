@@ -11,7 +11,7 @@ last-updated: 2026-04-30
 
 Expense BC 負責員工費用申報資料的生命週期。phase 1 建立 **ExpenseReport** Aggregate，處理 Draft → Submitted。phase 2 新增 **ApprovalDecision** Aggregate，記錄主管對一次 Submit 的核准或退回決定。
 
-ApprovalDecision 留在 Expense BC 內，不拆獨立 Approval BC。理由：phase 2 的審核動作仍緊密圍繞 ExpenseReport 狀態機，沒有獨立政策語言、跨部門 SLA、代理簽核或多階審批規則。未來若 Approval policy 複雜化，再 review 是否拆 BC。
+ApprovalDecision 留在 Expense BC 內，不拆獨立 Approval BC。理由：phase 2 的審核動作仍緊密圍繞 ExpenseReport 狀態機，沒有獨立政策語言、跨部門 SLA、代理簽核或多階審批規則。未來若 Approval policy 複雜化，再檢視是否拆 BC。
 
 ## Aggregate: ExpenseReport
 
@@ -70,13 +70,13 @@ ExpenseReport (Aggregate Root)
 | `ModifyItem(itemId, ...)` | Status == Draft 或 Rejected；itemId 存在 | Item 屬性更新；若原 Status = Rejected，改回 Draft | _(無)_ |
 | `Submit()` | Status == Draft；Items.Count >= 1 | Status = Submitted；SubmittedAt = now；SubmitAttemptNo += 1 | **ExpenseReportSubmitted** (ReportId, SubmitterId, SubmittedAt, TotalAmount, SubmitAttemptNo) |
 | `Approve(approverId, decidedAt)` <!-- phase-2 ADDED --> | Status == Submitted；approverId != SubmitterId | Status = Approved；ApprovedAt = decidedAt | **ExpenseReportApproved** (ReportId, SubmitterId, ApproverId, ApprovedAt, SubmitAttemptNo) |
-| `Reject(approverId, reason, decidedAt)` <!-- phase-2 ADDED --> <!-- 2026-04-30 lightweight MODIFIED --> | Status == Submitted；approverId != SubmitterId；reason 符合 ApprovalReason bilingual length validation | Status = Rejected；RejectedAt = decidedAt | **ExpenseReportRejected** (ReportId, SubmitterId, ApproverId, RejectedAt, Reason, SubmitAttemptNo) |
+| `Reject(approverId, reason, decidedAt)` <!-- phase-2 ADDED --> <!-- 2026-04-30 lightweight MODIFIED --> | Status == Submitted；approverId != SubmitterId；reason 符合 ApprovalReason 雙語長度驗證 | Status = Rejected；RejectedAt = decidedAt | **ExpenseReportRejected** (ReportId, SubmitterId, ApproverId, RejectedAt, Reason, SubmitAttemptNo) |
 
 ## Aggregate: ApprovalDecision <!-- phase-2 ADDED -->
 
 ### Purpose
 
-ApprovalDecision 記錄主管針對一次 Submit 做出的審核決定。它不是 ExpenseReport 的 child entity，因為它有自己的 audit identity、唯一約束與生命週期；同一份 ExpenseReport 被退回後重新 Submit，會產生新的 SubmitAttemptNo，並對應新的 ApprovalDecision。
+ApprovalDecision 記錄主管針對一次 Submit 做出的審核決定。它不是 ExpenseReport 的 child entity，因為它有自己的稽核識別、唯一約束與生命週期；同一份 ExpenseReport 被退回後重新 Submit，會產生新的 SubmitAttemptNo，並對應新的 ApprovalDecision。
 
 ### Invariants
 
@@ -119,7 +119,7 @@ ApprovalDecision (Aggregate Root)
 | Method | Preconditions | Postconditions | Domain Event |
 |---|---|---|---|
 | `CreateApproved(reportId, submitterId, submitAttemptNo, approverId, note, decidedAt)` | `approverId != submitterId`；尚無同 `(reportId, submitAttemptNo)` decision | 回傳 Decision = Approved 的 ApprovalDecision | Event 由 ExpenseReport.Approve() raise |
-| `CreateRejected(reportId, submitterId, submitAttemptNo, approverId, reason, decidedAt)` | `approverId != submitterId`；reason 符合 ApprovalReason bilingual length validation；尚無同 `(reportId, submitAttemptNo)` decision | 回傳 Decision = Rejected 的 ApprovalDecision | Event 由 ExpenseReport.Reject() raise |
+| `CreateRejected(reportId, submitterId, submitAttemptNo, approverId, reason, decidedAt)` | `approverId != submitterId`；reason 符合 ApprovalReason 雙語長度驗證；尚無同 `(reportId, submitAttemptNo)` decision | 回傳 Decision = Rejected 的 ApprovalDecision | Event 由 ExpenseReport.Reject() raise |
 
 ## Domain Events
 
@@ -139,19 +139,19 @@ ApprovalDecision (Aggregate Root)
 ## Design Decisions
 
 **為什麼 ApprovalDecision 留在 Expense BC，而不是拆 Approval BC？**
-phase 2 的審核行為只改變 ExpenseReport 的生命週期，語言也仍是「費用單被核准 / 退回」。目前沒有獨立 Approval policy、代理簽核、SLA、跨系統任務池或多階簽核模型。拆 BC 會讓 phase 2 過早引入 integration boundary。先留在 Expense BC，未來若政策複雜化再 review。
+phase 2 的審核行為只改變 ExpenseReport 的生命週期，語言也仍是「費用單被核准 / 退回」。目前沒有獨立 Approval policy、代理簽核、SLA、跨系統任務池或多階簽核模型。拆 BC 會讓 phase 2 過早引入整合邊界。先留在 Expense BC，未來若政策複雜化再檢視。
 
 **為什麼 ApprovalDecision 是第二個 Aggregate，而不是 ExpenseReport child entity？**
-審核決定有自己的 audit identity、唯一約束與不可變歷史。一份 Report 被 Reject 後重新 Submit，必須保留前一次 decision，並為新的 Submit attempt 建一筆新的 decision。如果做成 child entity，ExpenseReport 會承擔越來越大的 audit collection 與 concurrency 風險。用第二個 Aggregate 可以把審核紀錄的持久化與唯一性獨立出來。
+審核決定有自己的稽核識別、唯一約束與不可變歷史。一份 Report 被 Reject 後重新 Submit，必須保留前一次 decision，並為新的 Submit attempt 建一筆新的 decision。如果做成 child entity，ExpenseReport 會承擔越來越大的稽核集合與 concurrency 風險。用第二個 Aggregate 可以把審核紀錄的持久化與唯一性獨立出來。
 
 **為什麼 BR-005 要在 Domain 層強制？**
 UI 或 Application validator 可以先擋，但不能作為唯一防線。主管也可能透過 API、batch job 或測試工具觸發審核。`SubmitterId != ApproverId` 是業務不變條件，必須由 ApprovalDecision factory / ExpenseReport approve/reject transition 共同守住。
 
 **為什麼 Rejected 後允許重編，而 Submitted / Approved 不允許？**
-Rejected 是主管明確要求員工修正資料的狀態。如果仍不可編輯，員工只能另建一張 Report，audit trail 會分裂。Submitted 代表正在等待主管決定，Approved 代表已成為財務可處理的正式單據，兩者都不應被員工直接修改。
+Rejected 是主管明確要求員工修正資料的狀態。如果仍不可編輯，員工只能另建一張 Report，稽核軌跡會分裂。Submitted 代表正在等待主管決定，Approved 代表已成為財務可處理的正式單據，兩者都不應被員工直接修改。
 
 **為什麼 ExpenseItem 是 Entity 而非 Value Object？**
-最初考慮過把 ExpenseItem 設成 VO（不可變、用整體值比較相等性）。但 review 場景時發現「員工填錯金額需要修改某筆 Item」是常見動作，且主管審核時可能會指出特定 item。選 Entity（有穩定的 ExpenseItemId）更貼近業務語義。
+最初考慮過把 ExpenseItem 設成 VO（不可變、用整體值比較相等性）。但檢視場景時發現「員工填錯金額需要修改某筆 Item」是常見動作，且主管審核時可能會指出特定 item。選 Entity（有穩定的 ExpenseItemId）更貼近業務語義。
 
 **為什麼 Money 是 VO，而不是 primitive decimal？**
-金額永遠帶幣別語義；用 primitive 早晚會出現「忘記轉換幣別 / 不同幣別直接相加」的 bug。MVP 雖然只用 TWD，但用 VO 把 Currency 一併綁定，未來支援多幣別不需要改 schema。
+金額永遠帶幣別語義；用 primitive 早晚會出現「忘記轉換幣別 / 不同幣別直接相加」的錯誤。MVP 雖然只用 TWD，但用 VO 把 Currency 一併綁定，未來支援多幣別不需要改 schema。
