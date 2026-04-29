@@ -10,18 +10,22 @@ branch: feature/SPEC-20260428-001-employee-submit-expense
 
 ## Goals & Scope
 
-讓員工能在差旅或公務結束後，建立並提交一份完整的費用申報單給主管審核。本 feature 是 ExpenseTracker 的第一個 feature，**MVP 範圍刻意收斂**到「員工端的提交動作」這一段，不含主管審核（phase 2）也不含財務核銷（phase 3）。
+讓員工能在差旅或公務結束後，建立並提交一份完整的費用申報單給主管審核。本 feature 是 ExpenseTracker 的第一個 feature，phase 1 先完成「員工端提交」，phase 2 補上「主管端 Approve / Reject」。
 
 涉及 Bounded Context：**Expense**（首個 BC，本 feature 同步建立）。
-涉及 Aggregate：**ExpenseReport**（Aggregate Root，內含 ExpenseItem entities）。
 
-邊界：本 feature 結束後系統能讓員工新增 / 編輯 / 提交 ExpenseReport，並 raise 一個 ExpenseReportSubmitted Domain Event；該 event 在 MVP 階段沒有 consumer（保留給 phase 2）。
+涉及 Aggregates：
+- **ExpenseReport**（Aggregate Root，內含 ExpenseItem entities）
+- **ApprovalDecision**（Aggregate Root；phase 2 新增，一次 Submit 對應一筆審核決定）
+
+邊界：本 feature 結束後系統能讓員工新增 / 編輯 / 提交 ExpenseReport，主管能對 Submitted 的 ExpenseReport 做 Approve / Reject，並保留每次 Submit 對應的一筆 ApprovalDecision audit trail。通知 email、SLA timer、財務匯款與批次審核不在 phase 2。
 
 ## Phase Specs
 
 | Phase | Date | Slug | Status | File Link |
 |---|---|---|---|---|
-| 1 | 2026-04-28 | mvp | in-progress | [phase-spec-2026-04-28-mvp.md](./phase-spec-2026-04-28-mvp.md) |
+| 1 | 2026-04-28 | mvp | completed | [phase-spec-2026-04-28-mvp.md](./phase-spec-2026-04-28-mvp.md) |
+| 2 | 2026-04-29 | supervisor-approval | in-progress | [phase-spec-2026-04-29-supervisor-approval.md](./phase-spec-2026-04-29-supervisor-approval.md) |
 
 <!-- dflow:section current-br-snapshot -->
 ## Current BR Snapshot
@@ -33,10 +37,13 @@ branch: feature/SPEC-20260428-001-employee-submit-expense
 
 | BR-ID | Current Rule | First Seen (phase) | Last Updated (phase) | Status |
 |---|---|---|---|---|
-| BR-001 | 提交 ExpenseReport 時必須至少含 1 個 ExpenseItem，否則拒絕。 | phase-1 (mvp) | phase-1 (mvp) | draft |
-| BR-002 | ExpenseReport 提交成功後狀態變為 Submitted，且不可再被編輯。 | phase-1 (mvp) | phase-1 (mvp) | draft |
-| BR-003 | ExpenseItem 的 Money.Amount 必須 > 0。 | phase-1 (mvp) | phase-1 (mvp) | draft |
-| BR-004 | 同一 ExpenseReport 內，相同 ReceiptReference 不允許重複加入。 | phase-1 (mvp) | phase-1 (mvp) | draft |
+| BR-001 | 提交 ExpenseReport 時必須至少含 1 個 ExpenseItem，否則拒絕。 | phase-1 (mvp) | phase-1 (mvp) | active |
+| BR-002 | ExpenseReport 提交成功後狀態變為 Submitted，不可再被編輯；唯一例外是被 Reject 後可重新編輯並再次 Submit（會建立新的 ApprovalDecision）。 | phase-1 (mvp) | phase-2 (supervisor-approval) | active |
+| BR-003 | ExpenseItem 的 Money.Amount 必須 > 0。 | phase-1 (mvp) | phase-1 (mvp) | active |
+| BR-004 | 同一 ExpenseReport 內，相同 ReceiptReference 不允許重複加入。 | phase-1 (mvp) | phase-1 (mvp) | active |
+| BR-005 | 主管不可審核自己提交的 ExpenseReport；`SubmitterId != ApproverId` 必須由 Domain 層強制。 | phase-2 (supervisor-approval) | phase-2 (supervisor-approval) | active |
+| BR-006 | 只有 Status = Submitted 的 ExpenseReport 能被 Approve / Reject；其他狀態一律 raise DomainException。 | phase-2 (supervisor-approval) | phase-2 (supervisor-approval) | active |
+| BR-007 | Reject 必須附註原因；ApprovalReason 至少 10 字元，否則 raise DomainException。 | phase-2 (supervisor-approval) | phase-2 (supervisor-approval) | active |
 
 <!-- dflow:section lightweight-changes -->
 ## Lightweight Changes
@@ -48,11 +55,15 @@ branch: feature/SPEC-20260428-001-employee-submit-expense
 |---|---|---|---|
 | _(none yet)_ | — | — | — |
 
+## Open Questions
+
+- 要不要支援「批次 Approve」？phase 2 不做。保留到後續 phase 或實際使用後再評估。
+
 ## Resume Pointer
 
 > 一句話：目前進展到哪？下一個動作是什麼？
 > 開新對話接續工作時，從這裡讀起。
 
-**Current Progress**: phase-1 (mvp) phase-spec drafted; Aggregate design done; Implementation Tasks generated. 尚未進入 Step 6 git branch。
+**Current Progress**: phase-2 (supervisor-approval) phase-spec drafted; `_index.md` Current BR Snapshot regenerated from phase 2 Delta; ApprovalDecision added as second Aggregate in Expense BC.
 
-**Next Action**: 跑 `/dflow:next` 進入 Step 6 建 git branch `feature/SPEC-20260428-001-employee-submit-expense`，再進 Step 7 從 Domain layer 開始實作（DOMAIN-1 起）。
+**Next Action**: 開 phase 2 實作 branch / sync branch（依專案 trunk-based 規則），從 `phase-spec-2026-04-29-supervisor-approval.md` 的 DOMAIN-1 開始實作。

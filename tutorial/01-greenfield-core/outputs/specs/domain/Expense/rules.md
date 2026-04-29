@@ -9,12 +9,19 @@
 
 | BR-ID | Rule summary | Behavior anchor | Aggregate | Status | Last updated |
 |---|---|---|---|---|---|
-| BR-001 | 提交 ExpenseReport 時必須至少含 1 個 ExpenseItem，否則拒絕。 | [BR-001](./behavior.md#br-001-submit-requires-at-least-one-item) | ExpenseReport | draft | 2026-04-28 |
-| BR-002 | ExpenseReport 提交成功後狀態變為 Submitted，且不可再被編輯（包含新增 / 修改 / 刪除 Item）。 | [BR-002](./behavior.md#br-002-submitted-report-is-immutable) | ExpenseReport | draft | 2026-04-28 |
-| BR-003 | ExpenseItem 的 Money.Amount 必須 > 0；金額 = 0 或負數的 Item 在加入時就拒絕，提交時亦會 fail-fast。 | [BR-003](./behavior.md#br-003-item-amount-must-be-positive) | ExpenseReport | draft | 2026-04-28 |
-| BR-004 | 同一 ExpenseReport 內，相同 ReceiptReference 只允許出現一次；重複加入須警告（MVP 處理方式：拒絕並回 ValidationError，提示用戶確認）。 | [BR-004](./behavior.md#br-004-duplicate-receipt-rejected) | ExpenseReport | draft | 2026-04-28 |
+| BR-001 | 提交 ExpenseReport 時必須至少含 1 個 ExpenseItem，否則拒絕。 | [BR-001](./behavior.md#br-001-submit-requires-at-least-one-item) | ExpenseReport | active | 2026-04-28 |
+| BR-002 <!-- phase-2 MODIFIED --> | ExpenseReport 提交成功後狀態變為 Submitted，不可再被編輯；唯一例外是被 Reject 後可重新編輯並再次 Submit（會建立新的 ApprovalDecision）。 | [BR-002](./behavior.md#br-002-submitted-report-is-immutable-except-rejected-rework) | ExpenseReport | active | 2026-04-29 |
+| BR-003 | ExpenseItem 的 Money.Amount 必須 > 0；金額 = 0 或負數的 Item 在加入時就拒絕，提交時亦會 fail-fast。 | [BR-003](./behavior.md#br-003-item-amount-must-be-positive) | ExpenseReport | active | 2026-04-28 |
+| BR-004 | 同一 ExpenseReport 內，相同 ReceiptReference 只允許出現一次；重複加入須警告（MVP 處理方式：拒絕並回 ValidationError，提示用戶確認）。 | [BR-004](./behavior.md#br-004-duplicate-receipt-rejected) | ExpenseReport | active | 2026-04-28 |
+| BR-005 <!-- phase-2 ADDED --> | 主管不可審核自己提交的 ExpenseReport；`SubmitterId != ApproverId` 必須由 Domain 層強制。 | [BR-005](./behavior.md#br-005-approver-cannot-approve-own-report) | ApprovalDecision | active | 2026-04-29 |
+| BR-006 <!-- phase-2 ADDED --> | 只有 Status = Submitted 的 ExpenseReport 能被 Approve / Reject；其他狀態一律 raise DomainException。 | [BR-006](./behavior.md#br-006-only-submitted-report-can-be-approved-or-rejected) | ExpenseReport | active | 2026-04-29 |
+| BR-007 <!-- phase-2 ADDED --> | Reject 必須附註原因；ApprovalReason 至少 10 字元，否則 raise DomainException。 | [BR-007](./behavior.md#br-007-reject-requires-reason) | ApprovalDecision | active | 2026-04-29 |
 
-<!-- BR-001 / BR-002 來自 SPEC-20260428-001 phase MVP 主場景；BR-003 / BR-004 來自同 phase 的 edge case 衍生。所有 BR status 都是 draft —— 等 phase MVP 完成（Step 8.3）並合併進 behavior.md 後升 active。behavior anchor 連結指向尚未建立的 behavior.md（per Step 8.3 才建），點開時為 dead link 屬預期；/dflow:verify 會把這個 dead link 視為「pending behavior merge」而非 error。 -->
+<!-- phase 2 Delta:
+- MODIFIED BR-002：phase 1 原文「ExpenseReport 提交成功後狀態變為 Submitted，且不可再被編輯。」更新為 Rejected 可重編並再次 Submit。
+- ADDED BR-005..007：主管不可自審、只有 Submitted 可審、Reject reason 必填且至少 10 字元。
+behavior.md 仍由 finish-feature / Step 8.3 從 phase-spec 場景 merge；anchor 可能暫時是 pending link。
+-->
 
 ## Status Legend
 
@@ -26,5 +33,5 @@
 
 ## Open Questions
 
-- BR-004 重複收據的處理是「拒絕」還是「警告但允許覆寫」？MVP 暫採「拒絕」最嚴格，等實際使用觀察是否需放寬。
-- BR-002 的「不可編輯」是否包含「撤回到 Draft 重編」？目前 MVP 採「完全不可編輯」，後續主管退件 (Rejected) 時才開窗回 Draft，等 phase 2 主管審核時釐清。
+- 要不要支援「批次 Approve」？phase 2 不做。先收集主管實際使用回饋，再決定是否新增後續 phase。
+- Approval policy 若出現金額門檻、二階主管、代理簽核或 SLA escalation，可能需要重新評估是否拆出 Approval BC。
