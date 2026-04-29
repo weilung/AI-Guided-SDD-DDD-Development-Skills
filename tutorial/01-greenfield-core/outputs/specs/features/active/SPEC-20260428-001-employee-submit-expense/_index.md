@@ -45,6 +45,8 @@ branch: feature/SPEC-20260428-001-employee-submit-expense
 | BR-006 | 只有 Status = Submitted 的 ExpenseReport 能被 Approve / Reject；其他狀態一律 raise DomainException。 | phase-2 (supervisor-approval) | phase-2 (supervisor-approval) | active |
 | BR-007 | Reject 必須附註原因；ApprovalReason 至少 5 個中文字或至少 10 個英數字，否則 raise DomainException；空白不計，半形 / 全形視覺等價，emoji 算字。 | phase-2 (supervisor-approval) | lightweight-2026-04-30 | active |
 
+> 2026-05-04 BUG-001 note: Current BR Snapshot intentionally not regenerated. BR-007 wording is unchanged; the root cause is implementation-level Unicode truncation / sanitization, not a BR-level delta.
+
 <!-- dflow:section lightweight-changes -->
 ## Lightweight Changes
 
@@ -54,6 +56,7 @@ branch: feature/SPEC-20260428-001-employee-submit-expense
 | Date | Tier | Description | Commit |
 |---|---|---|---|
 | 2026-04-30 | T2 | Reject reason 從至少 10 字元放寬為 5 中文字 OR 10 英數字。見 [lightweight-2026-04-30-approval-reason-bilingual-length.md](./lightweight-2026-04-30-approval-reason-bilingual-length.md) | `{pending}` |
+| 2026-05-04 | T2 | Bug-fix: 前端 substring 截斷 emoji surrogate pair 導致 reject reason 被拒。見 [BUG-001-emoji-surrogate-truncation.md](./BUG-001-emoji-surrogate-truncation.md) | `{pending}` |
 
 ## Open Questions
 
@@ -64,6 +67,6 @@ branch: feature/SPEC-20260428-001-employee-submit-expense
 > 一句話：目前進展到哪？下一個動作是什麼？
 > 開新對話接續工作時，從這裡讀起。
 
-**Current Progress**: phase-2 (supervisor-approval) is in progress; T2 lightweight change `approval-reason-bilingual-length` drafted and BR-007 Current BR Snapshot regenerated.
+**Current Progress**: phase-2 (supervisor-approval) is in progress; `approval-reason-bilingual-length` has been implemented for trial use; BUG-001 (`emoji-surrogate-truncation`) is documented as a T2 bug-fix. Current BR Snapshot remains unchanged because BR-007 wording did not change.
 
-**Next Action**: Implement the `ApprovalReason` VO validation change and unit tests from `lightweight-2026-04-30-approval-reason-bilingual-length.md`, then continue phase 2 implementation work.
+**Next Action**: Implement BUG-001: replace Presentation truncation with grapheme-aware logic, add `ApprovalReason` invalid surrogate guard, and add regression tests from `BUG-001-emoji-surrogate-truncation.md`.
