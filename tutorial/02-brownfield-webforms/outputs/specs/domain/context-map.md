@@ -8,7 +8,7 @@
 
 | Bounded Context | Responsibility | Owner / Team | Primary Code Area | Notes |
 |---|---|---|---|---|
-| Order | 接單、訂單狀態、訂單明細、金額計算與提交流程。 | OrderManager 維運團隊 | `OrderManager.Web/Pages/Order/` | 第一個 modify-existing 的優先候選；邊界待實際修改確認。 |
+| Order | 接單、訂單狀態、訂單明細、金額計算與提交流程。 | OrderManager 維運團隊 | `OrderManager.Web/Pages/Order/` / `src/Domain/Order/` | 第一個已確認 BC；`SPEC-20260430-001` 先抽折扣計算。 |
 | Customer | 客戶資料、付款條件、啟用狀態與信用額度。 | 業務 / 客戶資料 owner | `OrderManager.Web/Pages/Customer/` / Customer repositories | 可能是 Order 的 upstream context。 |
 | Inventory | 庫存、預留、可售量與庫存查詢。 | 倉儲 / Inventory owner | `OrderManager.Web/Pages/Inventory/` / Stored Procedures | 與 OrderLine 的責任邊界待釐清。 |
 | Shipment | 出貨、貨運整合與物流狀態回寫。 | 倉儲 / 出貨團隊 | `OrderManager.Web/Pages/Shipment/` / Web Service integrations | 可能依賴 Order 狀態。 |
@@ -25,12 +25,12 @@
 
 ## Integration Notes
 
-- 這份 context map 是 Day-0 baseline，不代表正式邊界已定案。
-- 第一個 `/dflow:modify-existing` 應從具體 Code-Behind 行為開始，確認一小段規則後再建立 `specs/domain/{context}/`。
+- 這份 context map 起源於 Day-0 baseline；`SPEC-20260430-001` 已確認 Order BC 的第一個 scope：訂單明細總額與折扣計算。
+- 後續 `/dflow:modify-existing` 仍應從具體 Code-Behind 行為開始，逐步確認 Customer / Inventory / Shipment / Invoice 邊界。
 - 若第一個修改同時碰到 Order、Customer 與 Inventory，Bob 應先記錄 dependency，不急著一次切出多個完整 BC。
 
 ## Open Questions
 
-- BC 邊界待第一個 modify-existing 確認，特別是 Order 金額計算、信用額度檢查與庫存預留。
+- Order BC 的金額計算與折扣規則已部分決定；信用額度檢查與庫存預留仍待 Customer / Inventory 邊界確認。
 - Shipment 與 Invoice 是否由 OrderManager 同一團隊維護，或應視為外部 / downstream context？
 - 是否存在跨 context 共用資料表，導致需要 Anti-Corruption Layer 或中繼 model？

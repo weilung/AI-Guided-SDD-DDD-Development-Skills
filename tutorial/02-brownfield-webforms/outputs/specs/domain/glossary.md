@@ -8,8 +8,13 @@
 
 | Term | Definition | Bounded Context | Code Mapping | Notes |
 |---|---|---|---|---|
-| Order | B2B 經銷商提交的訂單主體，包含訂單狀態、客戶、訂單明細與金額資訊；是否作為 Aggregate Root 待第一個 modify-existing 確認。 | Order | `OrderManager.Web.Pages.Order.*` / `OrderManager.DataAccess.Entities.Order` | 目前規則分散在 `OrderEntry.aspx.cs` 與 Stored Procedures。 |
-| OrderLine | 訂單中的單一品項明細，包含商品、數量、單價、折扣與庫存檢查所需欄位。 | Order / Inventory | `OrderManager.DataAccess.Entities.OrderLine` | Order 與 Inventory 邊界待釐清。 |
+| Order | B2B 經銷商提交的訂單主體；在 Order BC 中作為 Aggregate Root，持有 OrderLine 集合並負責折扣前 / 折扣後金額計算。 | Order | `OrderManager.Domain.Order.Order` / `OrderManager.DataAccess.Entities.Order` | 首次由 `SPEC-20260430-001` 確認為 Order Aggregate Root。 |
+| OrderLine | 訂單中的單一品項明細，包含商品、數量、單價與 line subtotal。 | Order | `OrderManager.Domain.Order.OrderLine` / `OrderManager.DataAccess.Entities.OrderLine` | 庫存可售量仍屬 Inventory 邊界，OrderLine 只持有訂單明細資料。 |
+| Money | 金額與幣別的 Value Object，用來避免折扣與小計計算散落為裸 `decimal`。 | Order | `OrderManager.Domain.Order.Money` | 本階段以 TWD 為主；稅務 rounding 待 Invoice 邊界確認。 |
+| Quantity | 數量與單位的 Value Object。 | Order | `OrderManager.Domain.Order.Quantity` | 數量必須大於 0。 |
+| DiscountRate | 折扣率 Value Object，合法範圍為 `[0.0, 1.0]`。 | Order | `OrderManager.Domain.Order.DiscountRate` | 用於滿額折扣、客戶等級折扣與總折扣率。 |
+| DiscountPolicy | Domain Service，封裝滿額折扣與客戶等級折扣的判定、順序與累積公式。 | Order | `OrderManager.Domain.Order.DiscountPolicy` | `SPEC-20260430-001` 先處理滿 NT$50,000 與 `Senior` 折扣。 |
+| CustomerTier | 客戶等級 reference value；本階段使用 `Senior` 判斷老客戶折扣。 | Customer / Order | `Customer.CustomerTier` | Customer BC 尚未建模，Order 只消費此 reference value。 |
 | Dealer | 透過 OrderManager 下訂單的 B2B 經銷商。 | Customer | `OrderManager.DataAccess.Entities.Customer` | 業務常稱 Customer / Dealer，後續需統一命名。 |
 | CreditLimit | 客戶可用信用額度；接單或提交訂單時可能影響是否允許成立訂單。 | Customer | Stored Procedure / Customer repository | 規則可能在 Customer 與 Order 之間跨 context。 |
 | AvailableToPromise | 可承諾給訂單的可售量，通常由庫存量扣除預留量後得到。 | Inventory | Stored Procedure | 目前命名與實作待確認。 |
@@ -19,5 +24,5 @@
 ## Open Questions
 
 - Customer 與 Dealer 是否為同一個 Ubiquitous Language？若業務部門使用 Dealer、資料庫使用 Customer，spec 與 code mapping 要明確記錄。
-- Order 提交時的金額計算、信用額度檢查與庫存預留，哪些屬於 Order BC，哪些應由 Customer / Inventory 提供能力？
+- Order 金額計算與折扣規則已由 `SPEC-20260430-001` 確認屬於 Order BC；信用額度檢查與庫存預留仍待 Customer / Inventory 邊界釐清。
 - Invoice 狀態是否應影響 Order 狀態，或只作為 downstream 財務流程？
