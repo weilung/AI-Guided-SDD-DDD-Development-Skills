@@ -17,10 +17,11 @@
 | OrderEntry event handler 仍混合資料存取與流程控制 | `OrderManager.Web/Pages/Order/OrderEntry.aspx.cs` | 折扣計算抽離後，`btnSubmit_Click` 仍約有 50 行 EF query、UI parsing、狀態設定與 DB 寫回邏輯尚未抽離。 | Medium | WebForms adapter 仍偏厚；未來遷移到 ASP.NET Core 時需再拆 application-facing adapter / repository seam。 | open |
 | DiscountPolicy 結構可能需要演進 | `src/Domain/Order/DiscountPolicy` | 本 phase 只處理滿額折扣與 `Senior` 客戶折扣；若後續新增促銷、品項級折扣或通路折扣，單一 policy 可能過大。 | Low | 後續可評估是否拆成 PolicyChain 或 Strategy pattern；目前不為未確認需求過度設計。 | open |
 | OrderList / OrderEntry / OrderDetail rounding 策略不一致 | `OrderManager.Web/Pages/Order/OrderList.aspx.cs` / `OrderEntry.aspx.cs` / `OrderDetail.aspx.cs` | `OrderList.BindGrid()` 使用 `decimal.Round(value, 0)` 顯示整數元，`OrderEntry` / `OrderDetail` 使用 `Math.Round(value, 2)` 或 `ToString("N2")` 顯示到小數兩位，可能造成同一筆訂單跨頁視覺金額差異。 | Medium | Domain 層應統一 `Money` rounding / display precision contract，避免 ASP.NET Core migration 時把頁面差異一起搬過去。 | open |
-| OrderList isVip multiplier 0.93 規則來源不明 | `OrderManager.Web/Pages/Order/OrderList.aspx.cs` method `BindGrid()` | `if (customer.IsVip) { discountedTotal *= 0.93m; }` 沒有註解或 ticket reference，且可能與 BR-003 Senior customer 5% off 互斥。備註：待業務確認。 | Medium | 業務確認後再決定保留、移除或建立獨立 BR；未確認前不得寫入 `rules.md` 或 Domain `DiscountPolicy`。 | open |
+| OrderList isVip multiplier 0.93 規則來源不明 | `OrderManager.Web/Pages/Order/OrderList.aspx.cs` method `BindGrid()` | `if (customer.IsVip) { discountedTotal *= 0.93m; }` 沒有註解或 ticket reference，且可能與 BR-003 Senior customer 5% off 互斥。Resolved note: 2026-05-05 業務確認為 dead code，由 SPEC-20260505-002 phase 1 implement task 移除。 | Medium | 不寫成 BR；移除作為 `SPEC-20260505-002` 的 implementation cleanup task，避免把 legacy promotion 殘留帶入 ASP.NET Core migration。 | resolved |
 
 ## Follow-up Notes
 
 - Day-0 baseline 只記錄已知 debt，不代表立即重構。
 - 每個 `/dflow:modify-existing` 完成時，若看見新的 migration risk，應更新本檔。
 - 優先處理能支援 `src/Domain/` 純 C# 抽離與 unit testing 的 debt。
+- `OrderList isVip multiplier 0.93` 已由 Daniel 於 2026-05-05 確認為五年前促銷殘留；清理歸屬 `SPEC-20260505-002` phase 1 implementation task。
