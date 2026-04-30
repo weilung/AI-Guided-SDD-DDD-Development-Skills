@@ -1,0 +1,22 @@
+{
+  "name": "dflow",
+  "version": "0.1.0",
+  "description": "Dflow SDD/DDD project scaffolding CLI",
+  "type": "commonjs",
+  "bin": {
+    "dflow": "bin/dflow.js"
+  },
+  "engines": {
+    "node": ">=22.0.0"
+  },
+  "files": [
+    "bin/",
+    "lib/",
+    "templates/",
+    "README.md"
+  ],
+  "scripts": {
+    "test": "node test/smoke.mjs"
+  },
+  "license": "UNLICENSED"
+}
