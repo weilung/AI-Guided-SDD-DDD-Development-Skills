@@ -40,6 +40,26 @@ And 再套用 customer-tier discount
 And total discount rate 為 `1 - (1 - fullThresholdRate) * (1 - customerTierRate)`
 And NT$60,000 Senior customer order 在稅務處理前的 final amount 為 NT$51,300
 
+## Confirmed across pages (baseline-capture 2026-05-04)
+
+### BR-004: OrderList discounted total uses compound discount accumulation
+
+Source pages: `OrderManager.Web/Pages/Order/OrderList.aspx.cs` class `OrderList`, method `BindGrid()`；`OrderManager.Web/Pages/Order/OrderDetail.aspx.cs` class `OrderDetail`, method `LoadDiscountSummary()`。
+
+Given 同一筆 order 同時符合 full-threshold discount 與 Senior customer discount
+When `OrderList.BindGrid()` 計算 `Discounted Total` column
+Then 使用 `1 - (1 - fullRate) * (1 - tierRate)` 作為 total discount rate
+And 公式與 BR-004 compound discount accumulation 一致
+
+### BR-004: OrderDetail discount summary uses the shared discount summary source
+
+Source pages: `OrderManager.Web/Pages/Order/OrderList.aspx.cs` class `OrderList`, method `BindGrid()`；`OrderManager.Web/Pages/Order/OrderDetail.aspx.cs` class `OrderDetail`, method `LoadDiscountSummary()`；stored procedure `usp_GetOrderDiscountSummary`。
+
+Given `OrderList` 與 `OrderDetail` 顯示同一個 `OrderId`
+When 兩個頁面都從 `usp_GetOrderDiscountSummary` 載入 discount summary data
+Then 在相同 inputs 下，discounted total 的 source 一致
+And 兩個頁面預期都反映 BR-004 compound discount accumulation
+
 #### Edge cases
 
 - EC-001: Given Order 沒有 OrderLine items When 建立 Order Then 拒絕 construction。

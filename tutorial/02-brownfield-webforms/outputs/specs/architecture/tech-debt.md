@@ -16,6 +16,8 @@
 | Order 折扣規則分散在多個頁面 | `OrderManager.Web/Pages/Order/OrderList.aspx.cs` / `OrderDetail.aspx.cs` | 初步檢查顯示 Order BC 其他頁面也可能使用相同折扣規則，但各自實作金額摘要或顯示邏輯。 | High | 若只修 `OrderEntry.aspx.cs`，查詢與明細頁可能仍顯示舊算法；本 phase 先不擴張，後續 baseline capture 應跨頁確認。 | open |
 | OrderEntry event handler 仍混合資料存取與流程控制 | `OrderManager.Web/Pages/Order/OrderEntry.aspx.cs` | 折扣計算抽離後，`btnSubmit_Click` 仍約有 50 行 EF query、UI parsing、狀態設定與 DB 寫回邏輯尚未抽離。 | Medium | WebForms adapter 仍偏厚；未來遷移到 ASP.NET Core 時需再拆 application-facing adapter / repository seam。 | open |
 | DiscountPolicy 結構可能需要演進 | `src/Domain/Order/DiscountPolicy` | 本 phase 只處理滿額折扣與 `Senior` 客戶折扣；若後續新增促銷、品項級折扣或通路折扣，單一 policy 可能過大。 | Low | 後續可評估是否拆成 PolicyChain 或 Strategy pattern；目前不為未確認需求過度設計。 | open |
+| OrderList / OrderEntry / OrderDetail rounding 策略不一致 | `OrderManager.Web/Pages/Order/OrderList.aspx.cs` / `OrderEntry.aspx.cs` / `OrderDetail.aspx.cs` | `OrderList.BindGrid()` 使用 `decimal.Round(value, 0)` 顯示整數元，`OrderEntry` / `OrderDetail` 使用 `Math.Round(value, 2)` 或 `ToString("N2")` 顯示到小數兩位，可能造成同一筆訂單跨頁視覺金額差異。 | Medium | Domain 層應統一 `Money` rounding / display precision contract，避免 ASP.NET Core migration 時把頁面差異一起搬過去。 | open |
+| OrderList isVip multiplier 0.93 規則來源不明 | `OrderManager.Web/Pages/Order/OrderList.aspx.cs` method `BindGrid()` | `if (customer.IsVip) { discountedTotal *= 0.93m; }` 沒有註解或 ticket reference，且可能與 BR-003 Senior customer 5% off 互斥。備註：待業務確認。 | Medium | 業務確認後再決定保留、移除或建立獨立 BR；未確認前不得寫入 `rules.md` 或 Domain `DiscountPolicy`。 | open |
 
 ## Follow-up Notes
 

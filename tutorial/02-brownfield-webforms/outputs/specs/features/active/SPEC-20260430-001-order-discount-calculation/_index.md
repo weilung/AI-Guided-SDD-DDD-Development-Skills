@@ -38,13 +38,13 @@ Phase 1 `baseline-and-fix` 同時包含三件事：先 baseline capture `OrderEn
 <!-- dflow:section lightweight-changes -->
 ## Lightweight Changes
 
-| Date | Tier | Description | Commit |
+| Date | Type | Description | Commit |
 |---|---|---|---|
-| | | | |
+| 2026-05-04 | baseline-capture | Baseline-only capture：已補 `OrderList.aspx.cs` 與 `OrderDetail.aspx.cs` 的跨頁 confirmed behavior，詳見 [`behavior.md`](../../../domain/Order/behavior.md#confirmed-across-pages-baseline-capture-2026-05-04)；新發現的 rounding / `isVip` debt 已記錄於 [`tech-debt.md`](../../../architecture/tech-debt.md)。本 row 無對應 spec 檔。 | n/a - spec capture only |
 
 <!-- dflow:section resume-pointer -->
 ## Resume Pointer
 
-**Current Progress**: phase 1 `baseline-and-fix` phase-spec drafted; Order BC baseline docs created; Domain extraction implementation pending.
+**Current Progress**: phase 1 `baseline-and-fix` Domain extraction 待實作；2026-05-04 已完成 `OrderList.aspx.cs` / `OrderDetail.aspx.cs` baseline capture，另有 2 條 tech-debt 保持 open，待後續處理。
 
-**Next Action**: implement `Order`, `OrderLine`, `Money`, `Quantity`, `DiscountRate`, and `DiscountPolicy`, then thin `OrderEntry.aspx.cs` and add unit tests for BR-001~BR-004.
+**Next Action**: 開始 phase 1 implementation：建立 `Order`、`OrderLine`、`Money`、`Quantity`、`DiscountRate`、`DiscountPolicy`；本週確認 rounding consistency 要納入 phase 1 或拆成獨立 lightweight change，並向業務確認 `isVip` multiplier `0.93` 是 legacy promotion、active VIP policy，還是可移除的 dead code。
