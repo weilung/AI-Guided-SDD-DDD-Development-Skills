@@ -13,11 +13,7 @@
 - `sdd-ddd-webforms-skill/`：針對運行中的 ASP.NET WebForms 專案，漸進式抽離業務邏輯
 - `sdd-ddd-core-skill/`：針對 ASP.NET Core 新專案，完整 Clean Architecture + DDD 戰術模式
 
-**四個目錄**（英文版供 AI 使用，中文版供人閱讀）：
-- `sdd-ddd-webforms-skill/`（英文）
-- `sdd-ddd-core-skill/`（英文）
-- `sdd-ddd-webforms-skill-tw/`（繁體中文）
-- `sdd-ddd-core-skill-tw/`（繁體中文）
+> **註（2026-04-30）**：原本另有 `sdd-ddd-webforms-skill-tw/` / `sdd-ddd-core-skill-tw/` 繁中版供人閱讀，已於本日棄用刪除（Tutorial 已涵蓋人讀需求 + Path A 全英化路線）。未來若有重起翻譯需求另起 PROPOSAL。
 
 ---
 
@@ -47,23 +43,21 @@
 │       ├── lightweight-spec.md
 │       ├── context-definition.md
 │       └── AGENTS.md
-├── sdd-ddd-core-skill/
-│   ├── SKILL.md
-│   ├── PRACTICE_PLAN_tw.md
-│   ├── references/
-│   │   ├── new-feature-flow.md
-│   │   ├── modify-existing-flow.md
-│   │   ├── pr-review-checklist.md
-│   │   ├── git-flow-integration.md
-│   │   └── ddd-modeling-guide.md
-│   └── templates/
-│       ├── feature-spec.md
-│       ├── lightweight-spec.md
-│       ├── context-definition.md
-│       ├── aggregate-design.md
-│       └── AGENTS.md
-├── sdd-ddd-webforms-skill-tw/         ← 繁體中文版（人閱讀用）
-└── sdd-ddd-core-skill-tw/             ← 繁體中文版（人閱讀用）
+└── sdd-ddd-core-skill/
+    ├── SKILL.md
+    ├── PRACTICE_PLAN_tw.md
+    ├── references/
+    │   ├── new-feature-flow.md
+    │   ├── modify-existing-flow.md
+    │   ├── pr-review-checklist.md
+    │   ├── git-flow-integration.md
+    │   └── ddd-modeling-guide.md
+    └── templates/
+        ├── feature-spec.md
+        ├── lightweight-spec.md
+        ├── context-definition.md
+        ├── aggregate-design.md
+        └── AGENTS.md
 ```
 
 ---

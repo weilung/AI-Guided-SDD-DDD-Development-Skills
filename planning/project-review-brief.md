@@ -15,11 +15,11 @@
 
 暫不檢查：
 
-- `sdd-ddd-webforms-skill-tw/`
-- `sdd-ddd-core-skill-tw/`
 - tutorial 或未來 npm 發布實作細節
 
-原因是英文版是 AI runtime 讀取與執行的主體；繁中版目前定位為人讀翻譯，且版本尚未同步。
+原因是英文版是 AI runtime 讀取與執行的主體。
+
+> **註（2026-04-30）**：原本另列 `sdd-ddd-*-skill-tw/` 為「暫不檢查」，已於本日棄用刪除；未來若重起翻譯另起 PROPOSAL。
 
 ---
 
