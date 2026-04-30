@@ -1,6 +1,6 @@
 ## PROPOSAL-014: CLI init 與 Dflow root namespace
 
-**狀態**: `draft`
+**狀態**: `approved`
 
 **提出日期**: 2026-04-30
 
@@ -205,10 +205,10 @@ grep -rn "specs/" --include="*.md" .
 
 ### 評估紀錄（整合評估時填寫）
 
-**評估日期**:
+**評估日期**: 2026-04-30
 
-**結論**:
+**結論**: approved
 
-**理由**:
+**理由**: 兩議題（init CLI 化 + dflow/specs/ namespace）合併拍板避免 cascade 雙改；revision 已處理全部 7 finding。F-01 V1 npx-only 收斂入口拓撲；F-02 V1 clean cut 處理破壞性升級（無現存使用者前提）；F-11 sub-wave 重整為 W1 init contract + W2 repo-wide cascade，與 P015 共享切面。Implement 階段採 shared-cut 與 P015 同期。
 
-**如果 rejected**:
+**如果 rejected**: N/A

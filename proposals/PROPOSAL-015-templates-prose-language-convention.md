@@ -1,6 +1,6 @@
 ## PROPOSAL-015: Templates prose language 規範補完
 
-**狀態**: `draft`
+**狀態**: `approved`
 
 **提出日期**: 2026-04-30
 
@@ -221,10 +221,10 @@ P015 在 shared-cut 中的切面如下：
 
 ### 評估紀錄（整合評估時填寫）
 
-**評估日期**:
+**評估日期**: 2026-04-30
 
-**結論**:
+**結論**: approved
 
-**理由**:
+**理由**: P015 補完 R8b 結構英化後的 prose 語言缺口；revision 處理全部 5 finding。採 default (B) init CLI 必填 + (C) _conventions.md fallback；F-09 強制 explicit 避免 prose 漂移；F-07 五 prose-generating flow 改 mandatory 確保契約可靠；F-11 與 P014 同期 shared-cut implement。
 
-**如果 rejected**:
+**如果 rejected**: N/A
