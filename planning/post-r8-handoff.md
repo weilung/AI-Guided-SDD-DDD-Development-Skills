@@ -3,6 +3,82 @@
 > **目的**：讓 Debian 筆電開的新 Claude Code session 從 cold start 也能接續 Post-R8 工作
 > **建立日期**：2026-04-28（主 Windows session 收尾前）
 > **接續者**：Debian 筆電的 Claude Code 新 session（連假期間）
+> **2026-04-30 Update**：計畫變更，主 Windows session 連續跑完 11 段；下文「2026-04-30 Update」段為當前狀況，原始 handoff 內容保留作歷史
+
+---
+
+## 2026-04-30 Update：Tutorial 11 段全部完成
+
+### 計畫變更（vs 原 handoff 設計）
+
+原 handoff 是「Debian 連假 session 接續」設計，實際走法是**主 Windows
+session 連續跑完 11 段**。Debian session 沒啟用。執行模式：Codex CLI
+跑各段（替代 subagent，省 token），主 session 控管品質 + spot-check +
+commit。每段 commit 前 spot-check 重點 teaching points（Tier 判定 /
+Step transition / anchor 注入 / Delta markup / cross-feature
+reconciliation 等）。
+
+### 階段 2 已完成（commit chain `30b03c8` ~ `4c3a364`）
+
+Tutorial 11 段 ✅ 全部完成：
+
+**劇情 1 (Core greenfield ExpenseTracker) 段 2-6（5 段）**：
+- 段 2 `30b03c8` /dflow:new-feature
+- 段 3 `2b68426` /dflow:new-phase（含 Delta markup ADDED/MODIFIED）
+- 段 4 `e21a24b` /dflow:modify-existing T2 lightweight
+- 段 5 `abb08df` /dflow:bug-fix BUG-001（BR Snapshot 不 regenerate）
+- 段 6 `e61b815` /dflow:finish-feature（Integration Summary inline）
+
+**劇情 2 (Brownfield WebForms OrderManager) 段 0, 2-6（6 段）**：
+- 段 0 `98b1421` setup + baseline outputs
+- 段 2 `a040170` /dflow:modify-existing → /dflow:new-feature 升級
+  （brownfield 主入口，含 baseline capture + Domain extraction）
+- 段 3 `fea2d3a` baseline-capture 跨頁面（Tier 表外路徑 +
+  confirmed/buggy/unknown 三類分流）
+- 段 4 `caf5e08` /dflow:new-feature VIP 折扣（BC 邊界討論 + isVip
+  dead code disposition）
+- 段 5 `32bdec9` /dflow:bug-fix rounding inconsistency（host feature
+  紀律：歸 SPEC-001 不歸 SPEC-002）
+- 段 6 `4c3a364` /dflow:finish-feature SPEC-001 收尾（多 feature
+  並存的 cross-feature sync 紀律）
+
+**額外 work（不在原計畫但本 session 收斂）**：
+- `82c5b53` fix: 翻譯劇情 1 outputs Codex/subagent 自寫英文 prose
+  為繁中（單一 fix commit on top of main，不破壞性 rebase；劇情 2
+  起 prompt 明示全中文 prose）
+- `1f4e930` backlog § 1.2：templates prose language 規範補完候選議題
+  （V1 ships 前可能起 PROPOSAL-014）
+- `90d9399` chore: 加 .gitignore 排除 `.codex` Codex CLI metadata
+
+### 暫緩事項（同原 handoff 議題 1，仍未拍板）
+
+- 劇情 1 段 1 (init-project) 暫緩
+- 劇情 2 段 1 (init-project) 暫緩
+- 待議題 1 拍板（per `planning/public-distribution-backlog.md § 2.1`
+  /dflow:init-project 是否升級 CLI）
+- 議題拍板後僅補做 / 重寫 init 段，其他 11 段不受影響
+
+### 階段 3（連假後）待辦 — 下個 session 起點
+
+仍未開始：
+- ⏳ Closeout C1：繁中版 skill 同步（範圍可能因 Tutorial 全中文 prose
+  + § 1.2 PROPOSAL 進展縮減）
+- ⏳ Closeout C2：Tutorial 收尾調整 + `tutorial/README.md` 索引文件
+- ⏳ Global Sweep（可選）
+- ⏳ 議題 1 拍板（init CLI 升級）+ 補劇情 1/2 段 1
+- ⏳ § 1.2 PROPOSAL-014 評估（templates prose language 規範）
+- ⏳ 改名遷移（dev + dist repo 切割）
+- ⏳ Dflow V1 ships
+
+### 下個 session 起點建議
+
+建議第一句話：「我接續 Post-R8 階段。先讀 `planning/r8-overview.md` +
+`planning/post-r8-handoff.md` 頂部「2026-04-30 Update」段 + 最新
+commit log 建立 baseline，然後依使用者指示進入 Closeout C1 評估 /
+議題 1 拍板 / § 1.2 PROPOSAL-014 / 改名遷移其中之一。」
+
+下面原始 handoff 內容（給 Debian 連假 session 用）已 stale，但保留
+作為本 session 派工 prompt 的歷史參考。
 
 ---
 
