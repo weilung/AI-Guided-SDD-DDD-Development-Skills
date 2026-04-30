@@ -60,6 +60,12 @@ When 兩個頁面都從 `usp_GetOrderDiscountSummary` 載入 discount summary da
 Then 在相同 inputs 下，discounted total 的 source 一致
 And 兩個頁面預期都反映 BR-004 compound discount accumulation
 
+## Lifecycle Notes
+
+- BR-001~004 finalized on 2026-05-12 by `SPEC-20260430-001-order-discount-calculation` completion.
+- Baseline-capture scenarios remain here as accepted cross-page behavior history; do not delete them during SPEC-001 archive.
+- BR-005~008 remain owned by in-progress `SPEC-20260505-002-vip-discount-policy`; their behavior sections stay in this cumulative Order BC document but are not finalized by SPEC-001 closeout.
+
 ## VIP Discount Policy
 
 ### BR-005: VIP contract-valid discount
