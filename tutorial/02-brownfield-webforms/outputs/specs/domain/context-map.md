@@ -1,0 +1,36 @@
+<!-- Template maintained by Dflow. See proposals/PROPOSAL-013 for origin. -->
+
+# Context Map
+
+> Optional bounded context relationship map for WebForms brownfield discovery.
+
+## Context List
+
+| Bounded Context | Responsibility | Owner / Team | Primary Code Area | Notes |
+|---|---|---|---|---|
+| Order | 接單、訂單狀態、訂單明細、金額計算與提交流程。 | OrderManager 維運團隊 | `OrderManager.Web/Pages/Order/` | 第一個 modify-existing 的優先候選；邊界待實際修改確認。 |
+| Customer | 客戶資料、付款條件、啟用狀態與信用額度。 | 業務 / 客戶資料 owner | `OrderManager.Web/Pages/Customer/` / Customer repositories | 可能是 Order 的 upstream context。 |
+| Inventory | 庫存、預留、可售量與庫存查詢。 | 倉儲 / Inventory owner | `OrderManager.Web/Pages/Inventory/` / Stored Procedures | 與 OrderLine 的責任邊界待釐清。 |
+| Shipment | 出貨、貨運整合與物流狀態回寫。 | 倉儲 / 出貨團隊 | `OrderManager.Web/Pages/Shipment/` / Web Service integrations | 可能依賴 Order 狀態。 |
+| Invoice | 發票、應收帳款與財務狀態。 | 財務團隊 | `OrderManager.Web/Pages/Invoice/` | 可能是 Order / Shipment 的 downstream context。 |
+
+## Relationships
+
+| Source Context | Target Context | Relationship Type | Integration Mechanism | Notes |
+|---|---|---|---|---|
+| Customer | Order | Supplier / Reference data | EF entities + Stored Procedures | Order 提交流程會讀取付款條件與信用額度。 |
+| Inventory | Order | Supplier | Stored Procedures | Order 需要可售量或預留結果，但不應擁有完整庫存計算。 |
+| Order | Shipment | Upstream / Downstream | Shared database tables + Web Service | 訂單成立後觸發出貨流程；目前耦合方式待確認。 |
+| Order | Invoice | Upstream / Downstream | Shared database tables / nightly jobs | 發票資料通常基於訂單與出貨結果產生。 |
+
+## Integration Notes
+
+- 這份 context map 是 Day-0 baseline，不代表正式邊界已定案。
+- 第一個 `/dflow:modify-existing` 應從具體 Code-Behind 行為開始，確認一小段規則後再建立 `specs/domain/{context}/`。
+- 若第一個修改同時碰到 Order、Customer 與 Inventory，Bob 應先記錄 dependency，不急著一次切出多個完整 BC。
+
+## Open Questions
+
+- BC 邊界待第一個 modify-existing 確認，特別是 Order 金額計算、信用額度檢查與庫存預留。
+- Shipment 與 Invoice 是否由 OrderManager 同一團隊維護，或應視為外部 / downstream context？
+- 是否存在跨 context 共用資料表，導致需要 Anti-Corruption Layer 或中繼 model？
