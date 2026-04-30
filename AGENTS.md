@@ -1,7 +1,7 @@
 # SDD/DDD Skill 開發環境 — Codex 協作規範
 
 > 本文件供 Codex CLI 使用。
-> 議題討論和 Proposal 評估的完整背景請見 Codex.ai Project（內含 Project Instructions 和歷史對話）。
+> 議題討論、Proposal 評估、approve / reject 拍板由 user 在 repo 內主導；本 repo 不依賴外部 SaaS 評估環境。
 
 ---
 
@@ -84,10 +84,17 @@
    - 狀態從 `draft` 開始
    - 主要評估和優先排序在 Codex.ai Project 進行
 
-### 不在這裡做的事
+### Director vs Worker session 模式
 
-- Proposal 的整合評估和優先排序（在 Codex.ai Project 進行）
-- 大方向的架構決策討論（在 Codex.ai Project 進行）
+本 repo 的主線 session 可由 Codex CLI 或 Claude Code 擔任，視 token 預算切換：
+
+- **Director session**：統籌工作分配、寫提示詞給 sub-session、產出品質 review、與 user 對齊大方向
+- **Worker session**：執行 director 派工的具體任務（draft / revise / implement / review）
+- **Cross-model review**：需要獨立視角時，director 建議 user 開另一個模型（例如 Codex director 建議開 Claude review，反之亦然）；review 結果回到 director session 統整
+
+**User 角色**：approve / reject 拍板（PROPOSAL 評估紀錄段）；commit；在 director ↔ worker 之間 copy-paste prompts。
+
+**Handoff 觸發**：context 接近安全閾值時，director 寫一份 `planning/post-{checkpoint}-handoff.md`，下個 director session 從 cold start 接續。Handoff 結點選自然完成的 milestone（commit 後、prompt 派工前），避免 mid-task overflow。
 
 ---
 
