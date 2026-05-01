@@ -1,4 +1,4 @@
-<!-- Scaffolding template maintained alongside Dflow skill. See proposals/PROPOSAL-010 for origin. -->
+<!-- Scaffolding template maintained alongside Dflow skill. See archive/proposals/PROPOSAL-010 for origin. -->
 
 # Spec Writing Conventions — ExpenseTracker
 

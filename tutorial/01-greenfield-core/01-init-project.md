@@ -25,6 +25,8 @@ ExpenseTracker/
 
 ## 完整對話
 
+> **Note**：本段是教學化轉寫，用來說明 Dflow init 的決策點與產出物；實際 `dflow-sdd-ddd@0.1.0` CLI 會以較精簡的 numbered prompts、file preview 與 `Create these files? (y/N)` confirmation 呈現，不會逐字輸出下列完整敘事。
+
 > **Alice（shell）**：
 >
 > ```bash

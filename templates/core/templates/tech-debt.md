@@ -1,4 +1,4 @@
-<!-- Template maintained by Dflow. See proposals/PROPOSAL-013 for origin. -->
+<!-- Template maintained by Dflow. See archive/proposals/PROPOSAL-013 for origin. -->
 
 # Architecture Tech Debt
 

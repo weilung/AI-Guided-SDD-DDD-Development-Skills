@@ -342,13 +342,13 @@ AI-Guided-SDD-DDD-Development-Skills/
 
 | 類型 | 代表文件 | 角色 |
 |---|---|---|
-| 獨立 proposal | `proposals/PROPOSAL-001-workflow-transparency.md` | 單一問題的完整設計與實作依據 |
-| 批次評估 | `proposals/evaluation-p002-p008.md` | 從比較分析拆出多個 proposals |
-| 實地候選整理 | `reviews/field-reference-candidates.md` | 從 V2 / field reference 對照後產生 P009-P011 |
-| 跨 session prompt | `reviews/prompts/*.md` | 主控 session 提供給其他模型 / session 的任務說明 |
-| review report | `reviews/round-*-report.md` | reviewer 找問題 |
-| decision record | `reviews/round-*-decisions.md` | 主控或熟悉設計意圖的 session 判斷採納 / 延後 / 拒絕 |
-| global sweep | `reviews/global-sweep-report.md` | 一批 proposal 實作後做橫向一致性檢查 |
+| 獨立 proposal | `archive/proposals/PROPOSAL-001-workflow-transparency.md` | 單一問題的完整設計與實作依據 |
+| 批次評估 | `archive/proposals/evaluation-p002-p008.md` | 從比較分析拆出多個 proposals |
+| 實地候選整理 | `archive/reviews/field-reference-candidates.md` | 從 V2 / field reference 對照後產生 P009-P011 |
+| 跨 session prompt | `archive/reviews/prompts/*.md` | 主控 session 提供給其他模型 / session 的任務說明 |
+| review report | `archive/reviews/round-*-report.md` | reviewer 找問題 |
+| decision record | `archive/reviews/round-*-decisions.md` | 主控或熟悉設計意圖的 session 判斷採納 / 延後 / 拒絕 |
+| global sweep | `archive/reviews/global-sweep-report.md` | 一批 proposal 實作後做橫向一致性檢查 |
 
 這套模式的價值：
 
@@ -359,7 +359,7 @@ AI-Guided-SDD-DDD-Development-Skills/
 需要注意：
 
 - sweep 比較適合一批改動完成後再做，不適合每個小問題都做。
-- `reviews/prompts/` 很適合保存「當時怎麼請另一個 session 看」的脈絡，但不應變成正式規格的唯一來源。
+- `archive/reviews/prompts/` 很適合保存「當時怎麼請另一個 session 看」的脈絡，但不應變成正式規格的唯一來源。
 
 ---
 

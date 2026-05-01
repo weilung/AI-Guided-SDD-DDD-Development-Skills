@@ -424,7 +424,7 @@ still in them:
   (used by `/dflow:new-feature`, NOT by this flow)
 - Git integration rules: `sdd-ddd-core-skill/references/git-integration.md`
 - F-05 (`behavior.md` not generated at init) origin:
-  `reviews/round-7-decisions.md` → finding F-05
+  `archive/reviews/round-7-decisions.md` → finding F-05
 - F-07 (neutral README install wording) origin:
-  `reviews/round-7-decisions.md` → finding F-07
-- Proposal origin: `proposals/PROPOSAL-010-dflow-init-and-scaffolding.md`
+  `archive/reviews/round-7-decisions.md` → finding F-07
+- Proposal origin: `archive/proposals/PROPOSAL-010-dflow-init-and-scaffolding.md`

@@ -33,14 +33,17 @@
 ├── test/                              ← smoke tests
 ├── tutorial/                          ← 人讀教學劇本與範例 outputs
 ├── planning/                          ← handoff / contract / planning notes
-├── proposals/                         ← Proposal 管理目錄
-│   ├── PROPOSAL-000-template.md       ← 格式範本（不是實際 Proposal）
-│   ├── PROPOSAL-001-*.md
-│   ├── PROPOSAL-002-*.md
-│   ├── ...
-│   ├── comparison-analysis.md         ← 比較分析摘要
-│   └── openspec-reference.md          ← OpenSpec 參考文件
-├── reviews/                           ← cross-round review reports and prompts
+├── proposals/                         ← active Proposal 工作區
+│   ├── README.md
+│   └── PROPOSAL-000-template.md       ← 格式範本（不是實際 Proposal）
+├── reviews/                           ← active review 工作區
+│   └── README.md
+├── archive/                           ← historical proposals / reviews；非目前行為來源
+│   ├── proposals/
+│   │   ├── PROPOSAL-001-*.md
+│   │   ├── ...
+│   │   └── openspec-reference.md
+│   └── reviews/
 ├── sdd-ddd-webforms-skill/
 │   ├── SKILL.md                       ← 主文件：決策樹、核心原則、架構規範
 │   ├── references/
@@ -115,6 +118,7 @@
    - 按照 Proposal 的「影響範圍」修改對應檔案
    - 修改完成後，更新 Proposal 狀態為 `implemented`
    - 產出 CHANGELOG.md 的更新內容
+   - Proposal closeout 後移到 `archive/proposals/`，避免後續 session 把歷史決策誤讀為 active work
 
 2. **Review Skill 內容**
    - 檢查 WebForms 版和 Core 版的共通部分是否一致
@@ -176,11 +180,11 @@ draft → evaluating → approved → implemented
 
 ## OpenSpec 參考文件的使用原則
 
-`proposals/openspec-reference.md` 是 OpenSpec 的概覽整理，用於快速建立比較分析的基準，不是完整知識庫。
+`archive/proposals/openspec-reference.md` 是歷史 OpenSpec 概覽整理，用於追溯 P001-P015 時期比較分析的基準，不是目前完整知識庫。只有在需要追溯歷史 proposal 評估時才讀取；新的 OpenSpec 深入比較應重新查一手文件。
 
-- **概覽層級的比較**：直接使用本文件即可
+- **歷史概覽層級的比較**：可使用本文件理解當時評估背景
 - **深入某項功能或概念的細節時**：必須用 web search 查閱 OpenSpec 一手文件（GitHub: Fission-AI/OpenSpec），不能只依賴概述。例如：delta merge 的衝突解決機制、Custom Schema 的依賴圖運作方式、verify 的具體驗證項目等
-- **發現本文件有誤或重要遺漏時**：提出修正建議，回來補充或修正 `openspec-reference.md`
+- **發現本文件有誤或重要遺漏時**：提出修正建議；若要新增 active reference，另建目前版本的 active 文件，不直接擴張 archived note
 
 ---
 

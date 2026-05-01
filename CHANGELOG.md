@@ -1,6 +1,6 @@
 # Changelog
 
-本文件記錄 SDD/DDD Skill 的版本變更。變更依 Proposal 編號分段，對應 `proposals/PROPOSAL-NNN-*.md`。
+本文件記錄 SDD/DDD Skill 的版本變更。早期變更依 Proposal 編號分段；historical proposal records 已移到 `archive/proposals/`，新發布紀錄可直接按 release / closeout milestone 分段。
 
 格式：每個版本標註日期、關聯 Proposal、影響範圍。新版本加在最上方。
 
@@ -14,6 +14,11 @@
 - `npx dflow-sdd-ddd --version` 回傳 `0.1.0`
 - `npx dflow-sdd-ddd --help` 顯示 `Dflow CLI 0.1.0`
 - `npx dflow-sdd-ddd init` 已在乾淨 temp project 寫出 Core greenfield baseline：`CLAUDE.md`、`dflow/specs/shared/*`、`dflow/specs/domain/*`、`dflow/specs/architecture/tech-debt.md`
+
+**Post-publish docs cleanup**：
+- 分段 tutorial 的 init 劇本標明為教學化轉寫，避免被誤讀為 `dflow-sdd-ddd@0.1.0` 的逐字 CLI transcript
+- 移除已退場的 P001 前 / P001 hybrid 單檔 tutorial，避免後續 AI 或人讀者誤用過期流程素材
+- 將歷史 proposal / review 材料移入 `archive/`，讓 `proposals/`、`reviews/` 保留給後續 active work
 
 **備註**：npm publish 使用 npm Security Key / WebAuthn 2FA flow；不要使用 TOTP `--otp` 作為新帳號的預設發布路徑。
 
