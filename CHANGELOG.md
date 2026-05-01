@@ -19,6 +19,7 @@
 - 分段 tutorial 的 init 劇本標明為教學化轉寫，避免被誤讀為 `dflow-sdd-ddd@0.1.0` 的逐字 CLI transcript
 - 移除已退場的 P001 前 / P001 hybrid 單檔 tutorial，避免後續 AI 或人讀者誤用過期流程素材
 - 將歷史 proposal / review 材料移入 `archive/`，讓 `proposals/`、`reviews/` 保留給後續 active work
+- 完成 Closeout C2 tutorial 索引收尾：新增 `tutorial/README.md`、補 `01-greenfield-core/00-setup.md`，並加入 Mermaid reading map
 
 **備註**：npm publish 使用 npm Security Key / WebAuthn 2FA flow；不要使用 TOTP `--otp` 作為新帳號的預設發布路徑。
 

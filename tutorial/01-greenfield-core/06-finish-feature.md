@@ -291,6 +291,6 @@ Alice 觸發 `/dflow:finish-feature`。
 
 ## 下一個劇情段
 
-→ 劇情 2：`02-brownfield-webforms/00-setup.md`
+→ 劇情 2：[`../02-brownfield-webforms/00-setup.md`](../02-brownfield-webforms/00-setup.md)
 
 劇情 1（Core greenfield）到此結束。

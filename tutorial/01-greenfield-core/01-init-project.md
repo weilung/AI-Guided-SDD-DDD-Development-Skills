@@ -2,9 +2,9 @@
 
 ## 劇情背景
 
-Alice 是公司新成立的「差旅費用平台」小組組長，兼任 PO 與全端工程師。團隊 3-5 人，DDD 經驗中等（去年參加過內訓 + 模擬專案），這次要從零打造 **ExpenseTracker** —— 一個處理「企業差旅費用申報與核銷」的內部系統：員工出差後申報費用、主管審核、財務匯款。
+接續 [00-setup.md](00-setup.md)，Alice 已經建立好 **ExpenseTracker** 的 Clean Architecture solution，準備在第一個 feature 開始前導入 Dflow。
 
-技術選型已經拍板：**ASP.NET Core 9 + EF Core 8 + MediatR 12 + xUnit**，採 Clean Architecture 四層結構。Alice 早上花了一小時用 `dotnet new` 把骨架搭好：
+技術選型已經拍板：**ASP.NET Core 9 + EF Core 8 + MediatR 12 + xUnit**，採 Clean Architecture 四層結構。此時專案骨架如下：
 
 ```
 ExpenseTracker/

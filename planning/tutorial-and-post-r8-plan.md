@@ -3,6 +3,7 @@
 > **目的**：規劃 Tutorial 重建的結構與生產方式（Subagent 自動化）+ Post-R8 整體執行時程
 > **建立日期**：2026-04-28
 > **前置文件**：`planning/r8-overview.md`（R8 全程脈絡）
+> **狀態更新（2026-05-01）**：Closeout C2 tutorial 收尾已完成。現行 tutorial 入口為 `tutorial/README.md`；雙劇情分別從 `tutorial/01-greenfield-core/00-setup.md` 與 `tutorial/02-brownfield-webforms/00-setup.md` 開始。P001 前 / P001 hybrid 單檔 tutorial 已刪除，避免誤用。
 
 ---
 
@@ -240,7 +241,7 @@ Alice 的選擇：
 | 步驟 | 預估 |
 |---|---|
 | Closeout C1：繁中版 skill 同步（視 Tutorial 中文版產出再決定範圍）| 1-3 day |
-| Closeout C2：Tutorial 收尾（補圖、調整劇情段）| 1 day |
+| Closeout C2：Tutorial 收尾（補圖、調整劇情段）| ✅ 2026-05-01 完成 |
 | Global Sweep（仿 R6 後做法，可選）| 0.5 day |
 | 改名遷移：dev repo + dist repo 切割（per r8-overview.md §關鍵設計決定 #2）| 1-2 day |
 | Dflow V1 ships（README、LICENSE、CHANGELOG release notes、Git tag v1.0.0）| 0.5 day |
