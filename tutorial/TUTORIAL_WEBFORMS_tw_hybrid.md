@@ -349,7 +349,7 @@ Claude：偵測到 BUG-042-rounding-inconsistency.md 為 in-progress，
        ✅ dflow/specs/domain/expense/models.md — 新增 Money Value Object 定義
        ✅ dflow/specs/domain/expense/rules.md — 新增四捨五入規則 BR-R01（宣告索引）
        ✅ dflow/specs/domain/expense/behavior.md — 新增 BR-R01 的情境 section anchor（A+C 結構）
-       ✅ dflow/specs/architecture/tech-debt.md — 記錄 ExpenseApproval.aspx 的 Math.Floor 殘留
+       ✅ dflow/specs/migration/tech-debt.md — 記錄 ExpenseApproval.aspx 的 Math.Floor 殘留
 
        ─── 5.1 post-5.3 補驗（剛剛標 *(post-5.3)* 的項）───
        ✓ behavior.md 對 BR-R01 有 section anchor
@@ -371,7 +371,7 @@ Claude：偵測到 BUG-042-rounding-inconsistency.md 為 in-progress，
 | 模型文件更新 | `dflow/specs/domain/expense/models.md` |
 | 規則宣告（A 側） | `dflow/specs/domain/expense/rules.md`（+BR-R01） |
 | 行為情境（C 側） | `dflow/specs/domain/expense/behavior.md`（+BR-R01 section anchor） |
-| 技術債記錄 | `dflow/specs/architecture/tech-debt.md`（+3 筆） |
+| 技術債記錄 | `dflow/specs/migration/tech-debt.md`（+3 筆） |
 
 ### 重點回顧
 
@@ -774,7 +774,7 @@ Claude：實作完成，所有 DOMAIN-01 ~ TEST-01 任務都已勾選。
        ✅ dflow/specs/domain/expense/rules.md — 新增 BR-01 ~ BR-03（宣告索引）
        ✅ dflow/specs/domain/expense/behavior.md — 把 Phase 3 draft 段落轉為正式段落；
           對應 rules.md anchor 的 last-updated 更新為 2026-02-17
-       ✅ dflow/specs/architecture/tech-debt.md — 新增 ExpenseList.aspx 硬編碼匯率
+       ✅ dflow/specs/migration/tech-debt.md — 新增 ExpenseList.aspx 硬編碼匯率
 
        ─── 8.1 post-8.3 補驗 ───
        ✓ behavior.md 對 BR-01 / BR-02 / BR-03 都有 section anchor
@@ -815,7 +815,7 @@ Claude：執行 drift verification（機械層檢查）：
 | Domain 程式碼 | `src/Domain/Expense/ValueObjects/ExchangeRate.cs` |
 | Domain 程式碼 | `src/Domain/Expense/Interfaces/IExchangeRateRepository.cs` |
 | Domain 程式碼 | 擴展 `src/Domain/Expense/ValueObjects/Money.cs`（+ConvertTo） |
-| 技術債記錄 | `dflow/specs/architecture/tech-debt.md`（+ExpenseList.aspx 硬編碼匯率） |
+| 技術債記錄 | `dflow/specs/migration/tech-debt.md`（+ExpenseList.aspx 硬編碼匯率） |
 | Git 分支 | `feature/EXP-001-jpy-currency-support` |
 
 ### 重點回顧

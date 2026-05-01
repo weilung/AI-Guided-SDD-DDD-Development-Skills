@@ -242,7 +242,7 @@ Claude：程式碼改完了，讓我更新相關文件：
        2. ✅ dflow/specs/domain/glossary.md — 新增「Money」和「Currency」術語
        3. ✅ dflow/specs/domain/expense/models.md — 新增 Money Value Object 定義
        4. ✅ dflow/specs/domain/expense/rules.md — 新增四捨五入規則 BR-R01
-       5. ✅ dflow/specs/architecture/tech-debt.md — 記錄發現的重複計算邏輯
+       5. ✅ dflow/specs/migration/tech-debt.md — 記錄發現的重複計算邏輯
        6. ✅ 規格檔移到 dflow/specs/features/completed/
 ```
 
@@ -255,7 +255,7 @@ Claude：程式碼改完了，讓我更新相關文件：
 | 術語表更新 | `dflow/specs/domain/glossary.md`（+2 筆） |
 | 模型文件更新 | `dflow/specs/domain/expense/models.md` |
 | 規則文件更新 | `dflow/specs/domain/expense/rules.md`（+1 條） |
-| 技術債記錄 | `dflow/specs/architecture/tech-debt.md`（+3 筆） |
+| 技術債記錄 | `dflow/specs/migration/tech-debt.md`（+3 筆） |
 
 ### 重點回顧
 
