@@ -2,7 +2,7 @@
 
 ## 劇情背景
 
-接續上午跑完 `npx dflow init`（見 [01-init-project.md](01-init-project.md)），Alice 花了大概 30 分鐘掃過 `_overview.md`，把 stakeholders（差旅員工、部門主管、財務）、預估 user scale（公司全體 ~100 人，年度差旅 ~2000 筆）、DB（PostgreSQL 16）、Auth（公司 SSO via OIDC）、Hosting（Azure App Service）這幾欄補完，順手 commit 一發 `[INIT] fill in _overview.md placeholders`。
+接續上午跑完 `npx dflow-sdd-ddd init`（見 [01-init-project.md](01-init-project.md)），Alice 花了大概 30 分鐘掃過 `_overview.md`，把 stakeholders（差旅員工、部門主管、財務）、預估 user scale（公司全體 ~100 人，年度差旅 ~2000 筆）、DB（PostgreSQL 16）、Auth（公司 SSO via OIDC）、Hosting（Azure App Service）這幾欄補完，順手 commit 一發 `[INIT] fill in _overview.md placeholders`。
 
 中午吃飽回來，repo 結構清爽，但 `dflow/specs/features/active/` 還空著，`dflow/specs/domain/` 只有兩份 placeholder。她決定下午專心開第一個 feature：**員工提交費用單（Employee Submit Expense Report）**。這是整個 ExpenseTracker 最核心、也最簡單的入口——員工出差回來能在系統內把單據建好、提交給主管。後面的「主管審核」「財務匯款」她已經放進腦中的 backlog，但這個 phase 想刻意收斂到只做「員工端的提交動作」。
 

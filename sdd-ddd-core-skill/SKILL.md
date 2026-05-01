@@ -104,7 +104,7 @@ The Skill uses a **Hybrid design**: slash commands as the primary entry, natural
 ### Slash Commands
 
 Project bootstrap is handled by the npm CLI, not by a skill slash command:
-run `npx dflow init` from the project root. The detailed bootstrap contract is
+run `npx dflow-sdd-ddd init` from the project root. The detailed bootstrap contract is
 kept in `references/init-project-flow.md` as a CLI internal flow spec and a
 manual reference for environments without Node.js/npm.
 
@@ -275,7 +275,7 @@ You can `git commit` directly without writing even a T3 inline row.
 ExpenseTracker/
 ├── CLAUDE.md
 ├── dflow/specs/
-│   ├── shared/                         # Project-level governance docs (seeded by npx dflow init)
+│   ├── shared/                         # Project-level governance docs (seeded by npx dflow-sdd-ddd init)
 │   │   ├── _overview.md
 │   │   └── _conventions.md
 │   ├── domain/
@@ -435,7 +435,7 @@ Format: `| Term | Definition | Bounded Context | Code Mapping |`
 
 | File | When to read |
 |---|---|
-| `references/init-project-flow.md` | CLI internal init flow spec for `npx dflow init`; manual bootstrap reference when Node.js/npm is unavailable |
+| `references/init-project-flow.md` | CLI internal init flow spec for `npx dflow-sdd-ddd init`; manual bootstrap reference when Node.js/npm is unavailable |
 | `references/new-feature-flow.md` | New feature development |
 | `references/modify-existing-flow.md` | Changing existing functionality |
 | `references/new-phase-flow.md` | `/dflow:new-phase` — add a new phase-spec to an active feature |
@@ -473,9 +473,9 @@ Maintenance contracts at repo root:
 
 These two files are not runtime inputs for workflows; use them during review, maintenance, and when adding new templates.
 
-### Scaffolding (used by `npx dflow init`)
+### Scaffolding (used by `npx dflow-sdd-ddd init`)
 
-The `scaffolding/` directory holds **project-level** templates seeded by `npx dflow init` into a project's `dflow/specs/shared/` directory (or repo root for `CLAUDE.md`). They are **not** read by AI during normal flows; they are written to the target project once, then owned and maintained by the project.
+The `scaffolding/` directory holds **project-level** templates seeded by `npx dflow-sdd-ddd init` into a project's `dflow/specs/shared/` directory (or repo root for `CLAUDE.md`). They are **not** read by AI during normal flows; they are written to the target project once, then owned and maintained by the project.
 
 | Scaffolding file | Purpose |
 |---|---|

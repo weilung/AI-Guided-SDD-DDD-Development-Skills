@@ -298,7 +298,7 @@
 
 Tutorial 全劇本已展示的 `/dflow:` 命令：
 
-- `npx dflow init`：劇情 2 段 1 以 CLI 入口示範，建立 brownfield baseline outputs。
+- `npx dflow-sdd-ddd init`：劇情 2 段 1 以 CLI 入口示範，建立 brownfield baseline outputs。
 - `/dflow:new-feature`：劇情 2 段 4 建立 VIP discount policy；劇情 1 也示範 greenfield new feature。
 - `/dflow:new-phase`：劇情 1 示範後續 phase 擴張。
 - `/dflow:modify-existing`：劇情 2 段 2 / 段 3 展示 brownfield baseline capture 與既有功能修改思路。

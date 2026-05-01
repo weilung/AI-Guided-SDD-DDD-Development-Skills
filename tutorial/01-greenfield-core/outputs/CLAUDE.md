@@ -36,7 +36,7 @@ Presentation → Application → Domain ← Infrastructure
 ### Project Structure
 
 完整 specs 目錄結構見 Dflow skill `SKILL.md` § "Project Structure Reference"。
-以下只列本專案當前狀態（`npx dflow init` 建立後可能還未全填）：
+以下只列本專案當前狀態（`npx dflow-sdd-ddd init` 建立後可能還未全填）：
 
 ```
 dflow/specs/
@@ -71,7 +71,7 @@ AI 的完整決策樹、Workflow Transparency、Ceremony Scaling 三層判準
 - `sdd-ddd-core-skill/references/` 內各 flow 文件
 
 本專案採用的 slash command：
-- `npx dflow init` — 專案初始化（一次性，已執行過）
+- `npx dflow-sdd-ddd init` — 專案初始化（一次性，已執行過）
 - `/dflow:new-feature` — 新功能
 - `/dflow:new-phase` — 既有 active feature 加新 phase
 - `/dflow:modify-existing` — 修改既有行為

@@ -1,6 +1,6 @@
 # Init Project Flow — ASP.NET WebForms
 
-Internal flow spec for `npx dflow init` after the CLI selects the ASP.NET
+Internal flow spec for `npx dflow-sdd-ddd init` after the CLI selects the ASP.NET
 WebForms edition. It also serves as the manual reference for environments
 where Node.js/npm is unavailable.
 

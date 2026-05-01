@@ -1,4 +1,4 @@
-# npx dflow init — Bob 為 OrderManager 建立 brownfield baseline
+# npx dflow-sdd-ddd init — Bob 為 OrderManager 建立 brownfield baseline
 
 ## 劇情背景
 
@@ -11,7 +11,7 @@ Bob 已經看完 OrderManager 的現況：WebForms、EF 6、SQL Server、少量 
 > **Bob（shell）**：
 >
 > ```bash
-> $ npx dflow init
+> $ npx dflow-sdd-ddd init
 > ```
 
 > **Dflow CLI**：Dflow project initialization.
@@ -150,7 +150,7 @@ Bob 已經看完 OrderManager 的現況：WebForms、EF 6、SQL Server、少量 
 
 ## 本段產出的檔案
 
-`npx dflow init` 在 Bob 的 OrderManager repo 寫入 baseline outputs。Tutorial 對應檔案位於 [`outputs/`](outputs/)：
+`npx dflow-sdd-ddd init` 在 Bob 的 OrderManager repo 寫入 baseline outputs。Tutorial 對應檔案位於 [`outputs/`](outputs/)：
 
 **features/ 三個工作區**
 - [`dflow/specs/features/active/.gitkeep`](outputs/dflow/specs/features/active/.gitkeep)

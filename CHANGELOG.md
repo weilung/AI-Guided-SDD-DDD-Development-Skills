@@ -6,6 +6,23 @@
 
 ---
 
+## 2026-05-01 — Post-R9 Publish Prep：npm package name 與 metadata
+
+**背景**：npm 上 unscoped `dflow` package name 已被既有 package 使用；本 repo 不能直接以 `dflow` 發布。
+
+**變更**：
+- `package.json` package name 改為 `dflow-sdd-ddd`
+- CLI bin 保留 `dflow`，並新增 `dflow-sdd-ddd` alias
+- README、skill source、package templates、tutorial init entry 更新為 `npx dflow-sdd-ddd init`
+- 補 npm publish metadata：keywords、repository、bugs、homepage、`publishConfig.access`
+- 新增 MIT `LICENSE`
+
+**使用方式**：
+- V1 public default：`npx dflow-sdd-ddd init`
+- 進階 global install：`npm install -g dflow-sdd-ddd` 後執行 `dflow init`
+
+---
+
 ## 2026-05-01 — R9 Implement：PROPOSAL-014 CLI init + `dflow/specs/` namespace、PROPOSAL-015 prose language convention
 
 **前置**：PROPOSAL-014 / PROPOSAL-015 已於 2026-04-30 approved；實作採 shared-cut，避免 init flow、path namespace、prose-language convention 反覆 cascade

@@ -79,7 +79,7 @@ MyWebFormsProject/
 第一次使用時，在專案 root 執行 Dflow CLI：
 
 ```
-$ npx dflow init
+$ npx dflow-sdd-ddd init
 ```
 
 CLI 會詢問 project type、edition、tech stack、migration context、prose language 與 optional starter files，然後建立 `dflow/specs/` baseline 與可選的 `CLAUDE.md`。

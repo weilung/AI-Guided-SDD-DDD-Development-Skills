@@ -31,12 +31,12 @@ Node 24 end-of-life on 2028-04-30:
 The V1 formal entry point is:
 
 ```bash
-npx dflow init
+npx dflow-sdd-ddd init
 ```
 
 This is the only formal V1 init entry. `npm create dflow` is not supported
 in V1. Global installation may work if the package is installed globally,
-but documentation should still treat `npx dflow init` as the default path.
+but documentation should still treat `npx dflow-sdd-ddd init` as the default path.
 
 ### 1.2 Execution Location
 
@@ -602,7 +602,7 @@ Avoid dependencies that require native compilation for W1.
 Run this in a clean temporary directory:
 
 ```bash
-npx dflow init
+npx dflow-sdd-ddd init
 ```
 
 Selections:

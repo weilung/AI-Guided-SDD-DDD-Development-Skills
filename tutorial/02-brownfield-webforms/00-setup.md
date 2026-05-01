@@ -14,7 +14,7 @@
 |---|---|---|
 | 角色背景 | Alice 是新平台小組組長，兼 PO 與全端工程師，從零建立 Core 專案。 | Bob 是資深 .NET 工程師與維運團隊 tech lead，熟悉 WebForms / EF 6，也要帶兩位 DDD 經驗較淺的工程師。 |
 | 假想專案 | Greenfield 內部差旅費用平台，尚未有 legacy code。 | Brownfield B2B 訂單管理系統，已服務約 200 家活躍經銷商。 |
-| 主要 entry point | `npx dflow init` 後接 `/dflow:new-feature`，從第一個 feature 建立 Domain。 | `npx dflow init` 建立 brownfield baseline，後續進 `/dflow:modify-existing`，從既有 Code-Behind 的修改需求切入。 |
+| 主要 entry point | `npx dflow-sdd-ddd init` 後接 `/dflow:new-feature`，從第一個 feature 建立 Domain。 | `npx dflow-sdd-ddd init` 建立 brownfield baseline，後續進 `/dflow:modify-existing`，從既有 Code-Behind 的修改需求切入。 |
 | Domain 處理方式 | 一開始就有 Clean Architecture 專案骨架，Domain 層是主要開發位置。 | `src/Domain/` 會漸進建立；每次碰到業務規則才把可測試、純 C# 的部分抽出。 |
 | Tech debt 處理 | 主要記錄新系統設計過程中的架構取捨或後續改善。 | Tech debt backlog 從 Day 0 就有內容，記錄 Code-Behind、Stored Procedures、測試缺口與 migration 阻礙。 |
 | Git 策略 | 劇情 1 採 trunk-based / GitHub Flow，適合短命 feature branch。 | 劇情 2 假設維運團隊有 release / hotfix 節奏，因此選 Git Flow。 |
@@ -109,13 +109,13 @@ Bob 導入 Dflow 的目的不是增加文件負擔，而是讓修改既有系統
 
 ## 段 1 init-project
 
-劇情 2 的 `01-init-project.md` 現在改為 CLI 入口：Bob 在 OrderManager 專案 root 執行 `npx dflow init`，建立 brownfield baseline，後續 `02-modify-existing.md` 才從已初始化的專案開始處理第一個修改需求。
+劇情 2 的 `01-init-project.md` 現在改為 CLI 入口：Bob 在 OrderManager 專案 root 執行 `npx dflow-sdd-ddd init`，建立 brownfield baseline，後續 `02-modify-existing.md` 才從已初始化的專案開始處理第一個修改需求。
 
 本段 0 只負責說明角色、專案背景與 baseline outputs 的位置；實際 init 互動流程放在下一段。
 
 ## baseline outputs 在哪裡
 
-baseline outputs 位於 [`tutorial/02-brownfield-webforms/outputs/`](outputs/)。這些檔案模擬 Bob 在 OrderManager 裡完成 `npx dflow init` 後的結果。
+baseline outputs 位於 [`tutorial/02-brownfield-webforms/outputs/`](outputs/)。這些檔案模擬 Bob 在 OrderManager 裡完成 `npx dflow-sdd-ddd init` 後的結果。
 
 Bob 的 init 選擇假設如下：
 
@@ -146,4 +146,4 @@ baseline 檔案清單：
 
 ## 下一個劇情段
 
-→ `01-init-project.md`：Bob 在 shell 執行 `npx dflow init`，建立 OrderManager 的 brownfield Dflow baseline。
+→ `01-init-project.md`：Bob 在 shell 執行 `npx dflow-sdd-ddd init`，建立 OrderManager 的 brownfield Dflow baseline。

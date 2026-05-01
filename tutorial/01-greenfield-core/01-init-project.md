@@ -1,4 +1,4 @@
-# npx dflow init — Alice 為 ExpenseTracker 啟動 Dflow
+# npx dflow-sdd-ddd init — Alice 為 ExpenseTracker 啟動 Dflow
 
 ## 劇情背景
 
@@ -28,7 +28,7 @@ ExpenseTracker/
 > **Alice（shell）**：
 >
 > ```bash
-> $ npx dflow init
+> $ npx dflow-sdd-ddd init
 > ```
 
 > **Dflow CLI**：Dflow project initialization.
@@ -239,7 +239,7 @@ ExpenseTracker/
 
 ## 本段產出的檔案
 
-`npx dflow init` Step 4 在 Alice 的 ExpenseTracker repo 寫入了 **11 個檔**，按目錄分組如下：
+`npx dflow-sdd-ddd init` Step 4 在 Alice 的 ExpenseTracker repo 寫入了 **11 個檔**，按目錄分組如下：
 
 **features/ 三個工作區（空目錄 + .gitkeep）**
 - [`dflow/specs/features/active/.gitkeep`](outputs/dflow/specs/features/active/.gitkeep) — 進行中的 feature 目錄
@@ -264,7 +264,7 @@ ExpenseTracker/
 
 ## 觀察重點
 
-- **CLI init 是 shell entry point**。Alice 在專案 root 執行 `npx dflow init`，init 不再是 skill slash command；後續開 feature 才回到 `/dflow:new-feature`。
+- **CLI init 是 shell entry point**。Alice 在專案 root 執行 `npx dflow-sdd-ddd init`，init 不再是 skill slash command；後續開 feature 才回到 `/dflow:new-feature`。
 - **Step 3 file-list preview 明確 stop-and-confirm**。Dflow CLI 列出 will-create / will-skip / not-creating 三張表後，等 Alice 回 `yes` 才動手寫，符合 CLI init 的保護原則。
 - **Q6 全選反映「team 全選」情境**，可以一次展示 optional starter 的 placeholder 替換策略。同時 Dflow 在 Alice 勾完 trunk-based 後特別「reconfirm 不要 gitflow」，讓同事看到 CLI 對「容易誤勾」的選項會主動把關。
 - **Prose Language 是專案 baseline 的一部分**。`_conventions.md` 不再是 optional starter；CLI 必定建立它，並把 `## Prose Language` 設為 `zh-TW`，同時保留 canonical English structural language。
