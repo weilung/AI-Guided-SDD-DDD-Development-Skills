@@ -36,7 +36,7 @@
 
 > **Dflow**：Step 1 mechanical checks：
 >
-> - ✓ Feature directory located: `specs/features/active/SPEC-20260430-001-order-discount-calculation/`
+> - ✓ Feature directory located: `dflow/specs/features/active/SPEC-20260430-001-order-discount-calculation/`
 > - ✓ `_index.md` exists，front matter parsable，six required sections present
 > - ✓ Phase Specs table has 1 row：phase 1 `baseline-and-fix`
 > - ✓ Phase 1 implementation status：Bob confirmed done；BR-001~004 tests green
@@ -51,8 +51,8 @@
 
 > **Dflow**：Driftcheck result：
 >
-> - ✓ BR-001~004 all exist in `specs/domain/Order/rules.md`
-> - ✓ BR-001~004 all have scenario sections in `specs/domain/Order/behavior.md`
+> - ✓ BR-001~004 all exist in `dflow/specs/domain/Order/rules.md`
+> - ✓ BR-001~004 all have scenario sections in `dflow/specs/domain/Order/behavior.md`
 > - ✓ `behavior.md` 保留段 3 的 `Confirmed across pages (baseline-capture 2026-05-04)`，沒有在 BUG-001 closeout 時刪掉歷史
 > - ✓ `Order` Aggregate Root、`OrderLine` Entity、`Money` / `Quantity` / `DiscountRate` VO、`DiscountPolicy` Domain Service all exist in `models.md`
 > - ✓ `tech-debt.md` rounding inconsistency entry is `resolved` by `SPEC-20260430-001 BUG-001`
@@ -91,7 +91,7 @@
 > **Dflow**：對。這是 cross-feature reconciliation 的規則：
 >
 > - Single feature `_index.md` = feature-level current state。
-> - `specs/domain/Order/rules.md` = BC-level cumulative state。
+> - `dflow/specs/domain/Order/rules.md` = BC-level cumulative state。
 > - finish-feature 只把本次 completed feature 的 owned BR reconcile 到 BC layer。
 > - 其他 active feature 的 BR 保留，因為它們代表 Order BC 目前正在演進的 in-progress state。
 >
@@ -141,13 +141,13 @@
 > 真實專案我會用這個命令，不用 plain `mv`：
 >
 > ```bash
-> git mv specs/features/active/SPEC-20260430-001-order-discount-calculation \
->        specs/features/completed/SPEC-20260430-001-order-discount-calculation
+> git mv dflow/specs/features/active/SPEC-20260430-001-order-discount-calculation \
+>        dflow/specs/features/completed/SPEC-20260430-001-order-discount-calculation
 > git status
 > ```
 >
 > `git mv` 讓 Git 更容易保留 directory rename history，改善 `git log --follow`、`git blame` 與 PR diff。  
-> 這個 tutorial repo 的 `outputs/` 是示範 fixture；本段實際用 OS-level move 模擬 archive，但規範仍是：真實專案搬 `specs/features/active/...` 到 `specs/features/completed/...` 時使用 `git mv`。
+> 這個 tutorial repo 的 `outputs/` 是示範 fixture；本段實際用 OS-level move 模擬 archive，但規範仍是：真實專案搬 `dflow/specs/features/active/...` 到 `dflow/specs/features/completed/...` 時使用 `git mv`。
 >
 > Archive scope：
 >
@@ -173,7 +173,7 @@
 > - Phase Count: 1
 > - Phase: phase 1 baseline-and-fix
 > - Lightweight Changes: 1 baseline-capture row + 1 T2 BUG lightweight spec
-> - Archived Directory: specs/features/completed/SPEC-20260430-001-order-discount-calculation/
+> - Archived Directory: dflow/specs/features/completed/SPEC-20260430-001-order-discount-calculation/
 >
 > Phases Summary:
 > - phase 1 (2026-04-30): baseline-and-fix
@@ -255,7 +255,7 @@
 > Feature directory is now at：
 >
 > ```text
-> specs/features/completed/SPEC-20260430-001-order-discount-calculation/
+> dflow/specs/features/completed/SPEC-20260430-001-order-discount-calculation/
 > ```
 >
 > `SPEC-20260505-002-vip-discount-policy` remains active.
@@ -268,20 +268,20 @@
 - [`06-finish-feature.md`](06-finish-feature.md)
 
 **移動**
-- `outputs/specs/features/active/SPEC-20260430-001-order-discount-calculation/`
-- → [`outputs/specs/features/completed/SPEC-20260430-001-order-discount-calculation/`](outputs/specs/features/completed/SPEC-20260430-001-order-discount-calculation/)
+- `outputs/dflow/specs/features/active/SPEC-20260430-001-order-discount-calculation/`
+- → [`outputs/dflow/specs/features/completed/SPEC-20260430-001-order-discount-calculation/`](outputs/dflow/specs/features/completed/SPEC-20260430-001-order-discount-calculation/)
 
 **修改**
-- [`outputs/specs/features/completed/SPEC-20260430-001-order-discount-calculation/_index.md`](outputs/specs/features/completed/SPEC-20260430-001-order-discount-calculation/_index.md)
-- [`outputs/specs/domain/Order/rules.md`](outputs/specs/domain/Order/rules.md)
-- [`outputs/specs/domain/Order/behavior.md`](outputs/specs/domain/Order/behavior.md)
-- [`outputs/specs/architecture/tech-debt.md`](outputs/specs/architecture/tech-debt.md)
+- [`outputs/dflow/specs/features/completed/SPEC-20260430-001-order-discount-calculation/_index.md`](outputs/dflow/specs/features/completed/SPEC-20260430-001-order-discount-calculation/_index.md)
+- [`outputs/dflow/specs/domain/Order/rules.md`](outputs/dflow/specs/domain/Order/rules.md)
+- [`outputs/dflow/specs/domain/Order/behavior.md`](outputs/dflow/specs/domain/Order/behavior.md)
+- [`outputs/dflow/specs/migration/tech-debt.md`](outputs/dflow/specs/migration/tech-debt.md)
 
 **故意不改**
-- 不動 `outputs/specs/features/active/SPEC-20260505-002-vip-discount-policy/`，它仍是 in-progress。
+- 不動 `outputs/dflow/specs/features/active/SPEC-20260505-002-vip-discount-policy/`，它仍是 in-progress。
 - 不改 completed directory 內 phase-spec / BUG-001 spec 的 inline 內容；它們搬位置後保留為 frozen history。
-- 不改 `specs/domain/Order/{context,models}.md`，closeout 沒有引入新的 Domain model 或 context boundary。
-- 不改 `specs/domain/{glossary,context-map}.md`。
+- 不改 `dflow/specs/domain/Order/{context,models}.md`，closeout 沒有引入新的 Domain model 或 context boundary。
+- 不改 `dflow/specs/domain/{glossary,context-map}.md`。
 - 不 commit、不 push、不建 worktree。
 
 ## 觀察重點
@@ -298,7 +298,7 @@
 
 Tutorial 全劇本已展示的 `/dflow:` 命令：
 
-- `/dflow:init-project`：劇情 2 段 0 以 setup / baseline outputs 形式示範，正式 init-project 暫緩。
+- `npx dflow init`：劇情 2 段 1 以 CLI 入口示範，建立 brownfield baseline outputs。
 - `/dflow:new-feature`：劇情 2 段 4 建立 VIP discount policy；劇情 1 也示範 greenfield new feature。
 - `/dflow:new-phase`：劇情 1 示範後續 phase 擴張。
 - `/dflow:modify-existing`：劇情 2 段 2 / 段 3 展示 brownfield baseline capture 與既有功能修改思路。

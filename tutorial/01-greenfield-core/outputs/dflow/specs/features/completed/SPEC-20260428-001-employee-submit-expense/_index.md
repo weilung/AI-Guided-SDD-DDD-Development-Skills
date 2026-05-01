@@ -126,7 +126,7 @@ Audience：內部工程團隊、產品負責人、試用主管，以及需要了
 
 ### Tech Debt Outstanding
 
-- **Unicode i18n 下的字元計數策略**: status 在 `specs/architecture/tech-debt.md` 中仍為 `open`。BUG-001 已修 reject reason truncation 與 malformed-input handling，但針對 grapheme clusters、code points、UTF-16 units、`Intl.Segmenter` 與 ICU support 的更廣泛產品層級策略，仍是獨立 architecture 後續事項。
+- **Unicode i18n 下的字元計數策略**: status 在 `dflow/specs/architecture/tech-debt.md` 中仍為 `open`。BUG-001 已修 reject reason truncation 與 malformed-input handling，但針對 grapheme clusters、code points、UTF-16 units、`Intl.Segmenter` 與 ICU support 的更廣泛產品層級策略，仍是獨立 architecture 後續事項。
 
 ### Outstanding / Deferred
 
@@ -143,7 +143,7 @@ Audience：內部工程團隊、產品負責人、試用主管，以及需要了
 
 ## Outstanding / Future Considerations
 
-- **Batch approval：phase 2 已延後**: phase 2 刻意只交付單筆 report 的 Approve / Reject。如果試用回饋證明需要 batch approval，請在 `specs/features/backlog/` 下建立 follow-up feature 並連回這個 completed feature；不要直接在這裡追加新的 T2/T3 work。
+- **Batch approval：phase 2 已延後**: phase 2 刻意只交付單筆 report 的 Approve / Reject。如果試用回饋證明需要 batch approval，請在 `dflow/specs/features/backlog/` 下建立 follow-up feature 並連回這個 completed feature；不要直接在這裡追加新的 T2/T3 work。
 - **Approval notification email**: 已延後，因為 phase 2 將 notification concerns 保持在 Expense Domain model 之外。
 - **Approval SLA timer / escalation**: 延後到 policy 複雜度明確後；可能代表未來需要 Approval policy model 或獨立 BC review。
 - **Reimbursement BC**: 延後到 finance reimbursement workflow 啟動後；可能會接在 `ExpenseReportApproved` 之後。

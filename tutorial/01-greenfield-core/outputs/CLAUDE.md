@@ -36,10 +36,10 @@ Presentation → Application → Domain ← Infrastructure
 ### Project Structure
 
 完整 specs 目錄結構見 Dflow skill `SKILL.md` § "Project Structure Reference"。
-以下只列本專案當前狀態（`/dflow:init-project` 建立後可能還未全填）：
+以下只列本專案當前狀態（`npx dflow init` 建立後可能還未全填）：
 
 ```
-specs/
+dflow/specs/
 ├── domain/
 │   ├── glossary.md
 │   ├── context-map.md
@@ -71,7 +71,7 @@ AI 的完整決策樹、Workflow Transparency、Ceremony Scaling 三層判準
 - `sdd-ddd-core-skill/references/` 內各 flow 文件
 
 本專案採用的 slash command：
-- `/dflow:init-project` — 專案初始化（一次性，已執行過）
+- `npx dflow init` — 專案初始化（一次性，已執行過）
 - `/dflow:new-feature` — 新功能
 - `/dflow:new-phase` — 既有 active feature 加新 phase
 - `/dflow:modify-existing` — 修改既有行為
@@ -83,7 +83,7 @@ AI 的完整決策樹、Workflow Transparency、Ceremony Scaling 三層判準
 
 1. **Spec Before Code** — 沒有規格就不寫實作
 2. **Domain at the Center** — 業務邏輯只存在於 Domain 層
-3. **Ubiquitous Language** — 使用 `specs/domain/glossary.md` 中定義的術語
+3. **Ubiquitous Language** — 使用 `dflow/specs/domain/glossary.md` 中定義的術語
 4. **One Aggregate per Transaction** — 單一操作只修改一個 Aggregate
 5. **Dependency Inversion** — Domain 定義介面，Infrastructure 實作
 
@@ -113,7 +113,7 @@ AI 的完整決策樹、Workflow Transparency、Ceremony Scaling 三層判準
 ### Git Branching Strategy
 
 本專案採用：trunk-based / GitHub Flow（單一 `main`）。
-詳見 `specs/shared/Git-principles-trunk.md`。
+詳見 `dflow/specs/shared/Git-principles-trunk.md`。
 
 ### AI Collaboration Notes
 

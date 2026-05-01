@@ -27,7 +27,7 @@ Alice 觸發 `/dflow:finish-feature`。
 
 > **Dflow**：Step 1 mechanical checks：
 >
-> - ✓ Feature directory located: `specs/features/active/SPEC-20260428-001-employee-submit-expense/`
+> - ✓ Feature directory located: `dflow/specs/features/active/SPEC-20260428-001-employee-submit-expense/`
 > - ✓ `_index.md` exists and front matter parses
 > - ✓ Phase Specs table has 2 rows: phase 1 `mvp`, phase 2 `supervisor-approval`
 > - ✓ Phase 1 implementation status: done; implementation tasks checked
@@ -42,11 +42,11 @@ Alice 觸發 `/dflow:finish-feature`。
 
 > **Dflow**：Driftcheck result：
 >
-> - ✓ BR Snapshot BR-001..BR-007 all exist in `specs/domain/Expense/rules.md`
+> - ✓ BR Snapshot BR-001..BR-007 all exist in `dflow/specs/domain/Expense/rules.md`
 > - ✓ BR-002 的 phase-2 modification 在 rules.md 有保留歷史註記
 > - ✓ BR-007 的 2026-04-30 lightweight modification 在 rules.md 有保留歷史註記
-> - ✓ `ApprovalDecision` Aggregate 已存在於 `specs/domain/Expense/models.md`
-> - ✓ `ExpenseReportApproved` / `ExpenseReportRejected` 已存在於 `specs/domain/Expense/events.md`
+> - ✓ `ApprovalDecision` Aggregate 已存在於 `dflow/specs/domain/Expense/models.md`
+> - ✓ `ExpenseReportApproved` / `ExpenseReportRejected` 已存在於 `dflow/specs/domain/Expense/events.md`
 > - ✓ `Unicode character counting strategy under i18n` tech debt 仍是 `open`
 > - ⚠ Minor drift：phase 2 spec 裡的 Open Question「要不要支援批次 Approve」沒有明示移到哪裡。段 3 當時 Alice 已拍板「不放 phase 2」，但 closeout 文件需要把它 dispose 掉，避免 completed feature 留 dangling open question。
 
@@ -56,7 +56,7 @@ Alice 觸發 `/dflow:finish-feature`。
 >
 > ```text
 > Batch approval: deferred from phase 2.
-> If trial feedback proves it is needed, create a follow-up feature under specs/features/backlog/.
+> If trial feedback proves it is needed, create a follow-up feature under dflow/specs/features/backlog/.
 > Do not reopen SPEC-20260428-001.
 > ```
 >
@@ -85,7 +85,7 @@ Alice 觸發 `/dflow:finish-feature`。
 
 > **Dflow**：Step 3: Sync `_index.md` Current BR Snapshot to BC Layer。
 >
-> 先說原則：`_index.md` 是 feature-level current state；`specs/domain/Expense/rules.md` 是 Expense BC 的 system-level current state。Feature 完成時，finish-feature 要把前者 reconcile 到後者。
+> 先說原則：`_index.md` 是 feature-level current state；`dflow/specs/domain/Expense/rules.md` 是 Expense BC 的 system-level current state。Feature 完成時，finish-feature 要把前者 reconcile 到後者。
 >
 > 如果 Expense BC 同時有其他 completed features，我會做 cross-feature reconciliation：
 >
@@ -147,14 +147,14 @@ Alice 觸發 `/dflow:finish-feature`。
 > 真實專案我會用這個命令，不用 plain `mv`：
 >
 > ```bash
-> git mv specs/features/active/SPEC-20260428-001-employee-submit-expense \
->        specs/features/completed/SPEC-20260428-001-employee-submit-expense
+> git mv dflow/specs/features/active/SPEC-20260428-001-employee-submit-expense \
+>        dflow/specs/features/completed/SPEC-20260428-001-employee-submit-expense
 > git status
 > ```
 >
 > `git mv` 很重要，因為它讓 Git 更容易保留 rename history，改善 `git log --follow`、`git blame` 和 PR diff。尤其 feature directory 裡有 `_index.md`、phase specs、lightweight specs、aggregate design，多檔一起搬時，用 `git mv` 比 `mv` + `git add` 更可讀。
 >
-> 這個 tutorial repo 的 outputs 是示範 fixture；我會在 `tutorial/01-greenfield-core/outputs/...` 底下用 OS-level move 模擬 archive。但規範要記住：真實專案中的 `specs/features/active/...` → `specs/features/completed/...` 應該用 `git mv`。
+> 這個 tutorial repo 的 outputs 是示範 fixture；我會在 `tutorial/01-greenfield-core/outputs/...` 底下用 OS-level move 模擬 archive。但規範要記住：真實專案中的 `dflow/specs/features/active/...` → `dflow/specs/features/completed/...` 應該用 `git mv`。
 >
 > Step 4 complete（feature archived to completed/）。Entering Step 5: Emit Integration Summary.
 
@@ -247,7 +247,7 @@ Alice 觸發 `/dflow:finish-feature`。
 > Feature directory is now at：
 >
 > ```text
-> specs/features/completed/SPEC-20260428-001-employee-submit-expense/
+> dflow/specs/features/completed/SPEC-20260428-001-employee-submit-expense/
 > ```
 >
 > Stage is set; commit / merge / push at your discretion.
@@ -266,18 +266,18 @@ Alice 觸發 `/dflow:finish-feature`。
 - [`06-finish-feature.md`](06-finish-feature.md)
 
 **移動**
-- `outputs/specs/features/active/SPEC-20260428-001-employee-submit-expense/`
-- → [`outputs/specs/features/completed/SPEC-20260428-001-employee-submit-expense/`](outputs/specs/features/completed/SPEC-20260428-001-employee-submit-expense/)
+- `outputs/dflow/specs/features/active/SPEC-20260428-001-employee-submit-expense/`
+- → [`outputs/dflow/specs/features/completed/SPEC-20260428-001-employee-submit-expense/`](outputs/dflow/specs/features/completed/SPEC-20260428-001-employee-submit-expense/)
 
 **修改**
-- [`outputs/specs/features/completed/SPEC-20260428-001-employee-submit-expense/_index.md`](outputs/specs/features/completed/SPEC-20260428-001-employee-submit-expense/_index.md)
-- [`outputs/specs/domain/Expense/rules.md`](outputs/specs/domain/Expense/rules.md)
-- [`outputs/specs/architecture/tech-debt.md`](outputs/specs/architecture/tech-debt.md)
+- [`outputs/dflow/specs/features/completed/SPEC-20260428-001-employee-submit-expense/_index.md`](outputs/dflow/specs/features/completed/SPEC-20260428-001-employee-submit-expense/_index.md)
+- [`outputs/dflow/specs/domain/Expense/rules.md`](outputs/dflow/specs/domain/Expense/rules.md)
+- [`outputs/dflow/specs/architecture/tech-debt.md`](outputs/dflow/specs/architecture/tech-debt.md)
 
 **故意不改**
 - 不改 phase-spec / lightweight-spec / BUG-001 spec 的內容：completed feature 內保留它們作為 frozen history。
-- 不改 `specs/domain/Expense/{context,models,events}.md`：Step 3 只驗證 ApprovalDecision 與 domain events 已存在。
-- 不改 `specs/domain/{glossary,context-map}.md`：closeout 未引入新 ubiquitous language term 或 context relationship。
+- 不改 `dflow/specs/domain/Expense/{context,models,events}.md`：Step 3 只驗證 ApprovalDecision 與 domain events 已存在。
+- 不改 `dflow/specs/domain/{glossary,context-map}.md`：closeout 未引入新 ubiquitous language term 或 context relationship。
 - 不新增 backlog feature file：batch approval 只列為 future consideration。
 - 不更新 `features-index.md`：本 tutorial scaffold 採 listing-on-demand，不集中維護 features index。
 
@@ -285,7 +285,7 @@ Alice 觸發 `/dflow:finish-feature`。
 
 - **`/dflow:finish-feature` 與 `/dflow:new-phase` / `/dflow:modify-existing` 的差異**：new-phase 和 modify-existing 是開啟下一段變更；finish-feature 是 stage gate，也是 feature 生命週期終點。完成後 feature directory 進入 `completed/`，不再接新的 T2/T3。
 - **Step 3 BC Layer Sync 為何重要**：`_index.md` 是 feature-level truth，`rules.md` 是 BC-level truth。單一 feature 時看起來只是 1-to-1 copy，但真正價值是建立 cross-feature reconciliation 的規則：未來多個 feature 修改同一 BR 時，finish-feature 必須把 net result 合併到 BC system state。
-- **`git mv` vs `mv` 的差異**：真實專案搬 `specs/features/active/...` 到 `completed/...` 應使用 `git mv`，保留 rename history 和 PR diff 可讀性。本 tutorial outputs 用 OS-level move 只是示範 fixture 的限制，不改變規範。
+- **`git mv` vs `mv` 的差異**：真實專案搬 `dflow/specs/features/active/...` 到 `completed/...` 應使用 `git mv`，保留 rename history 和 PR diff 可讀性。本 tutorial outputs 用 OS-level move 只是示範 fixture 的限制，不改變規範。
 - **Integration Summary 的 audience 與 neutrality**：summary 同時服務團隊內 reviewer 和 stakeholder；它刻意 git-strategy-neutral，不假設 Git Flow、GitHub Flow、squash、rebase 或 merge commit，因此可被改寫成 PR description、release note 或 merge note。
 - **completed feature 不可直接追加 T2/T3**：依 modify-existing-flow Step 1.5，completed feature 是 frozen history。Alice 若日後要 batch approval、notification email 或新的 reject reason 政策，必須建立 follow-up feature，而不是 reopening `SPEC-20260428-001`。
 

@@ -18,7 +18,7 @@ phase-slug: mvp
 
 ## Domain Concepts <!-- Fill timing: Phase 2 -->
 
-涉及的 Domain 概念（引用 `specs/domain/Expense/models.md`）：
+涉及的 Domain 概念（引用 `dflow/specs/domain/Expense/models.md`）：
 
 | Concept | Type | Description |
 |---|---|---|
@@ -31,9 +31,9 @@ phase-slug: mvp
 | ExpenseReportSubmitted | Domain Event | ExpenseReport 提交成功時 raise |
 
 更新檢查：
-- [x] `specs/domain/glossary.md` — ExpenseReport / ExpenseItem / Approver / Reimbursement 4 個 term 已加入
-- [x] `specs/domain/Expense/models.md` — 1 Aggregate / 2 Entity / 3 VO / 1 Repo 已記錄
-- [x] `specs/domain/Expense/events.md` — ExpenseReportSubmitted 已記錄
+- [x] `dflow/specs/domain/glossary.md` — ExpenseReport / ExpenseItem / Approver / Reimbursement 4 個 term 已加入
+- [x] `dflow/specs/domain/Expense/models.md` — 1 Aggregate / 2 Entity / 3 VO / 1 Repo 已記錄
+- [x] `dflow/specs/domain/Expense/events.md` — ExpenseReportSubmitted 已記錄
 
 <!-- dflow:section behavior-scenarios -->
 ## Behavior Scenarios <!-- Fill timing: Phase 3 -->
@@ -73,7 +73,7 @@ Scenario: 員工嘗試在 Submitted 狀態下加入新的 ExpenseItem
 
 ## Business Rules <!-- Fill timing: Phase 3 -->
 
-> 首 phase，所有 BR 都是新建。完整定義權威在 `specs/domain/Expense/rules.md`；本表只列本 phase 引入的 BR-ID + 一行 + 實作位置。
+> 首 phase，所有 BR 都是新建。完整定義權威在 `dflow/specs/domain/Expense/rules.md`；本表只列本 phase 引入的 BR-ID + 一行 + 實作位置。
 
 | BR-ID | Rule | Implementation Location |
 |---|---|---|

@@ -165,9 +165,9 @@ Bob 不想把 Phase 1 scope 擴張成三個頁面的全面改造。他只想先 
 >
 > 這次 Step 3 是簡化版，因為主要規則已在 Step 2 baseline capture 中識別。現在只做分流：
 >
-> - confirmed behavior → `specs/domain/Order/behavior.md`
-> - buggy implementation → `specs/architecture/tech-debt.md`
-> - unknown behavior → `specs/architecture/tech-debt.md` + Open Question
+> - confirmed behavior → `dflow/specs/domain/Order/behavior.md`
+> - buggy implementation → `dflow/specs/migration/tech-debt.md`
+> - unknown behavior → `dflow/specs/migration/tech-debt.md` + Open Question
 >
 > Tech debt to record：
 >
@@ -193,13 +193,13 @@ Bob 不想把 Phase 1 scope 擴張成三個頁面的全面改造。他只想先 
 >
 > 我會更新三個既有檔案：
 >
-> 1. `specs/domain/Order/behavior.md`  
+> 1. `dflow/specs/domain/Order/behavior.md`
 >    新增 `Confirmed across pages (baseline-capture 2026-05-04)`，用 Given/When/Then 寫已確認跨頁面行為，並標明 source pages：`OrderList.BindGrid()`、`OrderDetail.LoadDiscountSummary()`、`usp_GetOrderDiscountSummary`。
 >
-> 2. `specs/architecture/tech-debt.md`  
+> 2. `dflow/specs/migration/tech-debt.md`
 >    新增兩條 debt：rounding precision inconsistency、`isVip` multiplier 來源不明。
 >
-> 3. `specs/features/active/SPEC-20260430-001-order-discount-calculation/_index.md`  
+> 3. `dflow/specs/features/active/SPEC-20260430-001-order-discount-calculation/_index.md`
 >    `Lightweight Changes` 表新增一列：
 >
 > ```text
@@ -225,14 +225,14 @@ Bob 不想把 Phase 1 scope 擴張成三個頁面的全面改造。他只想先 
 - [`03-baseline-capture.md`](03-baseline-capture.md)
 
 **修改**
-- [`specs/features/active/SPEC-20260430-001-order-discount-calculation/_index.md`](outputs/specs/features/active/SPEC-20260430-001-order-discount-calculation/_index.md)
-- [`specs/domain/Order/behavior.md`](outputs/specs/domain/Order/behavior.md)
-- [`specs/architecture/tech-debt.md`](outputs/specs/architecture/tech-debt.md)
+- [`dflow/specs/features/active/SPEC-20260430-001-order-discount-calculation/_index.md`](outputs/dflow/specs/features/active/SPEC-20260430-001-order-discount-calculation/_index.md)
+- [`dflow/specs/domain/Order/behavior.md`](outputs/dflow/specs/domain/Order/behavior.md)
+- [`dflow/specs/migration/tech-debt.md`](outputs/dflow/specs/migration/tech-debt.md)
 
 **故意不建 / 不改**
 - 不建新的 `lightweight-spec` 或 `phase-spec` — baseline-only 沒有 BR Delta。
-- 不動 `specs/domain/Order/rules.md` — 沒有新增或修改 BR。
-- 不動 `specs/domain/Order/models.md` / `context.md` — 沒有新 Domain structure。
+- 不動 `dflow/specs/domain/Order/rules.md` — 沒有新增或修改 BR。
+- 不動 `dflow/specs/domain/Order/models.md` / `context.md` — 沒有新 Domain structure。
 - 不動 `glossary.md` / `context-map.md` — 沒有新 term 或 BC。
 - 不動 `sdd-ddd-*-skill/`、`proposals/`、`CHANGELOG.md` 或其他 tutorial 檔案。
 - 不 commit、不 push、不建 worktree。

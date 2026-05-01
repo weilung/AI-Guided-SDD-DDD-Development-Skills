@@ -37,23 +37,19 @@ MyWebFormsProject/
 │   ├── references/
 │   └── templates/
 ├── src/
-├── specs/                     ← 第一次使用時建立
+├── dflow/specs/                     ← 第一次使用時建立
 └── CLAUDE.md                  ← 第一次使用時建立
 ```
 
-### 2. 建立初始目錄結構
+### 2. 建立 Dflow baseline
 
-第一次使用時，請 Claude Code 幫你建立 specs 目錄和 CLAUDE.md：
+第一次使用時，在專案 root 執行 Dflow CLI：
 
 ```
-❯ claude
-
-你：請讀取 sdd-ddd-workflow/SKILL.md 和 templates/CLAUDE.md，
-   幫我建立這個 WebForms 專案的初始 specs 目錄結構和 CLAUDE.md。
-   系統名稱是「費用報表系統」。
+$ npx dflow init
 ```
 
-Claude Code 會根據 SKILL.md 中定義的專案結構，一次建好所有目錄和初始檔案。
+CLI 會詢問 project type、edition、tech stack、migration context、prose language 與 optional starter files，然後建立 `dflow/specs/` baseline 與可選的 `CLAUDE.md`。
 
 ### 3. 之後的每次使用
 
@@ -95,7 +91,7 @@ Claude：了解，這很可能是四捨五入的方式不一致。
 
        讓我先看看有沒有相關的規格文件...
 
-       > 搜尋 specs/domain/ 和 specs/features/completed/，
+       > 搜尋 dflow/specs/domain/ 和 dflow/specs/features/completed/，
        > 沒有找到關於四捨五入的規格。
 
        目前沒有文件記錄四捨五入的規則。
@@ -114,7 +110,7 @@ Claude：了解，這很可能是四捨五入的方式不一致。
 ```
 Claude：好，我幫你建立輕量規格。
 
-       > 建立 specs/features/active/BUG-042-rounding-inconsistency.md
+       > 建立 dflow/specs/features/active/BUG-042-rounding-inconsistency.md
 ```
 
 Claude Code 會根據 `templates/lightweight-spec.md` 產生以下內容：
@@ -243,23 +239,23 @@ lblTotal.Text = money.Round().Amount.ToString("N0");
 Claude：程式碼改完了，讓我更新相關文件：
 
        1. ✅ 規格狀態改為 completed
-       2. ✅ specs/domain/glossary.md — 新增「Money」和「Currency」術語
-       3. ✅ specs/domain/expense/models.md — 新增 Money Value Object 定義
-       4. ✅ specs/domain/expense/rules.md — 新增四捨五入規則 BR-R01
-       5. ✅ specs/migration/tech-debt.md — 記錄發現的重複計算邏輯
-       6. ✅ 規格檔移到 specs/features/completed/
+       2. ✅ dflow/specs/domain/glossary.md — 新增「Money」和「Currency」術語
+       3. ✅ dflow/specs/domain/expense/models.md — 新增 Money Value Object 定義
+       4. ✅ dflow/specs/domain/expense/rules.md — 新增四捨五入規則 BR-R01
+       5. ✅ dflow/specs/architecture/tech-debt.md — 記錄發現的重複計算邏輯
+       6. ✅ 規格檔移到 dflow/specs/features/completed/
 ```
 
 ### 這個情境的產出物
 
 | 產出物 | 路徑 |
 |---|---|
-| 輕量規格 | `specs/features/completed/BUG-042-rounding-inconsistency.md` |
+| 輕量規格 | `dflow/specs/features/completed/BUG-042-rounding-inconsistency.md` |
 | Domain 程式碼 | `src/Domain/Expense/ValueObjects/Money.cs` |
-| 術語表更新 | `specs/domain/glossary.md`（+2 筆） |
-| 模型文件更新 | `specs/domain/expense/models.md` |
-| 規則文件更新 | `specs/domain/expense/rules.md`（+1 條） |
-| 技術債記錄 | `specs/migration/tech-debt.md`（+3 筆） |
+| 術語表更新 | `dflow/specs/domain/glossary.md`（+2 筆） |
+| 模型文件更新 | `dflow/specs/domain/expense/models.md` |
+| 規則文件更新 | `dflow/specs/domain/expense/rules.md`（+1 條） |
+| 技術債記錄 | `dflow/specs/architecture/tech-debt.md`（+3 筆） |
 
 ### 重點回顧
 
@@ -299,7 +295,7 @@ Claude：好的，支援日幣報銷。讓我先了解一些背景：
 ```
 Claude：了解。讓我看看現有的資產...
 
-       > 搜尋 specs/domain/expense/
+       > 搜尋 dflow/specs/domain/expense/
        > 找到 models.md 中有 Money Value Object（在修 BUG-042 時建立的）
        > 找到 glossary.md 中有 Money、Currency 術語
 
@@ -369,7 +365,7 @@ Claude：好，讓我整理一下這個功能涉及的領域概念：
 ```
 Claude：現在來寫功能規格。我幫你建立：
 
-       > 建立 specs/features/active/EXP-001-jpy-currency-support.md
+       > 建立 dflow/specs/features/active/EXP-001-jpy-currency-support.md
 ```
 
 Claude Code 會根據 `templates/feature-spec.md` 的結構，引導開發者逐段填寫。
@@ -523,10 +519,10 @@ Claude：分支名稱依照規範：
 
 | 產出物 | 路徑 |
 |---|---|
-| 完整功能規格 | `specs/features/active/EXP-001-jpy-currency-support.md` |
-| 術語表更新 | `specs/domain/glossary.md`（+2 筆：ExchangeRate、ReportDate） |
-| 模型文件更新 | `specs/domain/expense/models.md`（+ExchangeRate VO、擴展 Money） |
-| 規則文件更新 | `specs/domain/expense/rules.md`（+3 條） |
+| 完整功能規格 | `dflow/specs/features/active/EXP-001-jpy-currency-support.md` |
+| 術語表更新 | `dflow/specs/domain/glossary.md`（+2 筆：ExchangeRate、ReportDate） |
+| 模型文件更新 | `dflow/specs/domain/expense/models.md`（+ExchangeRate VO、擴展 Money） |
+| 規則文件更新 | `dflow/specs/domain/expense/rules.md`（+3 條） |
 | Domain 程式碼 | `src/Domain/Expense/ValueObjects/ExchangeRate.cs` |
 | Domain 程式碼 | `src/Domain/Expense/Interfaces/IExchangeRateRepository.cs` |
 | Domain 程式碼 | 擴展 `src/Domain/Expense/ValueObjects/Money.cs`（+ConvertTo） |
@@ -560,7 +556,7 @@ Claude：好，我來對照 PR Review Checklist 檢查。
 
        ── 規格符合度 ──
 
-       > 讀取 specs/features/active/EXP-001-jpy-currency-support.md
+       > 讀取 dflow/specs/features/active/EXP-001-jpy-currency-support.md
        > 比對實作程式碼
 
        ✅ 規格存在
@@ -659,7 +655,7 @@ PR Review Checklist 不只看「程式碼能不能動」，它系統性地檢查
 ```
 Claude：等一下，在建立 feature 分支之前，讓我做閘門檢查。
 
-       > 搜尋 specs/features/ 中是否有請假簽核的規格
+       > 搜尋 dflow/specs/features/ 中是否有請假簽核的規格
        > 沒有找到
 
        目前沒有「請假簽核流程」的規格文件。
@@ -669,7 +665,7 @@ Claude：等一下，在建立 feature 分支之前，讓我做閘門檢查。
 
        ┌──────────────────────────────────────────┐
        │  feature 分支閘門：                        │
-       │  ✅ spec 存在於 specs/features/active/     │
+       │  ✅ spec 存在於 dflow/specs/features/active/     │
        │  ✅ 至少一個 Given/When/Then               │
        │  ✅ Bounded Context 已識別                 │
        │  ✅ 關鍵領域概念已記錄                      │
@@ -700,7 +696,7 @@ Claude：沒問題，我們用快速版。只抓最核心的部分：
 Claude：好，這樣就有兩個核心情境了。
        讓我快速建立 spec...
 
-       > 建立 specs/features/active/LV-001-leave-approval-workflow.md
+       > 建立 dflow/specs/features/active/LV-001-leave-approval-workflow.md
 
        規格的關鍵部分已經有了：
        - 兩個 Given/When/Then 情境
@@ -719,8 +715,8 @@ Claude：好，這樣就有兩個核心情境了。
 
 | 產出物 | 路徑 |
 |---|---|
-| 功能規格（草稿） | `specs/features/active/LV-001-leave-approval-workflow.md` |
-| 術語表更新 | `specs/domain/glossary.md`（如有新術語） |
+| 功能規格（草稿） | `dflow/specs/features/active/LV-001-leave-approval-workflow.md` |
+| 術語表更新 | `dflow/specs/domain/glossary.md`（如有新術語） |
 | Git 分支 | `feature/LV-001-leave-approval-workflow` |
 
 ### 重點回顧
@@ -745,7 +741,7 @@ Claude：好，這樣就有兩個核心情境了。
 | 「幫我 review 這個 PR」 | PR 審查 | `pr-review-checklist.md` |
 | 「我要開一個分支」 | Git Flow 閘門 | `git-flow-integration.md` |
 | 「X 是什麼意思？」 | 術語查詢 | 查 `glossary.md`，沒有就建議新增 |
-| 「接下來做什麼？」 | Sprint 規劃 | 檢查 `specs/features/backlog/` |
+| 「接下來做什麼？」 | Sprint 規劃 | 檢查 `dflow/specs/features/backlog/` |
 
 ### Ceremony Scaling 速查
 

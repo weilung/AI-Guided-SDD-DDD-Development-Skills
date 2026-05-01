@@ -20,7 +20,7 @@ phase 2 要補上主管審核動作：主管可以核准或退回一份已提交
 
 ## Domain Concepts <!-- Fill timing: Phase 2 -->
 
-涉及的 Domain 概念（引用 `specs/domain/Expense/models.md`）：
+涉及的 Domain 概念（引用 `dflow/specs/domain/Expense/models.md`）：
 
 | Concept | Type | Description |
 |---|---|---|
@@ -32,9 +32,9 @@ phase 2 要補上主管審核動作：主管可以核准或退回一份已提交
 | ExpenseReportRejected | Domain Event | ExpenseReport 被退回時 raise |
 
 更新檢查：
-- [x] `specs/domain/glossary.md` — ApprovalDecision / Approver / ApprovalReason 已更新
-- [x] `specs/domain/Expense/models.md` — ApprovalDecision Aggregate + 狀態機擴張已記錄
-- [x] `specs/domain/Expense/events.md` — ExpenseReportApproved / ExpenseReportRejected 已記錄
+- [x] `dflow/specs/domain/glossary.md` — ApprovalDecision / Approver / ApprovalReason 已更新
+- [x] `dflow/specs/domain/Expense/models.md` — ApprovalDecision Aggregate + 狀態機擴張已記錄
+- [x] `dflow/specs/domain/Expense/events.md` — ExpenseReportApproved / ExpenseReportRejected 已記錄
 
 <!-- dflow:section behavior-scenarios -->
 ## Behavior Scenarios <!-- Fill timing: Phase 3 -->

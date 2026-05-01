@@ -33,7 +33,7 @@ Phase 2 supervisor approval 和上一段 T2 lightweight 規格已在連假前 im
 > 我掃 active feature，這個 bug 明確掛在：
 >
 > ```text
-> specs/features/active/SPEC-20260428-001-employee-submit-expense/
+> dflow/specs/features/active/SPEC-20260428-001-employee-submit-expense/
 > ```
 >
 > Host feature = `SPEC-20260428-001-employee-submit-expense`，status 還是 `in-progress`，所以可以直接在 active feature directory 裡新增 T2 bug lightweight spec。
@@ -58,7 +58,7 @@ Phase 2 supervisor approval 和上一段 T2 lightweight 規格已在連假前 im
 
 > **Dflow**：Step 1.5 — Completed-feature reopen detection：**skip**。
 >
-> 跳過理由：host feature 在 `specs/features/active/`，不是 completed feature，不觸發 completed-feature reopen。
+> 跳過理由：host feature 在 `dflow/specs/features/active/`，不是 completed feature，不觸發 completed-feature reopen。
 >
 > Step 1.6 — Create Follow-up Feature：**skip**。
 >
@@ -71,8 +71,8 @@ Phase 2 supervisor approval 和上一段 T2 lightweight 規格已在連假前 im
 > - `_index.md`
 > - `lightweight-2026-04-30-approval-reason-bilingual-length.md`
 > - `aggregate-design.md`
-> - `specs/domain/Expense/rules.md`
-> - `specs/architecture/tech-debt.md`
+> - `dflow/specs/domain/Expense/rules.md`
+> - `dflow/specs/architecture/tech-debt.md`
 >
 > Baseline 讀到：
 >
@@ -109,7 +109,7 @@ Phase 2 supervisor approval 和上一段 T2 lightweight 規格已在連假前 im
 >
 > 所以結論是：**不新增 BR-008**。把 invalid surrogate 視為 input sanitization / defensive programming，而不是 BR 層級規則。
 >
-> 但這次暴露出一個技術債：整個系統未來應該定義 user-facing length limit 到底用 grapheme cluster、code point 還是 UTF-16 unit。這不該塞進 BR-007，也不該在這個 T2 擴張成全 i18n 重構。我會記到 `specs/architecture/tech-debt.md`。
+> 但這次暴露出一個技術債：整個系統未來應該定義 user-facing length limit 到底用 grapheme cluster、code point 還是 UTF-16 unit。這不該塞進 BR-007，也不該在這個 T2 擴張成全 i18n 重構。我會記到 `dflow/specs/architecture/tech-debt.md`。
 
 > **Alice**：合理。BR-007 不動，但 Domain 不應該炸 generic error。它至少要 normalize，遇到 invalid surrogate 要丟明確 exception。
 
@@ -149,7 +149,7 @@ Phase 2 supervisor approval 和上一段 T2 lightweight 規格已在連假前 im
 > 1. 新增 T2 bug lightweight spec：
 >
 >    ```text
->    specs/features/active/SPEC-20260428-001-employee-submit-expense/BUG-001-emoji-surrogate-truncation.md
+>    dflow/specs/features/active/SPEC-20260428-001-employee-submit-expense/BUG-001-emoji-surrogate-truncation.md
 >    ```
 >
 > 2. 更新 `_index.md`：
@@ -159,7 +159,7 @@ Phase 2 supervisor approval 和上一段 T2 lightweight 規格已在連假前 im
 >    - Current BR Snapshot **不 regenerate**，明示理由：BR-007 wording unchanged，root cause 是 implementation-level。
 >    - Resume Pointer 改成「下一步實作 BUG-001」。
 >
-> 3. 更新 `specs/architecture/tech-debt.md`：
+> 3. 更新 `dflow/specs/architecture/tech-debt.md`：
 >
 >    - 新增 `Unicode character counting strategy under i18n`
 >    - reported = 2026-05-04
@@ -172,9 +172,9 @@ Phase 2 supervisor approval 和上一段 T2 lightweight 規格已在連假前 im
 > 故意不改：
 >
 > - `aggregate-design.md`：ApprovalReason VO 結構不變，只是 constructor 內部 defensive guard。
-> - `specs/domain/Expense/rules.md`：BR-007 wording 不變。
-> - `specs/domain/Expense/{models,events,context}.md`：無新 model / event / BC 變動。
-> - `specs/domain/{glossary,context-map}.md`：無新 term / context relationship。
+> - `dflow/specs/domain/Expense/rules.md`：BR-007 wording 不變。
+> - `dflow/specs/domain/Expense/{models,events,context}.md`：無新 model / event / BC 變動。
+> - `dflow/specs/domain/{glossary,context-map}.md`：無新 term / context relationship。
 
 > **Alice**：BR Snapshot 不 regenerate 這點幫我寫清楚，reviewer 很可能會問。
 
@@ -187,17 +187,17 @@ Phase 2 supervisor approval 和上一段 T2 lightweight 規格已在連假前 im
 ## 本段產出的檔案
 
 **新增**
-- [`specs/features/active/SPEC-20260428-001-employee-submit-expense/BUG-001-emoji-surrogate-truncation.md`](outputs/specs/features/active/SPEC-20260428-001-employee-submit-expense/BUG-001-emoji-surrogate-truncation.md)
+- [`dflow/specs/features/active/SPEC-20260428-001-employee-submit-expense/BUG-001-emoji-surrogate-truncation.md`](outputs/dflow/specs/features/active/SPEC-20260428-001-employee-submit-expense/BUG-001-emoji-surrogate-truncation.md)
 
 **修改**
-- [`specs/features/active/SPEC-20260428-001-employee-submit-expense/_index.md`](outputs/specs/features/active/SPEC-20260428-001-employee-submit-expense/_index.md)
-- [`specs/architecture/tech-debt.md`](outputs/specs/architecture/tech-debt.md)
+- [`dflow/specs/features/active/SPEC-20260428-001-employee-submit-expense/_index.md`](outputs/dflow/specs/features/active/SPEC-20260428-001-employee-submit-expense/_index.md)
+- [`dflow/specs/architecture/tech-debt.md`](outputs/dflow/specs/architecture/tech-debt.md)
 
 **故意不改**
 - 不改 `aggregate-design.md` — ApprovalReason VO 結構不變，只補 constructor 內部 normalization / invalid surrogate detection。
-- 不改 `specs/domain/Expense/rules.md` — BR-007 wording 不變，沒有 BR-008。
-- 不改 `specs/domain/Expense/{models,events,context}.md` — 無新 model、Domain Event 或 BC 變動。
-- 不改 `specs/domain/{glossary,context-map}.md` — 無新 ubiquitous language term 或 context relationship。
+- 不改 `dflow/specs/domain/Expense/rules.md` — BR-007 wording 不變，沒有 BR-008。
+- 不改 `dflow/specs/domain/Expense/{models,events,context}.md` — 無新 model、Domain Event 或 BC 變動。
+- 不改 `dflow/specs/domain/{glossary,context-map}.md` — 無新 ubiquitous language term 或 context relationship。
 - 不改既有 phase spec / lightweight spec — BUG-001 以新的 T2 bug spec 承接。
 
 ## 觀察重點

@@ -73,38 +73,33 @@ ExpenseTracker/
 │   └── templates/
 ├── src/
 ├── tests/
-├── specs/                     ← 第一次使用時建立
+├── dflow/specs/                     ← 第一次使用時建立
 └── CLAUDE.md                  ← 第一次使用時建立
 ```
 
-### 2. 建立 Clean Architecture 專案結構
+### 2. 建立 Clean Architecture 專案結構與 Dflow baseline
 
-第一次使用時，讓 Claude Code 引導你建立完整結構：
+先用 `dotnet new` 或團隊既有範本建立 Clean Architecture solution。專案骨架就位後，在 repo root 執行 Dflow CLI：
 
 ```
-❯ claude
-
-你：請讀取 sdd-ddd-core/SKILL.md 和所有 references/、templates/ 檔案。
-   我要建立一個 ASP.NET Core 專案：費用報銷系統（ExpenseTracker）。
-   請引導我建立 Clean Architecture 的方案結構和 specs 目錄。
+$ npx dflow init
 ```
 
-Claude Code 會建立以下結構：
+CLI 會詢問 project type、edition、tech stack、migration context、prose language 與 optional starter files，然後建立 `dflow/specs/` baseline 與可選的 `CLAUDE.md`。
+
+初始化後的典型結構：
 
 ```
 ExpenseTracker/
 ├── CLAUDE.md
-├── specs/
-│   ├── _overview.md
-│   ├── _conventions.md
+├── dflow/specs/
+│   ├── shared/
+│   │   ├── _overview.md
+│   │   ├── _conventions.md
+│   │   └── Git-principles-trunk.md
 │   ├── domain/
 │   │   ├── glossary.md
-│   │   ├── context-map.md
-│   │   └── expense/
-│   │       ├── context.md
-│   │       ├── models.md
-│   │       ├── rules.md
-│   │       └── events.md
+│   │   └── context-map.md
 │   ├── features/
 │   │   ├── active/
 │   │   ├── completed/
@@ -174,13 +169,13 @@ Claude：了解。這是典型的 Value Object 驗證漏洞——
 
        Step 1 完成，進入 Step 2：捕捉現有行為。讓我檢查相關文件...
 
-       > 讀取 specs/domain/expense/models.md
-       > 讀取 specs/domain/expense/rules.md
+       > 讀取 dflow/specs/domain/expense/models.md
+       > 讀取 dflow/specs/domain/expense/rules.md
 
        models.md 中有定義 Money，但沒有記錄金額約束。
        rules.md 也沒有「金額必須為正數」這條規則。
 
-       > 建立 specs/features/active/BUG-015-negative-money-validation.md
+       > 建立 dflow/specs/features/active/BUG-015-negative-money-validation.md
 ```
 
 ```markdown
@@ -341,9 +336,9 @@ Claude：依四層完成 checklist 跑：
 你：沒有
 
        ─── 5.3 文件更新 ───
-       ✅ specs/domain/expense/rules.md — 新增 BR-M01（A 側宣告）
-       ✅ specs/domain/expense/behavior.md — 新增 BR-M01 section anchor（C 側情境）
-       ✅ specs/domain/expense/models.md — 更新 Money 定義，加入約束
+       ✅ dflow/specs/domain/expense/rules.md — 新增 BR-M01（A 側宣告）
+       ✅ dflow/specs/domain/expense/behavior.md — 新增 BR-M01 section anchor（C 側情境）
+       ✅ dflow/specs/domain/expense/models.md — 更新 Money 定義，加入約束
 
        ─── 5.1 post-5.3 補驗 ───
        ✓ behavior.md 對 BR-M01 有 section anchor
@@ -359,12 +354,12 @@ Claude：依四層完成 checklist 跑：
 
 | 產出物 | 路徑 |
 |---|---|
-| 輕量規格 | `specs/features/completed/BUG-015-negative-money-validation.md` |
+| 輕量規格 | `dflow/specs/features/completed/BUG-015-negative-money-validation.md` |
 | Domain 修復 | `src/ExpenseTracker.Domain/Expense/ValueObjects/Money.cs` |
 | 單元測試 | `tests/Domain.UnitTests/Expense/MoneyTests.cs` |
-| 規則宣告（A 側） | `specs/domain/expense/rules.md`（+BR-M01） |
-| 行為情境（C 側） | `specs/domain/expense/behavior.md`（+BR-M01 section anchor） |
-| 模型文件更新 | `specs/domain/expense/models.md`（更新 Money 定義） |
+| 規則宣告（A 側） | `dflow/specs/domain/expense/rules.md`（+BR-M01） |
+| 行為情境（C 側） | `dflow/specs/domain/expense/behavior.md`（+BR-M01 section anchor） |
+| 模型文件更新 | `dflow/specs/domain/expense/models.md`（更新 Money 定義） |
 
 ### 重點回顧
 
@@ -487,7 +482,7 @@ Claude：好，這兩條也是不變條件。讓我整理 Aggregate 結構：
        因為每一項費用有自己的身份（ID），你可能會說「刪除第 3 項」，
        而不是「刪除金額 500 的那一項」。
 
-       > 建立 specs/features/active/EXP-002-submit-expense-report.md
+       > 建立 dflow/specs/features/active/EXP-002-submit-expense-report.md
        > 同時建立 Aggregate 設計工作表
 ```
 
@@ -585,7 +580,7 @@ status: in-progress
 phase: Phase 3 — Spec 定稿（通過 Step 4 → 5 phase gate）
 ddd-modeling-depth: 重（新 Aggregate、5 個不變條件、3 個 Domain Event）
 bounded-context: Expense
-aggregate-docs: specs/domain/expense/aggregate-expense-report.md
+aggregate-docs: dflow/specs/domain/expense/aggregate-expense-report.md
 created: 2026-03-20
 ---
 ```
@@ -808,21 +803,21 @@ Claude：Step 8: 依四層完成 checklist 跑。
 你：保留
 
        ─── 8.3 文件更新 ───
-       ✅ specs/domain/glossary.md — 新增 ReportStatus、ReportPeriod、ExpenseLineItem 等
-       ✅ specs/domain/expense/models.md — 新增 ExpenseReport、ExpenseLineItem 定義
-       ✅ specs/domain/expense/rules.md — 新增 INV-01 ~ INV-05（A 側宣告）
-       ✅ specs/domain/expense/behavior.md — Phase 3 draft 轉為正式段落；
+       ✅ dflow/specs/domain/glossary.md — 新增 ReportStatus、ReportPeriod、ExpenseLineItem 等
+       ✅ dflow/specs/domain/expense/models.md — 新增 ExpenseReport、ExpenseLineItem 定義
+       ✅ dflow/specs/domain/expense/rules.md — 新增 INV-01 ~ INV-05（A 側宣告）
+       ✅ dflow/specs/domain/expense/behavior.md — Phase 3 draft 轉為正式段落；
           每個 INV 有對應 section anchor（含 state transitions + Events）；
           對應 rules.md anchor 的 last-updated 更新為 2026-03-25
-       ✅ specs/domain/expense/events.md — 新增 3 個 Domain Event
-       ✅ specs/architecture/tech-debt.md — 新增 Event payload Currency 擴充項
+       ✅ dflow/specs/domain/expense/events.md — 新增 3 個 Domain Event
+       ✅ dflow/specs/architecture/tech-debt.md — 新增 Event payload Currency 擴充項
 
        ─── 8.1 post-8.3 補驗 ───
        ✓ behavior.md 對 INV-01 ~ INV-05 都有 section anchor
        ✓ behavior.md 的 last-updated（2026-03-25）晚於 spec 的 created（2026-03-20）
 
        ─── 8.4 歸檔 ───
-       ✅ EXP-002 狀態 → completed；移到 specs/features/completed/
+       ✅ EXP-002 狀態 → completed；移到 dflow/specs/features/completed/
 
        new-feature-flow 完成。建議用 `/dflow:verify` 做一次機械覆檢。
 ```
@@ -850,13 +845,13 @@ Claude：執行 drift verification（機械層檢查）：
 
 | 產出物 | 路徑 |
 |---|---|
-| 完整功能規格（含 Phase markers + DDD Depth + 實作任務段） | `specs/features/completed/EXP-002-submit-expense-report.md` |
-| Aggregate 設計工作表 | `specs/domain/expense/aggregate-expense-report.md` |
-| Domain Events 文件更新 | `specs/domain/expense/events.md`（+3 個事件） |
-| 規則宣告（A 側） | `specs/domain/expense/rules.md`（+INV-01 ~ INV-05） |
-| 行為情境（C 側） | `specs/domain/expense/behavior.md`（+5 個 anchor，含 state transitions + Events） |
-| 術語表更新 | `specs/domain/glossary.md` |
-| 技術債記錄 | `specs/architecture/tech-debt.md`（+Event Currency 擴充項） |
+| 完整功能規格（含 Phase markers + DDD Depth + 實作任務段） | `dflow/specs/features/completed/EXP-002-submit-expense-report.md` |
+| Aggregate 設計工作表 | `dflow/specs/domain/expense/aggregate-expense-report.md` |
+| Domain Events 文件更新 | `dflow/specs/domain/expense/events.md`（+3 個事件） |
+| 規則宣告（A 側） | `dflow/specs/domain/expense/rules.md`（+INV-01 ~ INV-05） |
+| 行為情境（C 側） | `dflow/specs/domain/expense/behavior.md`（+5 個 anchor，含 state transitions + Events） |
+| 術語表更新 | `dflow/specs/domain/glossary.md` |
+| 技術債記錄 | `dflow/specs/architecture/tech-debt.md`（+Event Currency 擴充項） |
 | Domain 程式碼 | `src/ExpenseTracker.Domain/Expense/Entities/ExpenseReport.cs` |
 | Domain 程式碼 | `src/ExpenseTracker.Domain/Expense/Entities/ExpenseLineItem.cs` |
 | Domain 程式碼 | `src/ExpenseTracker.Domain/Expense/Events/*.cs` |
@@ -1035,10 +1030,10 @@ Claude：進入 new-feature-flow（延續剛剛的建模結論）。
 
 | 產出物 | 路徑 |
 |---|---|
-| Aggregate 設計工作表 | `specs/domain/approval/aggregate-approval-task.md` |
-| Context 定義 | `specs/domain/approval/context.md`（新建 Approval Context） |
-| Context Map 更新 | `specs/domain/context-map.md`（Expense ↔ Approval 關係） |
-| Events 文件 | `specs/domain/approval/events.md` |
+| Aggregate 設計工作表 | `dflow/specs/domain/approval/aggregate-approval-task.md` |
+| Context 定義 | `dflow/specs/domain/approval/context.md`（新建 Approval Context） |
+| Context Map 更新 | `dflow/specs/domain/context-map.md`（Expense ↔ Approval 關係） |
+| Events 文件 | `dflow/specs/domain/approval/events.md` |
 
 ### 重點回顧
 
@@ -1078,7 +1073,7 @@ Claude：進入 pr-review 流程（Core 版，四層逐一檢查）。
        │ Step 5: 架構評分 + 改善建議（可選：跑 `/dflow:verify` 機械覆檢）
        └───────────────────────────┘
 
-       > 讀取 specs/features/active/EXP-003-approval-task.md
+       > 讀取 dflow/specs/features/active/EXP-003-approval-task.md
        > frontmatter 標示 DDD Modeling Depth: 重 → Domain / Events 嚴查
 
        先理解意圖：這個 PR 實作 ApprovalTask Aggregate，讓主管能核准/退回

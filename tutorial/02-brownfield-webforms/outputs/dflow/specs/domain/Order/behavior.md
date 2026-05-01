@@ -1,7 +1,7 @@
 # Order — Behavior Specification
 
 > **Purpose**: Order context current behavior 的 consolidated source of truth。
-> 不同於 `specs/features/completed/` 的 historical archive，本檔永遠反映
+> 不同於 `dflow/specs/features/completed/` 的 historical archive，本檔永遠反映
 > accepted specs 之後系統應該遵守的 current behavior。
 >
 > **Maintenance**: AI 在 completion flow（Step 8.3 / Step 6.3）更新本檔。

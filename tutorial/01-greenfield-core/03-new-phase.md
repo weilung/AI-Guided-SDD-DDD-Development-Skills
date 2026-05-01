@@ -18,11 +18,11 @@ phase 2 的目標刻意收斂：主管可以 Approve / Reject；Reject 後員工
 >
 > Step 1 先讀 active feature context。我會載入：
 >
-> - `specs/features/active/SPEC-20260428-001-employee-submit-expense/_index.md`
+> - `dflow/specs/features/active/SPEC-20260428-001-employee-submit-expense/_index.md`
 > - 最新 phase-spec：`phase-spec-2026-04-28-mvp.md`
 > - `aggregate-design.md`
 > - Expense BC 的 `context.md` / `models.md` / `rules.md` / `events.md`
-> - `specs/domain/glossary.md` / `context-map.md`
+> - `dflow/specs/domain/glossary.md` / `context-map.md`
 
 > **Dflow**：讀完了。
 >
@@ -165,7 +165,7 @@ phase 2 的目標刻意收斂：主管可以 Approve / Reject；Reject 後員工
 
 > **Alice**：OK，繼續。
 
-> **Dflow**：phase-spec drafted at `specs/features/active/SPEC-20260428-001-employee-submit-expense/phase-spec-2026-04-29-supervisor-approval.md`.
+> **Dflow**：phase-spec drafted at `dflow/specs/features/active/SPEC-20260428-001-employee-submit-expense/phase-spec-2026-04-29-supervisor-approval.md`.
 >
 > Phase Gate: Step 4 → Step 5。Ready to refresh `_index.md`（add Phase Specs row, regenerate Current BR Snapshot from the Delta）？`/dflow:next` to proceed.
 
@@ -198,12 +198,12 @@ phase 2 的目標刻意收斂：主管可以 Approve / Reject；Reject 後員工
 > 另外我會同步更新 living docs：
 >
 > - `aggregate-design.md`：新增 ApprovalDecision，更新 ExpenseReport 狀態機，標 phase-2 ADDED / MODIFIED
-> - `specs/domain/Expense/models.md`：新增 ApprovalDecision / ApprovalReason / enum
-> - `specs/domain/Expense/rules.md`：MODIFIED BR-002，ADDED BR-005..007
-> - `specs/domain/Expense/events.md`：新增 ExpenseReportApproved / ExpenseReportRejected
-> - `specs/domain/Expense/context.md`：Approval BC open question 改成已決定留在 Expense BC
-> - `specs/domain/glossary.md`：Approver 升級為已建模參與者，新增 ApprovalDecision / ApprovalReason
-> - `specs/domain/context-map.md`：補 external Identity reference，因為 BR-005 讓 SubmitterId / ApproverId 關係成為明確依賴
+> - `dflow/specs/domain/Expense/models.md`：新增 ApprovalDecision / ApprovalReason / enum
+> - `dflow/specs/domain/Expense/rules.md`：MODIFIED BR-002，ADDED BR-005..007
+> - `dflow/specs/domain/Expense/events.md`：新增 ExpenseReportApproved / ExpenseReportRejected
+> - `dflow/specs/domain/Expense/context.md`：Approval BC open question 改成已決定留在 Expense BC
+> - `dflow/specs/domain/glossary.md`：Approver 升級為已建模參與者，新增 ApprovalDecision / ApprovalReason
+> - `dflow/specs/domain/context-map.md`：補 external Identity reference，因為 BR-005 讓 SubmitterId / ApproverId 關係成為明確依賴
 >
 > 不建 `behavior.md`。per skill 規定，behavior scenarios 仍由 phase-spec 承載，等 finish-feature / Step 8.3 才 merge 到 BC-level `behavior.md`。
 
@@ -223,20 +223,20 @@ phase 2 的目標刻意收斂：主管可以 Approve / Reject；Reject 後員工
 ## 本段產出的檔案
 
 **新增**
-- [`specs/features/active/SPEC-20260428-001-employee-submit-expense/phase-spec-2026-04-29-supervisor-approval.md`](outputs/specs/features/active/SPEC-20260428-001-employee-submit-expense/phase-spec-2026-04-29-supervisor-approval.md)
+- [`dflow/specs/features/active/SPEC-20260428-001-employee-submit-expense/phase-spec-2026-04-29-supervisor-approval.md`](outputs/dflow/specs/features/active/SPEC-20260428-001-employee-submit-expense/phase-spec-2026-04-29-supervisor-approval.md)
 
 **修改**
-- [`specs/features/active/SPEC-20260428-001-employee-submit-expense/_index.md`](outputs/specs/features/active/SPEC-20260428-001-employee-submit-expense/_index.md)
-- [`specs/features/active/SPEC-20260428-001-employee-submit-expense/aggregate-design.md`](outputs/specs/features/active/SPEC-20260428-001-employee-submit-expense/aggregate-design.md)
-- [`specs/domain/Expense/context.md`](outputs/specs/domain/Expense/context.md)
-- [`specs/domain/Expense/models.md`](outputs/specs/domain/Expense/models.md)
-- [`specs/domain/Expense/rules.md`](outputs/specs/domain/Expense/rules.md)
-- [`specs/domain/Expense/events.md`](outputs/specs/domain/Expense/events.md)
-- [`specs/domain/glossary.md`](outputs/specs/domain/glossary.md)
-- [`specs/domain/context-map.md`](outputs/specs/domain/context-map.md)
+- [`dflow/specs/features/active/SPEC-20260428-001-employee-submit-expense/_index.md`](outputs/dflow/specs/features/active/SPEC-20260428-001-employee-submit-expense/_index.md)
+- [`dflow/specs/features/active/SPEC-20260428-001-employee-submit-expense/aggregate-design.md`](outputs/dflow/specs/features/active/SPEC-20260428-001-employee-submit-expense/aggregate-design.md)
+- [`dflow/specs/domain/Expense/context.md`](outputs/dflow/specs/domain/Expense/context.md)
+- [`dflow/specs/domain/Expense/models.md`](outputs/dflow/specs/domain/Expense/models.md)
+- [`dflow/specs/domain/Expense/rules.md`](outputs/dflow/specs/domain/Expense/rules.md)
+- [`dflow/specs/domain/Expense/events.md`](outputs/dflow/specs/domain/Expense/events.md)
+- [`dflow/specs/domain/glossary.md`](outputs/dflow/specs/domain/glossary.md)
+- [`dflow/specs/domain/context-map.md`](outputs/dflow/specs/domain/context-map.md)
 
 **故意不建**
-- `specs/domain/Expense/behavior.md` — behavior 場景仍由 phase-spec 帶；等 finish-feature / Step 8.3 才 merge 到 BC-level behavior。
+- `dflow/specs/domain/Expense/behavior.md` — behavior 場景仍由 phase-spec 帶；等 finish-feature / Step 8.3 才 merge 到 BC-level behavior。
 
 ## 觀察重點
 

@@ -5,7 +5,7 @@
 > Created: 2026-04-29
 > Scope: current state and migration direction of OrderManager
 > Audience: team members onboarding to the system + AI assistants reading
-> `specs/` for context.
+> `dflow/specs/` for context.
 
 This file is a **project-level starting point**. It does not duplicate
 Dflow's workflow rules (see `CLAUDE.md` and the Dflow skill for those) —
@@ -82,7 +82,7 @@ skill for the full rule set).
 5. The team needs specs to become the source of truth for future .NET
    Core migration.
 
-See [`../architecture/tech-debt.md`](../architecture/tech-debt.md) for
+See [`../migration/tech-debt.md`](../migration/tech-debt.md) for
 the baseline migration debt backlog.
 
 ---
@@ -101,7 +101,7 @@ migration follows four principles; expand / adapt each to this project:
   development preferentially uses the Domain layer, and legacy pages
   get touched only when they are being modified.
 - **Pragmatic First** — Migration does not block feature delivery. If
-  a deadline is tight, record the debt in `specs/architecture/tech-debt.md`
+  a deadline is tight, record the debt in `dflow/specs/migration/tech-debt.md`
   and continue.
 
 ### Migration Context Note
@@ -124,8 +124,7 @@ where Domain logic is pure C# and can be tested without WebForms,
 
 - [Spec conventions](_conventions.md)
 - [Git principles](Git-principles-gitflow.md)
-- [Context map](../domain/context-map.md)
 - [Glossary](../domain/glossary.md)
-- [Tech debt backlog](../architecture/tech-debt.md)
+- [Tech debt backlog](../migration/tech-debt.md)
 - Dflow skill: see `CLAUDE.md` and the `sdd-ddd-webforms-skill/` bundle
   for the full AI workflow guidance.

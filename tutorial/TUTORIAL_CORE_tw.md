@@ -38,38 +38,33 @@ ExpenseTracker/
 │   └── templates/
 ├── src/
 ├── tests/
-├── specs/                     ← 第一次使用時建立
+├── dflow/specs/                     ← 第一次使用時建立
 └── CLAUDE.md                  ← 第一次使用時建立
 ```
 
-### 2. 建立 Clean Architecture 專案結構
+### 2. 建立 Clean Architecture 專案結構與 Dflow baseline
 
-第一次使用時，讓 Claude Code 引導你建立完整結構：
+先用 `dotnet new` 或團隊既有範本建立 Clean Architecture solution。專案骨架就位後，在 repo root 執行 Dflow CLI：
 
 ```
-❯ claude
-
-你：請讀取 sdd-ddd-core/SKILL.md 和所有 references/、templates/ 檔案。
-   我要建立一個 ASP.NET Core 專案：費用報銷系統（ExpenseTracker）。
-   請引導我建立 Clean Architecture 的方案結構和 specs 目錄。
+$ npx dflow init
 ```
 
-Claude Code 會建立以下結構：
+CLI 會詢問 project type、edition、tech stack、migration context、prose language 與 optional starter files，然後建立 `dflow/specs/` baseline 與可選的 `CLAUDE.md`。
+
+初始化後的典型結構：
 
 ```
 ExpenseTracker/
 ├── CLAUDE.md
-├── specs/
-│   ├── _overview.md
-│   ├── _conventions.md
+├── dflow/specs/
+│   ├── shared/
+│   │   ├── _overview.md
+│   │   ├── _conventions.md
+│   │   └── Git-principles-trunk.md
 │   ├── domain/
 │   │   ├── glossary.md
-│   │   ├── context-map.md
-│   │   └── expense/
-│   │       ├── context.md
-│   │       ├── models.md
-│   │       ├── rules.md
-│   │       └── events.md
+│   │   └── context-map.md
 │   ├── features/
 │   │   ├── active/
 │   │   ├── completed/
@@ -125,15 +120,15 @@ Claude：了解。這是典型的 Value Object 驗證漏洞——
 
        讓我檢查相關文件...
 
-       > 讀取 specs/domain/expense/models.md
-       > 讀取 specs/domain/expense/rules.md
+       > 讀取 dflow/specs/domain/expense/models.md
+       > 讀取 dflow/specs/domain/expense/rules.md
 
        models.md 中有定義 Money，但沒有記錄金額約束。
        rules.md 也沒有「金額必須為正數」這條規則。
 
        先建立輕量規格，再修復：
 
-       > 建立 specs/features/active/BUG-015-negative-money-validation.md
+       > 建立 dflow/specs/features/active/BUG-015-negative-money-validation.md
 ```
 
 ```markdown
@@ -262,9 +257,9 @@ public class MoneyTests
 ```
 Claude：更新相關文件：
 
-       ✅ specs/domain/expense/rules.md — 新增 BR-M01：金額必須為正數
-       ✅ specs/domain/expense/models.md — 更新 Money 定義，加入約束
-       ✅ specs/features/active/BUG-015 狀態改為 completed，移到 completed/
+       ✅ dflow/specs/domain/expense/rules.md — 新增 BR-M01：金額必須為正數
+       ✅ dflow/specs/domain/expense/models.md — 更新 Money 定義，加入約束
+       ✅ dflow/specs/features/active/BUG-015 狀態改為 completed，移到 completed/
        ✅ Domain 專案 .csproj 確認：零 NuGet 依賴 ✅
 ```
 
@@ -272,11 +267,11 @@ Claude：更新相關文件：
 
 | 產出物 | 路徑 |
 |---|---|
-| 輕量規格 | `specs/features/completed/BUG-015-negative-money-validation.md` |
+| 輕量規格 | `dflow/specs/features/completed/BUG-015-negative-money-validation.md` |
 | Domain 修復 | `src/ExpenseTracker.Domain/Expense/ValueObjects/Money.cs` |
 | 單元測試 | `tests/Domain.UnitTests/Expense/MoneyTests.cs` |
-| 規則文件更新 | `specs/domain/expense/rules.md`（+1 條） |
-| 模型文件更新 | `specs/domain/expense/models.md`（更新 Money 定義） |
+| 規則文件更新 | `dflow/specs/domain/expense/rules.md`（+1 條） |
+| 模型文件更新 | `dflow/specs/domain/expense/models.md`（更新 Money 定義） |
 
 ### 重點回顧
 
@@ -370,7 +365,7 @@ Claude：好，這兩條也是不變條件。讓我整理 Aggregate 結構：
        因為每一項費用有自己的身份（ID），你可能會說「刪除第 3 項」，
        而不是「刪除金額 500 的那一項」。
 
-       > 建立 specs/features/active/EXP-002-submit-expense-report.md
+       > 建立 dflow/specs/features/active/EXP-002-submit-expense-report.md
        > 同時建立 Aggregate 設計工作表
 ```
 
@@ -602,11 +597,11 @@ Claude：注意 Handler 有多「薄」——它只做三件事：
 
 | 產出物 | 路徑 |
 |---|---|
-| 完整功能規格 | `specs/features/active/EXP-002-submit-expense-report.md` |
-| Aggregate 設計工作表 | `specs/domain/expense/aggregate-expense-report.md` |
-| Domain Events 文件更新 | `specs/domain/expense/events.md`（+3 個事件） |
-| 術語表更新 | `specs/domain/glossary.md` |
-| 規則文件更新 | `specs/domain/expense/rules.md` |
+| 完整功能規格 | `dflow/specs/features/active/EXP-002-submit-expense-report.md` |
+| Aggregate 設計工作表 | `dflow/specs/domain/expense/aggregate-expense-report.md` |
+| Domain Events 文件更新 | `dflow/specs/domain/expense/events.md`（+3 個事件） |
+| 術語表更新 | `dflow/specs/domain/glossary.md` |
+| 規則文件更新 | `dflow/specs/domain/expense/rules.md` |
 | Domain 程式碼 | `src/ExpenseTracker.Domain/Expense/Entities/ExpenseReport.cs` |
 | Domain 程式碼 | `src/ExpenseTracker.Domain/Expense/Entities/ExpenseLineItem.cs` |
 | Domain 程式碼 | `src/ExpenseTracker.Domain/Expense/Events/*.cs` |
@@ -781,10 +776,10 @@ ApprovalTask 獨立於 ExpenseReport 的原因：
 
 | 產出物 | 路徑 |
 |---|---|
-| Aggregate 設計工作表 | `specs/domain/approval/aggregate-approval-task.md` |
-| Context 定義 | `specs/domain/approval/context.md`（新建 Approval Context） |
-| Context Map 更新 | `specs/domain/context-map.md`（Expense ↔ Approval 關係） |
-| Events 文件 | `specs/domain/approval/events.md` |
+| Aggregate 設計工作表 | `dflow/specs/domain/approval/aggregate-approval-task.md` |
+| Context 定義 | `dflow/specs/domain/approval/context.md`（新建 Approval Context） |
+| Context Map 更新 | `dflow/specs/domain/context-map.md`（Expense ↔ Approval 關係） |
+| Events 文件 | `dflow/specs/domain/approval/events.md` |
 
 ### 重點回顧
 

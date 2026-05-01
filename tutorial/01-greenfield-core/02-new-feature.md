@@ -2,9 +2,9 @@
 
 ## 劇情背景
 
-接續上午跑完 `/dflow:init-project`（見 [01-init-project.md](01-init-project.md)），Alice 花了大概 30 分鐘掃過 `_overview.md`，把 stakeholders（差旅員工、部門主管、財務）、預估 user scale（公司全體 ~100 人，年度差旅 ~2000 筆）、DB（PostgreSQL 16）、Auth（公司 SSO via OIDC）、Hosting（Azure App Service）這幾欄補完，順手 commit 一發 `[INIT] fill in _overview.md placeholders`。
+接續上午跑完 `npx dflow init`（見 [01-init-project.md](01-init-project.md)），Alice 花了大概 30 分鐘掃過 `_overview.md`，把 stakeholders（差旅員工、部門主管、財務）、預估 user scale（公司全體 ~100 人，年度差旅 ~2000 筆）、DB（PostgreSQL 16）、Auth（公司 SSO via OIDC）、Hosting（Azure App Service）這幾欄補完，順手 commit 一發 `[INIT] fill in _overview.md placeholders`。
 
-中午吃飽回來，repo 結構清爽，但 `specs/features/active/` 還空著，`specs/domain/` 只有兩份 placeholder。她決定下午專心開第一個 feature：**員工提交費用單（Employee Submit Expense Report）**。這是整個 ExpenseTracker 最核心、也最簡單的入口——員工出差回來能在系統內把單據建好、提交給主管。後面的「主管審核」「財務匯款」她已經放進腦中的 backlog，但這個 phase 想刻意收斂到只做「員工端的提交動作」。
+中午吃飽回來，repo 結構清爽，但 `dflow/specs/features/active/` 還空著，`dflow/specs/domain/` 只有兩份 placeholder。她決定下午專心開第一個 feature：**員工提交費用單（Employee Submit Expense Report）**。這是整個 ExpenseTracker 最核心、也最簡單的入口——員工出差回來能在系統內把單據建好、提交給主管。後面的「主管審核」「財務匯款」她已經放進腦中的 backlog，但這個 phase 想刻意收斂到只做「員工端的提交動作」。
 
 她在 IDE 開啟 Claude Code，輸入指令。
 
@@ -18,17 +18,17 @@
 > 2. **Who needs it?** 哪個 stakeholder 或 user role？
 > 3. **Why now?** 為什麼是現在做？
 >
-> 我同時會去掃一下 `specs/domain/` 看有沒有相關概念能引用。
+> 我同時會去掃一下 `dflow/specs/domain/` 看有沒有相關概念能引用。
 
 > **Alice**：
 > 1. 員工出差或公務結束後，能在系統內建一份費用申報單、加幾筆費用項（高鐵、住宿之類）、送出給主管審核。
 > 2. 內部所有會出差或有零星公務支出的員工——主要 stakeholder 是差旅頻繁的業務 / RD / 採購；附帶的下游 stakeholder 是部門主管和財務。但 phase 1 我只想做「員工端的提交」，主管 / 財務後面再說。
 > 3. 現在做是因為這是整個 ExpenseTracker 最核心的入口，沒這個其他流程都沒上游資料。我也想用這個 feature 把 Expense 這個 BC 的骨架立起來，後面 phase 才有東西延伸。
 
-> **Dflow**：清楚。我掃過 `specs/domain/`：
+> **Dflow**：清楚。我掃過 `dflow/specs/domain/`：
 > - `glossary.md` — 還是 init-project 留下的 placeholder（術語表是空的，但 TODO 註記提到 ExpenseReport / ExpenseItem / Approver / Reimbursement 是預期要進來的核心術語）
 > - `context-map.md` — contexts / relationships 都還沒填
-> - `specs/domain/{context}/` 任何子目錄都不存在
+> - `dflow/specs/domain/{context}/` 任何子目錄都不存在
 >
 > 結論：這真的是 day-0 first feature，沒有任何既有 BC / Aggregate 可引用。所有 domain 概念要從零建。
 >
@@ -47,7 +47,7 @@
 
 > **Alice**：符合。Expense 這名字夠中性，主管審核要不要拆成獨立 BC 我也是傾向 phase 2 再決定，現在硬切會猜錯。
 
-> **Dflow**：好。Step 2 我會在 Step 3 後一併把 `specs/domain/Expense/context.md` 建起來（per new-feature-flow.md Step 3 的「foundational domain docs 缺失就從 templates 補」規則）。
+> **Dflow**：好。Step 2 我會在 Step 3 後一併把 `dflow/specs/domain/Expense/context.md` 建起來（per new-feature-flow.md Step 3 的「foundational domain docs 缺失就從 templates 補」規則）。
 >
 > Step 2 complete (BC identified: Expense). Entering Step 3: Domain Modeling.
 
@@ -120,7 +120,7 @@
 >
 > - **SPEC-ID**: `SPEC-20260428-001`
 > - **slug**: `employee-submit-expense`（英文，因為我們整段討論是中文，但 slug 跟程式碼比較近，git branch 也可以保 ASCII 友善——per P012 後規則 slug 跟隨討論語言或團隊偏好都可以；你想改中文 slug 也行）
-> - **feature 目錄**: `specs/features/active/SPEC-20260428-001-employee-submit-expense/`
+> - **feature 目錄**: `dflow/specs/features/active/SPEC-20260428-001-employee-submit-expense/`
 > - **git branch**: `feature/SPEC-20260428-001-employee-submit-expense`
 >
 > 這樣可以嗎？或想改 slug？
@@ -133,17 +133,17 @@
 >
 > | Path | 來源 | 性質 |
 > |---|---|---|
-> | `specs/features/active/SPEC-20260428-001-employee-submit-expense/_index.md` | `templates/_index.md` | 新建 — feature dashboard |
-> | `specs/features/active/SPEC-20260428-001-employee-submit-expense/phase-spec-2026-04-28-mvp.md` | `templates/phase-spec.md` | 新建 — phase 1 spec |
-> | `specs/features/active/SPEC-20260428-001-employee-submit-expense/aggregate-design.md` | `templates/aggregate-design.md` | 新建 — Core 版特有 |
-> | `specs/domain/Expense/context.md` | `templates/context-definition.md` | 新建 — BC 定義 |
-> | `specs/domain/Expense/models.md` | `templates/models.md` | 新建 — BC model catalog |
-> | `specs/domain/Expense/rules.md` | `templates/rules.md` | 新建 — BR-ID index |
-> | `specs/domain/Expense/events.md` | `templates/events.md` | 新建 — Domain Event catalog |
-> | `specs/domain/glossary.md` | (既有) | **修改** — 補 ExpenseReport / ExpenseItem / Approver / Reimbursement 4 個 term |
-> | `specs/domain/context-map.md` | (既有) | **修改** — 補 Expense BC 第一個 entry |
+> | `dflow/specs/features/active/SPEC-20260428-001-employee-submit-expense/_index.md` | `templates/_index.md` | 新建 — feature dashboard |
+> | `dflow/specs/features/active/SPEC-20260428-001-employee-submit-expense/phase-spec-2026-04-28-mvp.md` | `templates/phase-spec.md` | 新建 — phase 1 spec |
+> | `dflow/specs/features/active/SPEC-20260428-001-employee-submit-expense/aggregate-design.md` | `templates/aggregate-design.md` | 新建 — Core 版特有 |
+> | `dflow/specs/domain/Expense/context.md` | `templates/context-definition.md` | 新建 — BC 定義 |
+> | `dflow/specs/domain/Expense/models.md` | `templates/models.md` | 新建 — BC model catalog |
+> | `dflow/specs/domain/Expense/rules.md` | `templates/rules.md` | 新建 — BR-ID index |
+> | `dflow/specs/domain/Expense/events.md` | `templates/events.md` | 新建 — Domain Event catalog |
+> | `dflow/specs/domain/glossary.md` | (既有) | **修改** — 補 ExpenseReport / ExpenseItem / Approver / Reimbursement 4 個 term |
+> | `dflow/specs/domain/context-map.md` | (既有) | **修改** — 補 Expense BC 第一個 entry |
 >
-> **不建** `specs/domain/Expense/behavior.md`：per Step 8.3 才從 phase-spec 的 Given/When/Then 場景 merge 進來；現在建只會留空殼。`rules.md` 的 behavior anchor 連結指過去，會是預期的 dead link，`/dflow:verify` 會把它標為「pending behavior merge」而不是 error。
+> **不建** `dflow/specs/domain/Expense/behavior.md`：per Step 8.3 才從 phase-spec 的 Given/When/Then 場景 merge 進來；現在建只會留空殼。`rules.md` 的 behavior anchor 連結指過去，會是預期的 dead link，`/dflow:verify` 會把它標為「pending behavior merge」而不是 error。
 >
 > 開工嗎？或有 path 要調整？
 
@@ -151,15 +151,15 @@
 
 > **Dflow**：寫檔過程：
 >
-> - ✓ `specs/domain/Expense/context.md` — Responsibilities / In&Out Scope / Aggregates / VOs / Repository / Interactions（標 Approval BC 為「規劃中」，event 已有但 consumer 暫無）
-> - ✓ `specs/domain/Expense/models.md` — 1 Aggregate / 2 Entity / 3 VO / 1 Repository、Code Mapping 指向 `src/ExpenseTracker.Domain/Expense/`
-> - ✓ `specs/domain/Expense/rules.md` — BR-001..004（draft 狀態，等 Step 8.3 升 active）
-> - ✓ `specs/domain/Expense/events.md` — ExpenseReportSubmitted (payload 不含 Items 細節)
-> - ✓ `specs/domain/glossary.md` — 補 ExpenseReport / ExpenseItem / Approver / Reimbursement 4 term；後兩個目前 code mapping 留 `(尚未建模)`，預留給 phase 2/3
-> - ✓ `specs/domain/context-map.md` — Expense BC 進 contexts 表；relationships 表保持空（單 BC 無關係可填），integration notes 加註 phase 2 預期
-> - ✓ `specs/features/active/SPEC-20260428-001-employee-submit-expense/aggregate-design.md` — INV-01..05、Structure ASCII tree、State Transition Methods 表（Submit raise event）、Design Decisions（Item 為何是 Entity / 為何 Money 是 VO 等）
-> - ✓ `specs/features/active/SPEC-20260428-001-employee-submit-expense/phase-spec-2026-04-28-mvp.md` — Problem / Domain Concepts / Behavior Scenarios（含主成功 + 2 個替代）/ Business Rules（BR-001..004 一行 + Implementation Location）/ Edge Cases（EC-001..003）/ Domain Events 表 / Implementation Plan 四層 / Test Strategy / Open Questions / Implementation Tasks（生成放到 Step 5 末尾）
-> - ✓ `specs/features/active/SPEC-20260428-001-employee-submit-expense/_index.md` — 6 sections 全：Metadata / Goals & Scope / Phase Specs / Current BR Snapshot（4 條 BR）/ Lightweight Changes（空）/ Resume Pointer
+> - ✓ `dflow/specs/domain/Expense/context.md` — Responsibilities / In&Out Scope / Aggregates / VOs / Repository / Interactions（標 Approval BC 為「規劃中」，event 已有但 consumer 暫無）
+> - ✓ `dflow/specs/domain/Expense/models.md` — 1 Aggregate / 2 Entity / 3 VO / 1 Repository、Code Mapping 指向 `src/ExpenseTracker.Domain/Expense/`
+> - ✓ `dflow/specs/domain/Expense/rules.md` — BR-001..004（draft 狀態，等 Step 8.3 升 active）
+> - ✓ `dflow/specs/domain/Expense/events.md` — ExpenseReportSubmitted (payload 不含 Items 細節)
+> - ✓ `dflow/specs/domain/glossary.md` — 補 ExpenseReport / ExpenseItem / Approver / Reimbursement 4 term；後兩個目前 code mapping 留 `(尚未建模)`，預留給 phase 2/3
+> - ✓ `dflow/specs/domain/context-map.md` — Expense BC 進 contexts 表；relationships 表保持空（單 BC 無關係可填），integration notes 加註 phase 2 預期
+> - ✓ `dflow/specs/features/active/SPEC-20260428-001-employee-submit-expense/aggregate-design.md` — INV-01..05、Structure ASCII tree、State Transition Methods 表（Submit raise event）、Design Decisions（Item 為何是 Entity / 為何 Money 是 VO 等）
+> - ✓ `dflow/specs/features/active/SPEC-20260428-001-employee-submit-expense/phase-spec-2026-04-28-mvp.md` — Problem / Domain Concepts / Behavior Scenarios（含主成功 + 2 個替代）/ Business Rules（BR-001..004 一行 + Implementation Location）/ Edge Cases（EC-001..003）/ Domain Events 表 / Implementation Plan 四層 / Test Strategy / Open Questions / Implementation Tasks（生成放到 Step 5 末尾）
+> - ✓ `dflow/specs/features/active/SPEC-20260428-001-employee-submit-expense/_index.md` — 6 sections 全：Metadata / Goals & Scope / Phase Specs / Current BR Snapshot（4 條 BR）/ Lightweight Changes（空）/ Resume Pointer
 >
 > Step 4 內 phase-spec 的 Behavior Scenarios 段我寫了一個主成功（3 個 Item 提交成功）+ 2 個替代（空 Items 提交、Submitted 後再 AddItem），Edge Cases 寫了 3 條（EC-001 金額 = 0、EC-002 重複收據、EC-003 二次 Submit）。Edge cases 直接衍生出 BR-003 / BR-004，這也順便驗證 BR 跟 EC 的一致性。
 >
@@ -252,29 +252,29 @@
 >
 > ```
 >   New BC scaffolded: Expense
->     ✓ specs/domain/Expense/context.md
->     ✓ specs/domain/Expense/models.md
->     ✓ specs/domain/Expense/rules.md      (BR-001..004, draft)
->     ✓ specs/domain/Expense/events.md     (ExpenseReportSubmitted)
+>     ✓ dflow/specs/domain/Expense/context.md
+>     ✓ dflow/specs/domain/Expense/models.md
+>     ✓ dflow/specs/domain/Expense/rules.md      (BR-001..004, draft)
+>     ✓ dflow/specs/domain/Expense/events.md     (ExpenseReportSubmitted)
 >
 >   New feature: SPEC-20260428-001 employee-submit-expense
->     ✓ specs/features/active/SPEC-20260428-001-employee-submit-expense/_index.md
->     ✓ specs/features/active/SPEC-20260428-001-employee-submit-expense/phase-spec-2026-04-28-mvp.md
->     ✓ specs/features/active/SPEC-20260428-001-employee-submit-expense/aggregate-design.md
+>     ✓ dflow/specs/features/active/SPEC-20260428-001-employee-submit-expense/_index.md
+>     ✓ dflow/specs/features/active/SPEC-20260428-001-employee-submit-expense/phase-spec-2026-04-28-mvp.md
+>     ✓ dflow/specs/features/active/SPEC-20260428-001-employee-submit-expense/aggregate-design.md
 >
 >   Updated existing:
->     ✓ specs/domain/glossary.md          (+4 terms: ExpenseReport / ExpenseItem / Approver / Reimbursement)
->     ✓ specs/domain/context-map.md       (+1 BC entry: Expense)
+>     ✓ dflow/specs/domain/glossary.md          (+4 terms: ExpenseReport / ExpenseItem / Approver / Reimbursement)
+>     ✓ dflow/specs/domain/context-map.md       (+1 BC entry: Expense)
 >
 >   Deferred (not created here by design):
->     - specs/domain/Expense/behavior.md   — 由 Step 8.3 從 phase-spec 場景 merge 進來
+>     - dflow/specs/domain/Expense/behavior.md   — 由 Step 8.3 從 phase-spec 場景 merge 進來
 >     - phase-2 spec / AddExpenseItemCommand — 移到 phase 2 backlog
 > ```
 >
 > **接續工作提醒**：
 >
 > - 今天還沒建 git branch；明天開實作前記得 `git checkout -b feature/SPEC-20260428-001-employee-submit-expense`
-> - 實作完成後 Step 8 要做：把 phase-spec.md 的 Given/When/Then 場景 merge 進 `specs/domain/Expense/behavior.md`（merge 時 BR-001..004 在 rules.md 從 draft 升 active）
+> - 實作完成後 Step 8 要做：把 phase-spec.md 的 Given/When/Then 場景 merge 進 `dflow/specs/domain/Expense/behavior.md`（merge 時 BR-001..004 在 rules.md 從 draft 升 active）
 > - phase 1 收尾後跑 `/dflow:new-phase` 啟動 phase 2「主管審核」（會自動繼承 Current BR Snapshot，並要求 Delta 段）
 
 > **Alice**：清楚。週五前把 Domain 層跑完。明天開工再叫你。
@@ -284,22 +284,22 @@
 `/dflow:new-feature` 在 Alice 的 ExpenseTracker repo 寫入了 **7 個新檔 + 修改 2 個既有檔**，按目錄分組如下：
 
 **新建 — feature 目錄（3 檔）**
-- [`specs/features/active/SPEC-20260428-001-employee-submit-expense/_index.md`](outputs/specs/features/active/SPEC-20260428-001-employee-submit-expense/_index.md) — feature dashboard，含 6 個 sections（Metadata / Goals & Scope / Phase Specs / Current BR Snapshot / Lightweight Changes / Resume Pointer）+ canonical English headings + `<!-- dflow:section ... -->` anchors
-- [`specs/features/active/SPEC-20260428-001-employee-submit-expense/phase-spec-2026-04-28-mvp.md`](outputs/specs/features/active/SPEC-20260428-001-employee-submit-expense/phase-spec-2026-04-28-mvp.md) — phase 1 spec，「首 phase，無前置 Delta」 + 4 個 BR + 3 個 EC + 15 個 Implementation Tasks
-- [`specs/features/active/SPEC-20260428-001-employee-submit-expense/aggregate-design.md`](outputs/specs/features/active/SPEC-20260428-001-employee-submit-expense/aggregate-design.md) — Core 版特有；ExpenseReport 5 條 invariants + State Transition Methods + 4 個 Design Decisions
+- [`dflow/specs/features/active/SPEC-20260428-001-employee-submit-expense/_index.md`](outputs/dflow/specs/features/active/SPEC-20260428-001-employee-submit-expense/_index.md) — feature dashboard，含 6 個 sections（Metadata / Goals & Scope / Phase Specs / Current BR Snapshot / Lightweight Changes / Resume Pointer）+ canonical English headings + `<!-- dflow:section ... -->` anchors
+- [`dflow/specs/features/active/SPEC-20260428-001-employee-submit-expense/phase-spec-2026-04-28-mvp.md`](outputs/dflow/specs/features/active/SPEC-20260428-001-employee-submit-expense/phase-spec-2026-04-28-mvp.md) — phase 1 spec，「首 phase，無前置 Delta」 + 4 個 BR + 3 個 EC + 15 個 Implementation Tasks
+- [`dflow/specs/features/active/SPEC-20260428-001-employee-submit-expense/aggregate-design.md`](outputs/dflow/specs/features/active/SPEC-20260428-001-employee-submit-expense/aggregate-design.md) — Core 版特有；ExpenseReport 5 條 invariants + State Transition Methods + 4 個 Design Decisions
 
 **新建 — Expense BC 目錄（4 檔）**
-- [`specs/domain/Expense/context.md`](outputs/specs/domain/Expense/context.md) — BC 定義：Responsibilities / In Scope / Out of Scope / 概覽各模型 / Interactions / Code Mapping
-- [`specs/domain/Expense/models.md`](outputs/specs/domain/Expense/models.md) — model catalog：1 Aggregate / 2 Entity / 3 VO / 1 Repository
-- [`specs/domain/Expense/rules.md`](outputs/specs/domain/Expense/rules.md) — BR Index 表（BR-001..004 draft）+ behavior anchor 連結（指向尚未建立的 behavior.md，預期 dead link）
-- [`specs/domain/Expense/events.md`](outputs/specs/domain/Expense/events.md) — Event catalog（ExpenseReportSubmitted，MVP 無 consumer）
+- [`dflow/specs/domain/Expense/context.md`](outputs/dflow/specs/domain/Expense/context.md) — BC 定義：Responsibilities / In Scope / Out of Scope / 概覽各模型 / Interactions / Code Mapping
+- [`dflow/specs/domain/Expense/models.md`](outputs/dflow/specs/domain/Expense/models.md) — model catalog：1 Aggregate / 2 Entity / 3 VO / 1 Repository
+- [`dflow/specs/domain/Expense/rules.md`](outputs/dflow/specs/domain/Expense/rules.md) — BR Index 表（BR-001..004 draft）+ behavior anchor 連結（指向尚未建立的 behavior.md，預期 dead link）
+- [`dflow/specs/domain/Expense/events.md`](outputs/dflow/specs/domain/Expense/events.md) — Event catalog（ExpenseReportSubmitted，MVP 無 consumer）
 
 **修改 — domain/ 既有 living document（2 檔）**
-- [`specs/domain/glossary.md`](outputs/specs/domain/glossary.md) — 補 4 個 term（ExpenseReport / ExpenseItem / Approver / Reimbursement）；後兩個 code mapping 留 `(尚未建模)` 預留 phase 2/3
-- [`specs/domain/context-map.md`](outputs/specs/domain/context-map.md) — 補 Expense BC entry；relationships 留空（單 BC 無關係）；integration notes 註明 phase 2 預期
+- [`dflow/specs/domain/glossary.md`](outputs/dflow/specs/domain/glossary.md) — 補 4 個 term（ExpenseReport / ExpenseItem / Approver / Reimbursement）；後兩個 code mapping 留 `(尚未建模)` 預留 phase 2/3
+- [`dflow/specs/domain/context-map.md`](outputs/dflow/specs/domain/context-map.md) — 補 Expense BC entry；relationships 留空（單 BC 無關係）；integration notes 註明 phase 2 預期
 
 **未建（per skill 規定）**
-- `specs/domain/Expense/behavior.md` — Step 8.3 才 merge phase-spec 場景進來
+- `dflow/specs/domain/Expense/behavior.md` — Step 8.3 才 merge phase-spec 場景進來
 - phase-2 spec — 屬另一段（`03-new-phase.md`）
 
 ## 觀察重點

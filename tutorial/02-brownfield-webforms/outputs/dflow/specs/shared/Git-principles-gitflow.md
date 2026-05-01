@@ -29,7 +29,7 @@ trunk-based, GitHub Flow), use `Git-principles-trunk.md` instead.
 
 The `feature/{SPEC-ID}-{slug}` pattern is a **Dflow requirement** (not
 a Git Flow requirement). It ties each feature branch to its
-corresponding `specs/features/active/{SPEC-ID}-{slug}/` directory.
+corresponding `dflow/specs/features/active/{SPEC-ID}-{slug}/` directory.
 
 ### Feature Branch Workflow
 
@@ -110,7 +110,7 @@ git branch -d hotfix/{version}-hotfix{n}
 upfront SDD cycle for speed. This project commits to writing a
 lightweight spec within **24 hours** after the hotfix lands, documenting
 root cause + fix + (if applicable) a tech-debt entry in
-`specs/architecture/tech-debt.md` if the bug reveals a systemic issue.
+`dflow/specs/migration/tech-debt.md` if the bug reveals a systemic issue.
 This is a **human-to-human commitment** — Dflow / AI cannot track the
 24-hour clock; the team enforces it in retros.
 
@@ -164,11 +164,11 @@ before making key Git operations:
 
 - [ ] `/dflow:finish-feature` has run (or the equivalent closeout is complete)
 - [ ] `_index.md` status = `completed`, feature directory moved to
-      `specs/features/completed/` via `git mv`
-- [ ] BC layer synced: `specs/domain/{context}/rules.md` and
+      `dflow/specs/features/completed/` via `git mv`
+- [ ] BC layer synced: `dflow/specs/domain/{context}/rules.md` and
       `behavior.md` reflect the feature's net BR changes
-- [ ] `specs/domain/glossary.md` updated with any new terms
-- [ ] `specs/architecture/tech-debt.md` updated with any debt discovered
+- [ ] `dflow/specs/domain/glossary.md` updated with any new terms
+- [ ] `dflow/specs/migration/tech-debt.md` updated with any debt discovered
 - [ ] Domain layer (`src/Domain/`) has no `System.Web` references
 
 ---

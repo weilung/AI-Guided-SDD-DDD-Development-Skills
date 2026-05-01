@@ -31,7 +31,7 @@
 > 我掃 active feature，這個 change 明確屬於：
 >
 > ```text
-> specs/features/active/SPEC-20260428-001-employee-submit-expense/
+> dflow/specs/features/active/SPEC-20260428-001-employee-submit-expense/
 > ```
 >
 > Host feature = `SPEC-20260428-001-employee-submit-expense`，目前 status 是 `in-progress`，所以它可以直接接 T2 lightweight change。
@@ -44,7 +44,7 @@
 
 > **Dflow**：Step 1.5 — Completed-feature reopen detection：**skip**。
 >
-> 跳過理由：Step 1 找到的是 active feature，不是 completed feature。`SPEC-20260428-001-employee-submit-expense` 還在 `specs/features/active/`，所以不觸發 completed feature reopen，也不需要建立 follow-up feature。
+> 跳過理由：Step 1 找到的是 active feature，不是 completed feature。`SPEC-20260428-001-employee-submit-expense` 還在 `dflow/specs/features/active/`，所以不觸發 completed feature reopen，也不需要建立 follow-up feature。
 >
 > Step 1.6 — Create Follow-up Feature：**skip**。
 >
@@ -56,11 +56,11 @@
 >
 > 需要對照：
 >
-> - `specs/features/active/SPEC-20260428-001-employee-submit-expense/_index.md`
+> - `dflow/specs/features/active/SPEC-20260428-001-employee-submit-expense/_index.md`
 > - `phase-spec-2026-04-29-supervisor-approval.md`
-> - `specs/domain/Expense/rules.md`
+> - `dflow/specs/domain/Expense/rules.md`
 > - `aggregate-design.md`
-> - `specs/domain/glossary.md`
+> - `dflow/specs/domain/glossary.md`
 >
 > 我讀到 BR-007 目前是：
 >
@@ -156,7 +156,7 @@
 > 1. 新增 T2 lightweight spec：
 >
 >    ```text
->    specs/features/active/SPEC-20260428-001-employee-submit-expense/lightweight-2026-04-30-approval-reason-bilingual-length.md
+>    dflow/specs/features/active/SPEC-20260428-001-employee-submit-expense/lightweight-2026-04-30-approval-reason-bilingual-length.md
 >    ```
 >
 > 2. 更新 `_index.md`：
@@ -169,9 +169,9 @@
 >
 > 3. 更新 living docs 的 source-of-truth wording：
 >
->    - `specs/domain/Expense/rules.md`：BR-007 加 `<!-- 2026-04-30 lightweight MODIFIED -->`，Last updated = 2026-04-30。
+>    - `dflow/specs/domain/Expense/rules.md`：BR-007 加 `<!-- 2026-04-30 lightweight MODIFIED -->`，Last updated = 2026-04-30。
 >    - `aggregate-design.md`：只更新 `ApprovalReason` validation 描述，不改 Aggregate structure。
->    - `specs/domain/glossary.md`：同步 `ApprovalReason` 條目的最低長度說明。
+>    - `dflow/specs/domain/glossary.md`：同步 `ApprovalReason` 條目的最低長度說明。
 >
 > 4. Step 5.4 T2 Archival：
 >
@@ -196,13 +196,13 @@
 ## 本段產出的檔案
 
 **新增**
-- [`specs/features/active/SPEC-20260428-001-employee-submit-expense/lightweight-2026-04-30-approval-reason-bilingual-length.md`](outputs/specs/features/active/SPEC-20260428-001-employee-submit-expense/lightweight-2026-04-30-approval-reason-bilingual-length.md)
+- [`dflow/specs/features/active/SPEC-20260428-001-employee-submit-expense/lightweight-2026-04-30-approval-reason-bilingual-length.md`](outputs/dflow/specs/features/active/SPEC-20260428-001-employee-submit-expense/lightweight-2026-04-30-approval-reason-bilingual-length.md)
 
 **修改**
-- [`specs/features/active/SPEC-20260428-001-employee-submit-expense/_index.md`](outputs/specs/features/active/SPEC-20260428-001-employee-submit-expense/_index.md)
-- [`specs/features/active/SPEC-20260428-001-employee-submit-expense/aggregate-design.md`](outputs/specs/features/active/SPEC-20260428-001-employee-submit-expense/aggregate-design.md)
-- [`specs/domain/Expense/rules.md`](outputs/specs/domain/Expense/rules.md)
-- [`specs/domain/glossary.md`](outputs/specs/domain/glossary.md)
+- [`dflow/specs/features/active/SPEC-20260428-001-employee-submit-expense/_index.md`](outputs/dflow/specs/features/active/SPEC-20260428-001-employee-submit-expense/_index.md)
+- [`dflow/specs/features/active/SPEC-20260428-001-employee-submit-expense/aggregate-design.md`](outputs/dflow/specs/features/active/SPEC-20260428-001-employee-submit-expense/aggregate-design.md)
+- [`dflow/specs/domain/Expense/rules.md`](outputs/dflow/specs/domain/Expense/rules.md)
+- [`dflow/specs/domain/glossary.md`](outputs/dflow/specs/domain/glossary.md)
 
 **故意不建 / 不改**
 - 不建新 `phase-spec-*` — 這是 T2 Light，不是 `/dflow:new-phase`。

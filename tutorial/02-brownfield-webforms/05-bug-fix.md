@@ -69,7 +69,7 @@ Bob 決定觸發 `/dflow:bug-fix`，把 display rounding contract 收斂到 `Mon
 >
 > Step 1.5 — Completed-feature reopen detection：**skip**。
 >
-> 跳過理由：host feature 在 `specs/features/active/`，不是 completed feature，不觸發 completed-feature reopen。
+> 跳過理由：host feature 在 `dflow/specs/features/active/`，不是 completed feature，不觸發 completed-feature reopen。
 >
 > Step 1.6 — Create Follow-up Feature：**skip**。
 >
@@ -81,9 +81,9 @@ Bob 決定觸發 `/dflow:bug-fix`，把 display rounding contract 收斂到 `Mon
 >
 > - `SPEC-20260430-001-order-discount-calculation/_index.md`
 > - `phase-spec-2026-04-30-baseline-and-fix.md`
-> - `specs/domain/Order/rules.md`
-> - `specs/domain/Order/models.md`
-> - `specs/architecture/tech-debt.md`
+> - `dflow/specs/domain/Order/rules.md`
+> - `dflow/specs/domain/Order/models.md`
+> - `dflow/specs/migration/tech-debt.md`
 >
 > Baseline 讀到：
 >
@@ -120,7 +120,7 @@ Bob 決定觸發 `/dflow:bug-fix`，把 display rounding contract 收斂到 `Mon
 > 3. 它不新增業務可決策的規則語句。Carol 的問題是「同一筆訂單跨頁顯示要一致」，不是「新增一條折扣政策」。
 > 4. 它把已存在的顯示慣例收斂成 single contract，避免 WebForms page 各自 round。
 >
-> 所以寫在 `BUG-001` 的 Implementation Tasks，不寫進 BR-001~004，也不更新 `specs/domain/Order/models.md`。如果未來要討論多幣別、locale-specific formatter 或 invoice rounding，那才是新的 scope 或 tech-debt。
+> 所以寫在 `BUG-001` 的 Implementation Tasks，不寫進 BR-001~004，也不更新 `dflow/specs/domain/Order/models.md`。如果未來要討論多幣別、locale-specific formatter 或 invoice rounding，那才是新的 scope 或 tech-debt。
 
 > **Bob**：好。`ToDisplay(precision = 2)` 預設兩位小數，符合目前財務顯示慣例；但我們不把它講成新 business rule。
 
@@ -156,7 +156,7 @@ Bob 決定觸發 `/dflow:bug-fix`，把 display rounding contract 收斂到 `Mon
 > 1. 新增 T2 bug lightweight spec：
 >
 >    ```text
->    specs/features/active/SPEC-20260430-001-order-discount-calculation/BUG-001-rounding-inconsistency.md
+>    dflow/specs/features/active/SPEC-20260430-001-order-discount-calculation/BUG-001-rounding-inconsistency.md
 >    ```
 >
 > 2. 更新 SPEC-001 `_index.md`：
@@ -166,7 +166,7 @@ Bob 決定觸發 `/dflow:bug-fix`，把 display rounding contract 收斂到 `Mon
 >    - Current BR Snapshot **不 regenerate**，明示理由：BR-001~004 wording unchanged；root cause 是 Presentation-layer display rounding contract drift，不是 BR-level delta。
 >    - Resume Pointer 改成「下一步實作 BUG-001；後續考慮 SPEC-001 finish-feature」。
 >
-> 3. 更新 `specs/architecture/tech-debt.md`：
+> 3. 更新 `dflow/specs/migration/tech-debt.md`：
 >
 >    - rounding inconsistency entry status 從 `open` 改為 `resolved`。
 >    - resolved note 寫：`2026-05-08 由 SPEC-20260430-001 BUG-001 修正，Domain Money VO 提供統一 ToDisplay() contract，三頁面改 call 同一 contract`。
@@ -175,9 +175,9 @@ Bob 決定觸發 `/dflow:bug-fix`，把 display rounding contract 收斂到 `Mon
 > 故意不改：
 >
 > - 不動 `SPEC-20260505-002` directory，避免污染 VIP feature scope。
-> - 不改 `specs/domain/Order/{rules,context,behavior,glossary}.md`，因為 BR 與 Domain 概念不變。
-> - 不改 `specs/domain/Order/models.md`，因為 `Money` 結構不變，加 method 是 implementation detail。
-> - 不改 `specs/domain/{glossary,context-map}.md`。
+> - 不改 `dflow/specs/domain/Order/{rules,context,behavior,glossary}.md`，因為 BR 與 Domain 概念不變。
+> - 不改 `dflow/specs/domain/Order/models.md`，因為 `Money` 結構不變，加 method 是 implementation detail。
+> - 不改 `dflow/specs/domain/{glossary,context-map}.md`。
 
 > **Bob**：BR Snapshot 不 regenerate 這點請寫清楚。Reviewer 如果只看到 T2 spec，可能會問為什麼沒有刷新 snapshot。
 
@@ -190,17 +190,17 @@ Bob 決定觸發 `/dflow:bug-fix`，把 display rounding contract 收斂到 `Mon
 ## 本段產出的檔案
 
 **新增**
-- [`specs/features/active/SPEC-20260430-001-order-discount-calculation/BUG-001-rounding-inconsistency.md`](outputs/specs/features/active/SPEC-20260430-001-order-discount-calculation/BUG-001-rounding-inconsistency.md)
+- [`dflow/specs/features/active/SPEC-20260430-001-order-discount-calculation/BUG-001-rounding-inconsistency.md`](outputs/dflow/specs/features/active/SPEC-20260430-001-order-discount-calculation/BUG-001-rounding-inconsistency.md)
 
 **修改**
-- [`specs/features/active/SPEC-20260430-001-order-discount-calculation/_index.md`](outputs/specs/features/active/SPEC-20260430-001-order-discount-calculation/_index.md)
-- [`specs/architecture/tech-debt.md`](outputs/specs/architecture/tech-debt.md)
+- [`dflow/specs/features/active/SPEC-20260430-001-order-discount-calculation/_index.md`](outputs/dflow/specs/features/active/SPEC-20260430-001-order-discount-calculation/_index.md)
+- [`dflow/specs/migration/tech-debt.md`](outputs/dflow/specs/migration/tech-debt.md)
 
 **故意不改**
 - 不動 `SPEC-20260505-002-vip-discount-policy/` — rounding bug 來源是 SPEC-001 tech-debt，不混入 VIP feature scope。
-- 不改 `specs/domain/Order/{rules,context,behavior,glossary}.md` — BR 不變，Domain 概念無新增。
-- 不改 `specs/domain/Order/models.md` — `Money` VO 結構不變；加 `ToDisplay()` method 是 implementation 收斂，不寫進 model catalog。
-- 不改 `specs/domain/{glossary,context-map}.md`。
+- 不改 `dflow/specs/domain/Order/{rules,context,behavior,glossary}.md` — BR 不變，Domain 概念無新增。
+- 不改 `dflow/specs/domain/Order/models.md` — `Money` VO 結構不變；加 `ToDisplay()` method 是 implementation 收斂，不寫進 model catalog。
+- 不改 `dflow/specs/domain/{glossary,context-map}.md`。
 - 不動 `sdd-ddd-*-skill/`、`proposals/`、`reviews/`、`planning/`、`CHANGELOG.md` 或其他 tutorial 舊檔。
 - 不 commit、不 push、不建 worktree。
 

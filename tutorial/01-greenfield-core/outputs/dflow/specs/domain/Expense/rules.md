@@ -51,5 +51,5 @@ behavior.md 仍由 finish-feature / Step 8.3 從 phase-spec 場景 merge；ancho
 
 ## Deferred / Monitoring Questions
 
-- Batch approval 已從 phase 2 延後。如果試用回饋證明需要，請在 `specs/features/backlog/` 下建立 follow-up feature；不要重新開啟 `SPEC-20260428-001`。
+- Batch approval 已從 phase 2 延後。如果試用回饋證明需要，請在 `dflow/specs/features/backlog/` 下建立 follow-up feature；不要重新開啟 `SPEC-20260428-001`。
 - Approval policy 若出現金額門檻、二階主管、代理簽核或 SLA escalation，可能需要重新評估是否拆出 Approval BC。
