@@ -22,8 +22,17 @@
 ```
 /
 ├── AGENTS.md                          ← 本文件
+├── CLAUDE.md                          ← Claude Code 協作規範
 ├── CHANGELOG.md                       ← 版本變更記錄
 ├── README.md
+├── bin/                               ← `dflow` CLI entrypoint
+├── lib/                               ← init runtime implementation
+├── templates/                         ← npm package template source
+│   ├── core/
+│   └── webforms/
+├── test/                              ← smoke tests
+├── tutorial/                          ← 人讀教學劇本與範例 outputs
+├── planning/                          ← handoff / contract / planning notes
 ├── proposals/                         ← Proposal 管理目錄
 │   ├── PROPOSAL-000-template.md       ← 格式範本（不是實際 Proposal）
 │   ├── PROPOSAL-001-*.md
@@ -31,33 +40,66 @@
 │   ├── ...
 │   ├── comparison-analysis.md         ← 比較分析摘要
 │   └── openspec-reference.md          ← OpenSpec 參考文件
+├── reviews/                           ← cross-round review reports and prompts
 ├── sdd-ddd-webforms-skill/
 │   ├── SKILL.md                       ← 主文件：決策樹、核心原則、架構規範
 │   ├── references/
+│   │   ├── drift-verification.md
+│   │   ├── finish-feature-flow.md
+│   │   ├── git-integration.md
+│   │   ├── init-project-flow.md
 │   │   ├── new-feature-flow.md
+│   │   ├── new-phase-flow.md
 │   │   ├── modify-existing-flow.md
-│   │   ├── pr-review-checklist.md
-│   │   └── git-flow-integration.md
+│   │   └── pr-review-checklist.md
+│   ├── scaffolding/
+│   │   ├── _conventions.md
+│   │   ├── _overview.md
+│   │   └── Git-principles-*.md
 │   └── templates/
-│       ├── feature-spec.md
+│       ├── _index.md
+│       ├── CLAUDE.md
+│       ├── behavior.md
 │       ├── lightweight-spec.md
+│       ├── phase-spec.md
 │       ├── context-definition.md
-│       └── AGENTS.md
+│       ├── context-map.md
+│       ├── glossary.md
+│       ├── models.md
+│       ├── rules.md
+│       └── tech-debt.md
 └── sdd-ddd-core-skill/
     ├── SKILL.md
     ├── PRACTICE_PLAN_tw.md
     ├── references/
+    │   ├── drift-verification.md
+    │   ├── finish-feature-flow.md
+    │   ├── git-integration.md
+    │   ├── init-project-flow.md
     │   ├── new-feature-flow.md
+    │   ├── new-phase-flow.md
     │   ├── modify-existing-flow.md
     │   ├── pr-review-checklist.md
-    │   ├── git-flow-integration.md
     │   └── ddd-modeling-guide.md
+    ├── scaffolding/
+    │   ├── _conventions.md
+    │   ├── _overview.md
+    │   ├── architecture-decisions-README.md
+    │   └── Git-principles-*.md
     └── templates/
-        ├── feature-spec.md
+        ├── _index.md
+        ├── CLAUDE.md
         ├── lightweight-spec.md
+        ├── phase-spec.md
         ├── context-definition.md
         ├── aggregate-design.md
-        └── AGENTS.md
+        ├── behavior.md
+        ├── context-map.md
+        ├── events.md
+        ├── glossary.md
+        ├── models.md
+        ├── rules.md
+        └── tech-debt.md
 ```
 
 ---
@@ -118,7 +160,7 @@ draft → evaluating → approved → implemented
 
 ### WebForms 版 / Core 版的同步原則
 
-兩版有共通的 SDD 流程部分（`new-feature-flow`、`modify-existing-flow`、`pr-review-checklist`、`git-flow-integration`）。修改共通部分時，**兩版必須同步修改**，除非 Proposal 明確說明只改其中一版。
+兩版有共通的 SDD 流程部分（`init-project-flow`、`new-feature-flow`、`modify-existing-flow`、`new-phase-flow`、`finish-feature-flow`、`drift-verification`、`pr-review-checklist`、`git-integration`）。修改共通部分時，**兩版必須同步修改**，除非 Proposal 明確說明只改其中一版。
 
 ---
 
