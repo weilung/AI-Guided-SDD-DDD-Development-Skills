@@ -140,8 +140,8 @@ Deltas are the audit trail.
 > and the phase-specs, fix `_index.md` first, then re-run
 > `/dflow:finish-feature`.
 
-Also update tech-debt.md / migration/tech-debt.md / models.md / glossary.md
-as discovered during the feature (the same items listed in
+Also update `migration/tech-debt.md` / `models.md` / `glossary.md` as
+discovered during the feature (the same items listed in
 `new-feature-flow.md` Step 8.3) — these may have been touched per phase
 already; this is the closeout sweep.
 
