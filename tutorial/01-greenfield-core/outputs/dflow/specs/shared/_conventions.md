@@ -169,8 +169,8 @@ and `/dflow:new-phase` flows; the project-level convention is simply
 
 - [System overview](_overview.md)
 - [Git principles](Git-principles-trunk.md)
-- [Context map](domain/context-map.md)
-- [Glossary](domain/glossary.md)
+- [Context map](../domain/context-map.md)
+- [Glossary](../domain/glossary.md)
 - Dflow skill `SKILL.md` — canonical source for Ceremony Scaling, flow
   selection, and template shapes.
 - Dflow skill `references/ddd-modeling-guide.md` — DDD tactical

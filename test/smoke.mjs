@@ -114,6 +114,11 @@ try {
   const conventions = await readFile(join(tempRoot, 'dflow/specs/shared/_conventions.md'), 'utf8');
   assert.equal((conventions.match(/^## Prose Language$/gm) || []).length, 1, 'Prose Language section count');
   assert.match(conventions, /Project prose language: `zh-TW`/);
+  assert.match(conventions, /\[Glossary\]\(\.\.\/domain\/glossary\.md\)/);
+
+  const overview = await readFile(join(tempRoot, 'dflow/specs/shared/_overview.md'), 'utf8');
+  assert.match(overview, /\[Tech debt backlog\]\(\.\.\/architecture\/tech-debt\.md\)/);
+  assert.doesNotMatch(`${conventions}\n${overview}`, /\]\((?:domain|architecture|migration)\//);
 
   const second = await runDflow(tempRoot);
   assert.notEqual(second.code, 0, 'second init should abort');
@@ -149,7 +154,7 @@ try {
     'Future ASP.NET Core migration',
     '4',
     'fr-CA',
-    '4',
+    '1,4',
     'y'
   ].join('\n') + '\n';
 
@@ -161,6 +166,7 @@ try {
     'dflow/specs/features/completed/.gitkeep',
     'dflow/specs/features/backlog/.gitkeep',
     'dflow/specs/shared/_conventions.md',
+    'dflow/specs/shared/_overview.md',
     'dflow/specs/domain/glossary.md',
     'dflow/specs/migration/tech-debt.md',
     'CLAUDE.md'
@@ -176,6 +182,10 @@ try {
   const webformsConventions = await readFile(join(webformsRoot, 'dflow/specs/shared/_conventions.md'), 'utf8');
   assert.equal((webformsConventions.match(/^## Prose Language$/gm) || []).length, 1, 'WebForms Prose Language section count');
   assert.match(webformsConventions, /Project prose language: `fr-CA`/);
+
+  const webformsOverview = await readFile(join(webformsRoot, 'dflow/specs/shared/_overview.md'), 'utf8');
+  assert.match(webformsOverview, /\[Tech debt backlog\]\(\.\.\/migration\/tech-debt\.md\)/);
+  assert.doesNotMatch(`${webformsConventions}\n${webformsOverview}`, /\]\((?:domain|architecture|migration)\//);
 
   const rootClaude = await readFile(join(webformsRoot, 'CLAUDE.md'), 'utf8');
   assert.match(rootClaude, /^# Project:/);

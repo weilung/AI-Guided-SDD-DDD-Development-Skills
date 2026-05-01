@@ -104,13 +104,13 @@ one-line responsibility + link to its `dflow/specs/domain/{context}/` folder.
 If only one BC exists at adoption time, that is fine — the map grows.}
 
 - **{Context A}** — {responsibility}. See
-  [`dflow/specs/domain/{context-a}/`](domain/{context-a}/).
+  [`dflow/specs/domain/{context-a}/`](../domain/{context-a}/).
 - **{Context B}** — {responsibility}. See
-  [`dflow/specs/domain/{context-b}/`](domain/{context-b}/).
+  [`dflow/specs/domain/{context-b}/`](../domain/{context-b}/).
 
 Full context relationships (upstream / downstream, shared kernel,
 anti-corruption layer) are documented in
-[`dflow/specs/domain/context-map.md`](domain/context-map.md).
+[`dflow/specs/domain/context-map.md`](../domain/context-map.md).
 
 ---
 
@@ -157,9 +157,9 @@ Initial ADRs that typically exist:
 - [Spec conventions](_conventions.md)
 - [Git principles](Git-principles-{gitflow|trunk}.md) — choose the
   branching-strategy-specific file that matches this project
-- [Context map](domain/context-map.md)
-- [Glossary](domain/glossary.md)
-- [Tech debt backlog](architecture/tech-debt.md)
-- [Architecture decisions](architecture/decisions/)
+- [Context map](../domain/context-map.md)
+- [Glossary](../domain/glossary.md)
+- [Tech debt backlog](../architecture/tech-debt.md)
+- [Architecture decisions](../architecture/decisions/)
 - Dflow skill: see `CLAUDE.md` and the `sdd-ddd-core-skill/` bundle
   for the full AI workflow guidance.

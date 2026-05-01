@@ -17,7 +17,7 @@ Source references:
 | `sdd-ddd-core-skill/scaffolding/_conventions.md` | Current Core conventions scaffolding |
 | `sdd-ddd-webforms-skill/scaffolding/_overview.md` | Current WebForms overview scaffolding |
 | `sdd-ddd-core-skill/scaffolding/_overview.md` | Current Core overview scaffolding |
-| `tutorial/01-greenfield-core/outputs/specs/` | Current tutorial output shape in this checkout; P014 W2 moves this to `tutorial/01-greenfield-core/outputs/dflow/specs/` |
+| `tutorial/01-greenfield-core/outputs/dflow/specs/` | Current tutorial output shape after P014 W2 cascade |
 
 Node.js support reference: the Node.js Release Working Group schedule lists
 Node 20 end-of-life on 2026-04-30, Node 22 end-of-life on 2027-04-30, and
@@ -651,7 +651,7 @@ Acceptance criteria:
 | Existing-file protection | Re-running in the same directory aborts at pre-flight because `dflow/specs/` is already initialized. |
 | Legacy warning | If a root `specs/` directory exists in a clean test, init warns but still writes to `dflow/specs/`. |
 
-The current checkout still has tutorial outputs under
-`tutorial/01-greenfield-core/outputs/specs/`. W2 is expected to move them
-to `tutorial/01-greenfield-core/outputs/dflow/specs/`; the smoke test should
-compare structure conceptually until that cascade lands.
+The current checkout has tutorial outputs under
+`tutorial/01-greenfield-core/outputs/dflow/specs/` after the P014 W2 cascade.
+The smoke test should compare structure conceptually rather than require
+byte-level equality.

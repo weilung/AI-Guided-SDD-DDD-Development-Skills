@@ -35,6 +35,11 @@
 - `TEMPLATE-LANGUAGE-GLOSSARY.md` 補 `Prose Language`、`free prose`、`structural language` 等術語對照
 - P014 / P015 狀態更新為 `implemented`，保留原 user evaluation 決策紀錄語氣
 
+**Post-review fixes**
+- 修正 `dflow/specs/shared/` scaffolding 內指向 sibling `domain/`、`architecture/`、`migration/` 的 relative links，避免 generated `_overview.md` / `_conventions.md` 指到 `shared/` 底下的錯路徑
+- 補 smoke test assertion，防止 shared scaffolding link target 回歸為 unqualified sibling path
+- 補 planning docs closeout note，標明 W1a handoff / public-distribution backlog 中已由 P014 / P015 收斂的決策
+
 **V1 clean cut**
 - 新 baseline 是 `npx dflow init` + `dflow/specs/`
 - 不提供 legacy root `specs/` migration tool、dual-read 或自動搬移

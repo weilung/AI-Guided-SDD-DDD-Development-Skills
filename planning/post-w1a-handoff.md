@@ -5,6 +5,8 @@
 > **接續者**：**Codex CLI 主線 session**（per user 2026-04-30 拍板，Claude token 餘量低，主線改 Codex；Claude 留作 cross-model review 召喚）
 > **本 session 角色**：Claude Code director（將交接給 Codex director）；延續自前一個主線 session 交接的 Post-R8 階段
 
+> **狀態更新（2026-05-01）**：本 handoff 是 W1a 後的歷史交接文件；W1b、W2a、W2b、W2c 已完成並提交。現行 baseline 是 `npx dflow init` + `dflow/specs/`，tutorial outputs 已搬到 `outputs/dflow/specs/`。下方 W2 待辦與 `outputs/specs/` 描述保留為當時交接脈絡，不再代表目前狀態。
+
 ---
 
 ## 第一句話（給新 session 看的開場）
