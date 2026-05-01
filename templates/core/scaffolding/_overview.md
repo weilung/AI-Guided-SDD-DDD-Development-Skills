@@ -5,7 +5,7 @@
 > Created: {YYYY-MM-DD}
 > Scope: architectural overview and long-term direction of {System Name}.
 > Audience: team members onboarding to the system + AI assistants reading
-> `specs/` for context.
+> `dflow/specs/` for context.
 
 This file is a **project-level starting point**. It does not duplicate
 Dflow's workflow rules (see `CLAUDE.md` and the Dflow skill for those) —
@@ -100,17 +100,17 @@ tests/
 ## Bounded Contexts (Current Map)
 
 {List the current Bounded Contexts in this system. Each entry: name +
-one-line responsibility + link to its `specs/domain/{context}/` folder.
+one-line responsibility + link to its `dflow/specs/domain/{context}/` folder.
 If only one BC exists at adoption time, that is fine — the map grows.}
 
 - **{Context A}** — {responsibility}. See
-  [`specs/domain/{context-a}/`](domain/{context-a}/).
+  [`dflow/specs/domain/{context-a}/`](domain/{context-a}/).
 - **{Context B}** — {responsibility}. See
-  [`specs/domain/{context-b}/`](domain/{context-b}/).
+  [`dflow/specs/domain/{context-b}/`](domain/{context-b}/).
 
 Full context relationships (upstream / downstream, shared kernel,
 anti-corruption layer) are documented in
-[`specs/domain/context-map.md`](domain/context-map.md).
+[`dflow/specs/domain/context-map.md`](domain/context-map.md).
 
 ---
 
@@ -128,10 +128,10 @@ to the following design habits. Expand / adapt each to this project:
   Infrastructure layer implements them. No Domain code imports
   `Microsoft.EntityFrameworkCore`.
 - **Ubiquitous Language** — Class / method / variable names come from
-  `specs/domain/glossary.md`. When business language evolves, the
+  `dflow/specs/domain/glossary.md`. When business language evolves, the
   glossary moves first, code follows.
 - **Pragmatic First** — We do not gold-plate. If a feature needs a
-  quick fix, record the debt in `specs/architecture/tech-debt.md` and
+  quick fix, record the debt in `dflow/specs/architecture/tech-debt.md` and
   ship.
 
 ---
@@ -139,7 +139,7 @@ to the following design habits. Expand / adapt each to this project:
 ## Architecture Decision Records (ADRs)
 
 Significant architectural choices are recorded as ADRs under
-`specs/architecture/decisions/`. Each ADR captures: decision, context,
+`dflow/specs/architecture/decisions/`. Each ADR captures: decision, context,
 alternatives considered, consequences. See the `decisions/` folder's
 README (if present) or the ADR convention in {Michael Nygard's ADR
 format / MADR / other}.

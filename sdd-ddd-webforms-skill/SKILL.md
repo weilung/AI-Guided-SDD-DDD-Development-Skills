@@ -3,7 +3,7 @@ name: sdd-ddd-workflow
 description: >
   AI-guided Specification-Driven Development (SDD) and Domain-Driven Design (DDD) workflow guardian
   for ASP.NET WebForms projects preparing for ASP.NET Core migration.
-  PRIMARY TRIGGERS — /dflow: slash commands: /dflow:init-project, /dflow:new-feature,
+  PRIMARY TRIGGERS — /dflow: slash commands: /dflow:new-feature,
   /dflow:modify-existing, /dflow:bug-fix, /dflow:new-phase, /dflow:finish-feature,
   /dflow:pr-review, /dflow:verify, /dflow:status, /dflow:next, /dflow:cancel.
   SECONDARY TRIGGERS (auto-trigger safety net) — natural language:
@@ -43,9 +43,6 @@ naturally produce three assets with every change:
 Developer input arrives
     │
     ├─ /dflow: command (explicit entry — route directly to workflow)
-    │   ├─ /dflow:init-project    → INIT PROJECT WORKFLOW (references/init-project-flow.md)
-    │   │                             One-time project bootstrap: set up specs/ baseline +
-    │   │                             optional scaffolding. Safe to re-run (skips existing files).
     │   ├─ /dflow:new-feature     → NEW FEATURE WORKFLOW (references/new-feature-flow.md)
     │   ├─ /dflow:modify-existing → MODIFY EXISTING WORKFLOW (references/modify-existing-flow.md)
     │   ├─ /dflow:bug-fix         → Lightweight-ceremony modification of existing functionality.
@@ -69,11 +66,11 @@ Developer input arrives
     │       3. Wait for developer confirmation before entering the workflow
     │
     ├─ "Quick question about..." / "How does X work?"
-    │   └─ → Check specs/domain/ first, answer from domain knowledge
+    │   └─ → Check dflow/specs/domain/ first, answer from domain knowledge
     │       If no spec exists → suggest documenting the answer as domain knowledge
     │
     ├─ "What should I work on next?" / Sprint planning
-    │   └─ → Review specs/features/backlog/, suggest based on migration value
+    │   └─ → Review dflow/specs/features/backlog/, suggest based on migration value
     │
     ├─ "I'm creating a branch"
     │   └─ → GIT INTEGRATION (read references/git-integration.md)
@@ -91,8 +88,10 @@ The Skill uses a **Hybrid design**: slash commands as the primary entry, natural
 
 ### Slash Commands
 
-**Project-level commands** — one-time (or occasional) project-scope operations:
-- `/dflow:init-project` — **project bootstrap**. Inspect the repo, ask a short set of intake questions, and seed the `specs/` baseline (features / domain / migration directories) plus any scaffolding templates the developer picks (`_overview.md` / `_conventions.md` / `Git-principles-*.md` / `CLAUDE.md` snippet). Existing files are **never overwritten**; re-running only fills in gaps.
+Project bootstrap is handled by the npm CLI, not by a skill slash command:
+run `npx dflow init` from the project root. The detailed bootstrap contract is
+kept in `references/init-project-flow.md` as a CLI internal flow spec and a
+manual reference for environments without Node.js/npm.
 
 **Flow entry commands** — start a workflow (build branch + feature directory):
 - `/dflow:new-feature` — enter new-feature-flow
@@ -209,9 +208,20 @@ If no workflow is active, reply: "No active workflow. Use `/dflow:new-feature`, 
 
 1. **Spec Before Code** — No implementation without at least a lightweight spec
 2. **Domain Extraction** — Business logic belongs in src/Domain/, not Code-Behind
-3. **Ubiquitous Language** — Use terms from specs/domain/glossary.md consistently
+3. **Ubiquitous Language** — Use terms from dflow/specs/domain/glossary.md consistently
 4. **Migration Awareness** — Every decision should consider future ASP.NET Core migration
 5. **Pragmatic, Not Dogmatic** — A quick hotfix doesn't need a 50-line spec. Scale ceremony to impact.
+
+## Template Language
+
+Dflow templates keep canonical English structural language: headings, table
+headers, fixed labels, placeholders, IDs, anchors, and code-facing terms remain
+English. Free prose inside those sections follows the project prose language in
+`dflow/specs/shared/_conventions.md` under `## Prose Language`.
+
+Before producing or updating prose in a spec, read that section. If it is
+missing or not explicit, ask the developer to choose an explicit language tag
+and update `_conventions.md` before continuing.
 
 ## Ceremony Scaling
 
@@ -248,8 +258,8 @@ The instantiated file is placed inside the feature directory (see
 ```
 WebFormsProject/
 ├── CLAUDE.md                         # AI workflow rules
-├── specs/
-│   ├── shared/                       # Project-level governance docs (seeded by /dflow:init-project)
+├── dflow/specs/
+│   ├── shared/                       # Project-level governance docs (seeded by npx dflow init)
 │   │   ├── _overview.md              # System status & migration strategy
 │   │   └── _conventions.md           # Spec writing conventions
 │   ├── domain/                       # Domain knowledge (DDD preparation)
@@ -291,7 +301,7 @@ Each Bounded Context has two complementary files that together describe the syst
 - **`rules.md`** — declarative index: lists each BR-ID with a one-line summary. Quick lookup, easy to scan.
 - **`behavior.md`** — scenario-level detail: the full Given/When/Then scenarios for each BR-ID. This is the consolidated source of truth for "what does the system actually do right now?"
 
-`specs/features/completed/` is a historical archive (individual change records). `behavior.md` is the **merged current state** — when a feature is completed, AI merges its scenarios into `behavior.md`; when behavior is modified, AI updates the corresponding section to reflect the new behavior (git preserves history). See `templates/behavior.md` for the template.
+`dflow/specs/features/completed/` is a historical archive (individual change records). `behavior.md` is the **merged current state** — when a feature is completed, AI merges its scenarios into `behavior.md`; when behavior is modified, AI updates the corresponding section to reflect the new behavior (git preserves history). See `templates/behavior.md` for the template.
 
 This is analogous to how OpenSpec's `specs/` directory serves as the system behavior source of truth, but organized by Bounded Context rather than by capability.
 
@@ -308,7 +318,7 @@ Don't dump all questions at once — ask naturally as the conversation progresse
 - Are there existing specs or domain docs related to this?
 
 ### Phase 2: Domain Analysis (Where does it live?)
-- Which Bounded Context does this belong to? (Check specs/domain/)
+- Which Bounded Context does this belong to? (Check dflow/specs/domain/)
 - What domain concepts are involved? (Entities, Value Objects, Services)
 - Are there new terms? → Update glossary.md
 - Are there new or changed business rules? → Document in rules.md
@@ -342,7 +352,7 @@ will be directly migrated to ASP.NET Core:
 
 ## Glossary Maintenance
 
-The glossary at specs/domain/glossary.md is the single source of truth for business terminology.
+The glossary at dflow/specs/domain/glossary.md is the single source of truth for business terminology.
 
 When you encounter a business term in conversation:
 1. Check if it exists in the glossary
@@ -358,7 +368,7 @@ Read these files when you need detailed procedures:
 
 | File | When to read |
 |---|---|
-| `references/init-project-flow.md` | `/dflow:init-project` — one-time project bootstrap (set up `specs/` baseline + optional scaffolding) |
+| `references/init-project-flow.md` | CLI internal init flow spec for `npx dflow init`; manual bootstrap reference when Node.js/npm is unavailable |
 | `references/new-feature-flow.md` | Developer wants to add a new feature |
 | `references/modify-existing-flow.md` | Developer wants to change existing functionality |
 | `references/new-phase-flow.md` | `/dflow:new-phase` — add a new phase-spec to an active feature |
@@ -393,9 +403,9 @@ Maintenance contracts at repo root:
 
 These two files are not runtime inputs for workflows; use them during review, maintenance, and when adding new templates.
 
-### Scaffolding (used by `/dflow:init-project`)
+### Scaffolding (used by `npx dflow init`)
 
-The `scaffolding/` directory holds **project-level** templates seeded by `/dflow:init-project` into a project's `specs/shared/` directory (or repo root for `CLAUDE.md`). They are **not** read by AI during normal flows; they are written to the target project once, then owned and maintained by the project.
+The `scaffolding/` directory holds **project-level** templates seeded by `npx dflow init` into a project's `dflow/specs/shared/` directory (or repo root for `CLAUDE.md`). They are **not** read by AI during normal flows; they are written to the target project once, then owned and maintained by the project.
 
 | Scaffolding file | Purpose |
 |---|---|

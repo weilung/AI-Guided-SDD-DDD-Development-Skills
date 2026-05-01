@@ -14,12 +14,12 @@ record how *this* project fills them in.
 
 ## Where Specs Live
 
-All spec documents live under `specs/`. The feature directory pattern
+All spec documents live under `dflow/specs/`. The feature directory pattern
 and file names follow Dflow (see the Dflow skill § "Project Structure"
 for the full tree):
 
 ```
-specs/features/active/{SPEC-ID}-{slug}/
+dflow/specs/features/active/{SPEC-ID}-{slug}/
 ├── _index.md                              # Feature dashboard
 ├── phase-spec-{YYYY-MM-DD}-{slug}.md      # T1 Heavy (one per phase)
 └── lightweight-{YYYY-MM-DD}-{slug}.md     # T2 Light (or BUG-{NUMBER}-{slug}.md)
@@ -27,6 +27,25 @@ specs/features/active/{SPEC-ID}-{slug}/
 
 T3 Trivial changes do **not** produce a separate file — they are
 recorded as one row in `_index.md` Lightweight Changes.
+
+## Prose Language
+
+Project prose language: `{prose-language}`
+
+Dflow templates keep canonical English structural language: headings,
+table headers, fixed labels, placeholders, IDs, anchors, and code-facing
+terms remain English.
+
+Free prose written inside those sections should follow the project prose
+language:
+
+- `en`: write free prose in English.
+- `zh-TW`: write free prose in Traditional Chinese.
+- `{xx-XX}`: write free prose in that explicit BCP-47 language.
+
+Do not translate code identifiers, DDD pattern names, BR IDs, SPEC IDs,
+file paths, branch names, anchors, or inline code only to satisfy the
+prose-language setting.
 
 ### SPEC-ID Format
 
@@ -73,7 +92,7 @@ Project-specific guidance when filling these templates:
   Modeling" section and explain the integration strategy (Domain
   Event? Query? ACL?).
 - **Domain Events documentation**: events belong in
-  `specs/domain/{context}/events.md`. When a phase-spec introduces or
+  `dflow/specs/domain/{context}/events.md`. When a phase-spec introduces or
   modifies an event, update `events.md` during Step 8.3 sync — do not
   only update it in the feature-level spec.
 - **Aggregate state transitions**: for phase-specs that change
@@ -130,7 +149,7 @@ Use this table to record project-specific interpretation if needed.
 ## Glossary Consistency
 
 All business terms in spec documents must use names defined in
-`specs/domain/glossary.md`. When a new term appears:
+`dflow/specs/domain/glossary.md`. When a new term appears:
 
 1. Check glossary first
 2. If missing, add it **before** using the term in a spec

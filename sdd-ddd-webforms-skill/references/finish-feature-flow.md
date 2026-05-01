@@ -31,11 +31,16 @@ Transparency for the full transparency protocol and confirmation signals.
 
 ## Step 1: Validate Phase Specs and `_index.md`
 
+Before producing any closeout prose or Integration Summary text, read
+`dflow/specs/shared/_conventions.md` and apply the `## Prose Language`
+setting. If the setting is missing or not an explicit language tag, ask the
+developer to update `_conventions.md` before continuing.
+
 AI runs mechanical checks first. Report `✓` / `✗` for every item; if any
 `✗` appears, **stop here** and ask the developer to address them before
 proceeding (do not flip status, do not archive, do not emit summary).
 
-- [ ] Locate the feature directory at `specs/features/active/{SPEC-ID}-{slug}/`
+- [ ] Locate the feature directory at `dflow/specs/features/active/{SPEC-ID}-{slug}/`
 - [ ] `_index.md` exists and parses (YAML front matter intact, six required
       sections present)
 - [ ] Every row in `_index.md` Phase Specs table has Status = `completed`
@@ -91,14 +96,14 @@ Also update the **Resume Pointer** to reflect closeout:
 ## Step 3: Sync `_index.md` Current BR Snapshot to BC Layer
 
 This step **reuses the existing sync mechanism** from `new-feature-flow`
-Step 8.3 (`specs/domain/{context}/rules.md` + `behavior.md` updates). The
+Step 8.3 (`dflow/specs/domain/{context}/rules.md` + `behavior.md` updates). The
 input is the feature's `_index.md` Current BR Snapshot table; the output
 is the BC's `rules.md` and `behavior.md` updated to reflect the
 feature's net effect.
 
 Before syncing, ensure required BC files exist. If missing, create from templates:
-- `specs/domain/{context}/rules.md` → `templates/rules.md`
-- `specs/domain/{context}/behavior.md` → `templates/behavior.md`
+- `dflow/specs/domain/{context}/rules.md` → `templates/rules.md`
+- `dflow/specs/domain/{context}/behavior.md` → `templates/behavior.md`
 
 For each row in Current BR Snapshot where Status = `active`:
 
@@ -115,7 +120,7 @@ For each row in Current BR Snapshot where Status = `active`:
 For `behavior.md`:
 
 - For every BR-ID still active after this feature, ensure
-  `specs/domain/{context}/behavior.md` has a scenario section (anchor)
+  `dflow/specs/domain/{context}/behavior.md` has a scenario section (anchor)
   matching the BR-ID
 - For REMOVED BR-IDs, delete the corresponding scenario section from
   `behavior.md`
@@ -154,8 +159,8 @@ Wait for confirmation before entering Step 4.
 AI runs:
 
 ```bash
-git mv specs/features/active/{SPEC-ID}-{slug} \
-       specs/features/completed/{SPEC-ID}-{slug}
+git mv dflow/specs/features/active/{SPEC-ID}-{slug} \
+       dflow/specs/features/completed/{SPEC-ID}-{slug}
 git status   # confirm rename detection
 ```
 
@@ -227,7 +232,7 @@ the developer:
 
 If no `follow-up-of` field, skip Step 6 and announce closeout complete:
 > "`/dflow:finish-feature` complete for `{SPEC-ID}-{slug}`. Feature
-> directory is now at `specs/features/completed/{SPEC-ID}-{slug}/`.
+> directory is now at `dflow/specs/features/completed/{SPEC-ID}-{slug}/`.
 > Stage is set; commit / merge / push at your discretion."
 
 ## Step 6: Reverse-Update Follow-up Tracking (only if follow-up)
@@ -236,7 +241,7 @@ For features that were created as follow-ups of an earlier completed
 feature (decision 18 in PROPOSAL-009), update the original feature's
 Follow-up Tracking table.
 
-1. Locate `specs/features/completed/{原 SPEC-ID}-{原 slug}/_index.md`
+1. Locate `dflow/specs/features/completed/{原 SPEC-ID}-{原 slug}/_index.md`
 2. Find the Follow-up Tracking section's row for this feature's SPEC-ID
 3. Flip Status → `completed`
 

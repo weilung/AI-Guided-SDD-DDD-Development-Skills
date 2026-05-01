@@ -1,7 +1,7 @@
 # {Bounded Context} — Behavior Specification
 
 > **Purpose**: Consolidated source of truth for this context's current behavior.
-> Unlike `specs/features/completed/` (historical archive), this file always reflects
+> Unlike `dflow/specs/features/completed/` (historical archive), this file always reflects
 > the **current** system behavior — what the system does right now.
 >
 > **Maintenance**: AI updates this file during the completion flow (Step 8.3 / Step 6.3).

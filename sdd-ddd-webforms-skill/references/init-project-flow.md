@@ -1,26 +1,27 @@
-# Init Project Workflow — ASP.NET WebForms
+# Init Project Flow — ASP.NET WebForms
 
-Step-by-step guide for when a developer triggers `/dflow:init-project`
-(or a natural-language equivalent such as "set up SDD structure in this
-project" / "adopt Dflow").
+Internal flow spec for `npx dflow init` after the CLI selects the ASP.NET
+WebForms edition. It also serves as the manual reference for environments
+where Node.js/npm is unavailable.
 
-This is a **one-time project bootstrap** flow. It sets up the `specs/`
-directory structure, seeds project-level governance files from the
-`scaffolding/` template set, and points the developer at
-`/dflow:new-feature` as the natural next command.
+This is not a skill slash command. Do not describe or invoke it as one.
 
-This flow is idempotent-by-default: **existing files are never
-overwritten**. Re-running on a project that already has some of these
-files is safe — the flow skips anything that already exists and fills
-in only the missing pieces.
+This is a **one-time project bootstrap** flow. It sets up the `dflow/specs/`
+directory structure, seeds project-level governance files from the packaged
+`scaffolding/` template set, and points the developer at `/dflow:new-feature`
+as the natural next command.
 
-**Phase Gates** in this flow (stop-and-confirm before proceeding):
-- Step 2 → Step 3 (info collected → present file-list for confirmation)
-- Step 3 → Step 4 (file-list confirmed → write)
+The V1 CLI clean cut does not migrate or dual-read a legacy root `specs/`
+directory. If root `specs/` exists, warn that new Dflow files will be created
+under `dflow/specs/`.
 
-All other transitions are **step-internal**: announce "Step N complete,
-entering Step N+1" and proceed. See SKILL.md § Workflow Transparency for
-the full protocol.
+**Confirmations** in this flow:
+- Step 2 → Step 3: information collected → present file-list preview
+- Step 3 → Step 4: file-list confirmed → write
+
+In the CLI, use ordinary yes/no confirmation. In the manual AI fallback,
+ask for explicit confirmation in natural language; do not require
+the workflow next command for init.
 
 **Ceremony**: this flow is **meta-level** — it sets up the infrastructure
 that subsequent T1 / T2 / T3 work will live in. It does not itself produce
@@ -31,39 +32,39 @@ Scaling.
 
 ## Step 1: Current-State Inventory
 
-AI inspects the repo to classify the project and avoid overwriting work.
+The CLI inspects the project root before prompting.
 
 **Read** (using the Read / Glob / LS tools):
 - Is there a `.git` directory? → repo exists
-- Is there an existing `specs/` directory? → Brownfield adoption
+- Is there an existing non-empty `dflow/specs/` directory? → Dflow already initialized; abort
+- Is there an empty `dflow/specs/` directory? → continue with existing-file protection
+- Is there an existing root `specs/` directory? → legacy / other-tool warning only; do not read, copy, move, or rewrite it
 - Is there an existing `CLAUDE.md` at the repo root? → project already
   has AI-collab rules
-- If `specs/` exists, recursively list it (Glob `specs/**`) and report
-  what's already there (features, domain, migration, glossary, etc.)
 
 Report findings plainly:
 
 > "Repo inventory:
 >  - `.git`: present
->  - `specs/`: not yet present → greenfield Dflow setup
+>  - `dflow/specs/`: not yet present → greenfield Dflow setup
+>  - `specs/`: present → legacy / other-tool directory; Dflow V1 will not
+>    migrate or modify it
 >  - `CLAUDE.md`: present → will not overwrite; I'll offer a snippet
 >    to merge into it"
 
 Or:
 
 > "Repo inventory:
->  - `specs/`: already exists, containing `domain/glossary.md` (3 lines),
->    `features/active/` (empty), `migration/` (missing)
+>  - `dflow/specs/`: already contains files
 >  - `CLAUDE.md`: not present
 >
->  Looks like a partial Dflow adoption. I'll only fill in the gaps and
->  won't touch anything that exists."
+>  Dflow already appears initialized here. I will stop rather than risk
+>  mixing bootstrap versions."
 
 Classify the scenario:
-- **Greenfield**: no `specs/` at all → create full baseline
-- **Partial Brownfield**: some `specs/` subtrees exist → fill gaps only
-- **Already fully set up**: every expected path exists → report + exit
-  gracefully
+- **Greenfield**: no `dflow/specs/` at all → create full baseline
+- **Empty Dflow namespace**: `dflow/specs/` exists but contains no files → continue
+- **Already initialized**: non-empty `dflow/specs/` exists → abort cleanly
 
 **→ Transition (step-internal)**: Step 1 complete. Announce
 > "Step 1 complete (current-state inventory). Entering Step 2: Project
@@ -73,7 +74,7 @@ and continue.
 
 ---
 
-## Step 2: Project Information (5-question intake)
+## Step 2: Project Information (edition-specific intake)
 
 Ask these questions naturally — not as a checklist dump. Skip any
 question where Step 1 already gave a confident answer.
@@ -105,31 +106,30 @@ If yes → `_overview.md` "Migration Strategy" section is emphasised and
 mentions the principles (Migration Awareness / Domain Extraction /
 Dual-Track Parallel / Pragmatic First) but framed as forward-option.
 
-### Q4. Document language
+### Q4. Project prose language
 
-> "Do you want the scaffolding files in **English** or **繁體中文**?
-> (Dflow's default scaffolding is English; a 繁中 set is a planned
-> optional add-on. If you pick 繁中 and no 繁中 scaffolding exists yet,
-> I will seed English and flag that translation is a follow-up task.)"
+> "Project prose language for generated spec content? Choose an explicit
+> language tag: `zh-TW`, `en`, `ja-JP`, or another BCP-47 tag."
 
-Used to decide which `scaffolding/` directory to read from. At the time
-of writing, only English scaffolding ships in-box; this question is
-forward-compatible.
+Used to write `dflow/specs/shared/_conventions.md` under `## Prose
+Language`. This value is required. Do not accept `any`, `skip`, `later`,
+blank input, or prose descriptions such as "Traditional Chinese". Dflow
+templates keep canonical English structural language; this setting controls
+free prose inside generated spec sections.
 
 ### Q5. Optional starter files (multi-select)
 
 > "Besides the mandatory baseline, which optional starter files do
 > you want me to seed? You can check as many as apply:
 >
->   - [ ] `specs/shared/_overview.md` — system overview template
->   - [ ] `specs/shared/_conventions.md` — spec writing conventions
+>   - [ ] `dflow/specs/shared/_overview.md` — system overview template
 >   - [ ] Git principles — **pick one** if your project has opinions
 >         about Git conventions (decision hint: **if you're not sure,
 >         pick trunk-based** — that's the default for GitHub / GitLab.
 >         Pick Git Flow only if you have a formal release cycle with
 >         dedicated release / hotfix branches):
->     - [ ] `specs/shared/Git-principles-gitflow.md`
->     - [ ] `specs/shared/Git-principles-trunk.md`
+>     - [ ] `dflow/specs/shared/Git-principles-gitflow.md`
+>     - [ ] `dflow/specs/shared/Git-principles-trunk.md`
 >   - [ ] `CLAUDE.md` snippet — mandatory if no `CLAUDE.md` exists in
 >         repo root (I'll create one); otherwise I'll drop the snippet
 >         as a standalone file so you can merge it manually"
@@ -158,19 +158,21 @@ are what every Dflow-adopting WebForms project is expected to have
 before `/dflow:new-feature` runs cleanly:
 
 ```
-specs/
+dflow/specs/
 ├── features/
 │   ├── active/               # directory (empty)
 │   ├── completed/            # directory (empty)
 │   └── backlog/              # directory (empty)
 ├── domain/
 │   └── glossary.md           # ← templates/glossary.md
+├── shared/
+│   └── _conventions.md       # ← scaffolding/_conventions.md (mandatory)
 └── migration/
     └── tech-debt.md          # ← templates/tech-debt.md
 ```
 
 Key WebForms-edition notes:
-- `specs/migration/tech-debt.md` (not `specs/architecture/tech-debt.md`)
+- `dflow/specs/migration/tech-debt.md` (not `dflow/specs/architecture/tech-debt.md`)
   — WebForms projects use `migration/` as the cross-cutting directory
   for migration-era concerns. The Core edition uses `architecture/`
   instead; this split is an F-05 decision from R7 review.
@@ -191,11 +193,11 @@ destination path:
 
 | Scaffolding source | Destination in project |
 |---|---|
-| `scaffolding/_overview.md` | `specs/shared/_overview.md` |
-| `scaffolding/_conventions.md` | `specs/shared/_conventions.md` |
-| `scaffolding/Git-principles-gitflow.md` | `specs/shared/Git-principles-gitflow.md` |
-| `scaffolding/Git-principles-trunk.md` | `specs/shared/Git-principles-trunk.md` |
-| `scaffolding/CLAUDE-md-snippet.md` | repo root `CLAUDE.md` (if missing) OR `specs/shared/CLAUDE-md-snippet.md` (if root `CLAUDE.md` exists) |
+| `scaffolding/_overview.md` | `dflow/specs/shared/_overview.md` |
+| `scaffolding/_conventions.md` | `dflow/specs/shared/_conventions.md` (mandatory baseline) |
+| `scaffolding/Git-principles-gitflow.md` | `dflow/specs/shared/Git-principles-gitflow.md` |
+| `scaffolding/Git-principles-trunk.md` | `dflow/specs/shared/Git-principles-trunk.md` |
+| `scaffolding/CLAUDE-md-snippet.md` | repo root `CLAUDE.md` (if missing) OR `dflow/specs/shared/CLAUDE-md-snippet.md` (if root `CLAUDE.md` exists) |
 
 ### 3.3 Present the preview
 
@@ -208,37 +210,37 @@ skip, and wait for developer confirmation:
 >
 > | Path | Source |
 > |---|---|
-> | `specs/features/active/.gitkeep` | (directory placeholder) |
-> | `specs/features/completed/.gitkeep` | (directory placeholder) |
-> | `specs/features/backlog/.gitkeep` | (directory placeholder) |
-> | `specs/domain/glossary.md` | `templates/glossary.md` (mandatory baseline) |
-> | `specs/migration/tech-debt.md` | `templates/tech-debt.md` (mandatory baseline) |
-> | `specs/shared/_overview.md` | optional (you picked it) |
-> | `specs/shared/Git-principles-trunk.md` | optional (you picked it) |
+> | `dflow/specs/features/active/.gitkeep` | (directory placeholder) |
+> | `dflow/specs/features/completed/.gitkeep` | (directory placeholder) |
+> | `dflow/specs/features/backlog/.gitkeep` | (directory placeholder) |
+> | `dflow/specs/domain/glossary.md` | `templates/glossary.md` (mandatory baseline) |
+> | `dflow/specs/shared/_conventions.md` | `scaffolding/_conventions.md` (mandatory baseline) |
+> | `dflow/specs/migration/tech-debt.md` | `templates/tech-debt.md` (mandatory baseline) |
+> | `dflow/specs/shared/_overview.md` | optional (you picked it) |
+> | `dflow/specs/shared/Git-principles-trunk.md` | optional (you picked it) |
 > | `CLAUDE.md` | optional — snippet seeded because repo has no CLAUDE.md |
 >
 > **Will skip ({M} files — already present):**
 >
 > | Path | Reason |
 > |---|---|
-> | `specs/domain/glossary.md` | already exists (47 lines) |
+> | `dflow/specs/domain/glossary.md` | already exists (47 lines) |
 >
 > **Not creating** (per F-05 decision):
-> - No `specs/domain/{context}/behavior.md` files. These are created
+> - No `dflow/specs/domain/{context}/behavior.md` files. These are created
 >   later by `/dflow:new-feature` Step 8.3 or P007a when the first
 >   bounded context is established.
-> - No `specs/domain/context-map.md`. WebForms edition treats BCs as
+> - No `dflow/specs/domain/context-map.md`. WebForms edition treats BCs as
 >   emergent from domain extraction; this file becomes relevant later,
 >   typically when 2+ contexts coexist.
 >
-> Looks good? Reply `/dflow:next` or 'yes' to proceed with the writes,
-> or tell me what to adjust."
+> Looks good? Reply 'yes' to proceed with the writes, or tell me what to
+> adjust."
 
 **→ Phase Gate: Step 3 → Step 4**
 
-Wait for explicit confirmation (`/dflow:next`, verbal 'yes', or
-equivalent — see SKILL.md § Confirmation Signals). If the developer
-asks to change the selection, go back to Step 2 Q5 and re-run Step 3.
+Wait for explicit confirmation. If the developer asks to change the
+selection, go back to Step 2 Q5 and re-run Step 3.
 
 ---
 
@@ -252,7 +254,7 @@ mkdir-equivalent for directories).
 Before every single write, re-check: does the target path already
 exist? If yes, **skip** — do not overwrite. Announce the skip:
 
-> "Skipped `specs/domain/glossary.md` — already exists (unchanged)."
+> "Skipped `dflow/specs/domain/glossary.md` — already exists (unchanged)."
 
 Only overwrite if the developer said explicitly "overwrite X" in
 Step 2 (rare; usually a conscious reset during early adoption).
@@ -270,6 +272,7 @@ captured in Step 2:
 | `{ASP.NET WebForms version}` | From Step 2 Q2 |
 | `{.NET Framework version}` | From Step 2 Q2 |
 | `{ORM / Data Access}` | From Step 2 Q2 |
+| `{prose-language}` | From Step 2 Q4 |
 
 For placeholders the developer did not provide, keep the `{placeholder}`
 token in the emitted file and add a one-line TODO comment so they
@@ -286,10 +289,10 @@ notice:
   `scaffolding/CLAUDE-md-snippet.md`, stripped of its outer "How to
   use this snippet" scaffolding wrapper — keep only the snippet body).
 - **Repo-root `CLAUDE.md` exists, developer wants the snippet:** write
-  `specs/shared/CLAUDE-md-snippet.md` (a copy of the scaffolding file)
+  `dflow/specs/shared/CLAUDE-md-snippet.md` (a copy of the scaffolding file)
   and announce:
   > "Your project already has `CLAUDE.md` at repo root — I did not
-  > touch it. The snippet is now at `specs/shared/CLAUDE-md-snippet.md`
+  > touch it. The snippet is now at `dflow/specs/shared/CLAUDE-md-snippet.md`
   > for you to merge manually. Preserve the `System Context` / `Development Workflow`
   > H2 structure when merging — it matches what the Dflow skill
   > expects."
@@ -318,22 +321,23 @@ Summarise what actually happened and point at the next command.
 Init complete. Summary:
 
   Created ({N} files):
-    ✓ specs/features/active/.gitkeep
-    ✓ specs/features/completed/.gitkeep
-    ✓ specs/features/backlog/.gitkeep
-    ✓ specs/domain/glossary.md
-    ✓ specs/migration/tech-debt.md
-    ✓ specs/shared/_overview.md
-    ✓ specs/shared/Git-principles-trunk.md
+    ✓ dflow/specs/features/active/.gitkeep
+    ✓ dflow/specs/features/completed/.gitkeep
+    ✓ dflow/specs/features/backlog/.gitkeep
+    ✓ dflow/specs/domain/glossary.md
+    ✓ dflow/specs/shared/_conventions.md
+    ✓ dflow/specs/migration/tech-debt.md
+    ✓ dflow/specs/shared/_overview.md
+    ✓ dflow/specs/shared/Git-principles-trunk.md
     ✓ CLAUDE.md (seeded from scaffolding snippet)
 
   Skipped ({M} files already present):
     - (none this run)
 
   Deferred (not created here by design):
-    - specs/domain/{context}/behavior.md — created by /dflow:new-feature
+    - dflow/specs/domain/{context}/behavior.md — created by /dflow:new-feature
       Step 8.3 or P007a baseline capture
-    - specs/domain/context-map.md — created organically when you have
+    - dflow/specs/domain/context-map.md — created organically when you have
       ≥2 bounded contexts
 ```
 
@@ -345,13 +349,13 @@ Tailor the recommendation to the Step 1 scenario:
 
 > "Structure is ready. Recommended next step:
 >  - Run `/dflow:new-feature` to start your first feature
->    (this will create `specs/features/active/{SPEC-ID}-{slug}/` and
+>    (this will create `dflow/specs/features/active/{SPEC-ID}-{slug}/` and
 >    walk you through spec → domain concepts → implementation plan)"
 
 **Brownfield**:
 
 > "Structure is ready. Recommended next step:
->  - First, open `specs/shared/_overview.md` and fill in the 'Current
+>  - First, open `dflow/specs/shared/_overview.md` and fill in the 'Current
 >    System State' and 'Known Issues' sections — this gives Dflow
 >    context when you triage existing behavior later.
 >  - Then run `/dflow:modify-existing` to work from an incoming change
@@ -359,7 +363,7 @@ Tailor the recommendation to the Step 1 scenario:
 >    for a fresh piece of work.
 >  - When you touch a domain concept for the first time, the completion
 >    flow will prompt you to baseline it into
->    `specs/domain/{context}/` — don't try to pre-fill everything
+>    `dflow/specs/domain/{context}/` — don't try to pre-fill everything
 >    up front."
 
 **Already fully set up (Step 1 showed nothing to do)**:
@@ -374,7 +378,7 @@ Remind the developer to review files that have `{placeholder}` tokens
 still in them:
 
 > "A few files still have `{placeholder}` tokens that need your input:
->  - `specs/shared/_overview.md`: `{業務領域}`, `{團隊}`,
+>  - `dflow/specs/shared/_overview.md`: `{業務領域}`, `{團隊}`,
 >    `{使用者規模}`
 >  - `CLAUDE.md`: `{業務領域}`
 >

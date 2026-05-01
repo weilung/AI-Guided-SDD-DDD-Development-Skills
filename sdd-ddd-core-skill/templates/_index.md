@@ -10,7 +10,7 @@ branch: feature/{SPEC-ID}-{slug}
 <!--
 Template note (for AI):
   This is the **feature-level dashboard** (`_index.md`) for a feature
-  directory. Place at `specs/features/active/{SPEC-ID}-{slug}/_index.md`.
+  directory. Place at `dflow/specs/features/active/{SPEC-ID}-{slug}/_index.md`.
 
   Six required sections (see below):
     1. Metadata (YAML front matter above)
@@ -32,7 +32,7 @@ Template note (for AI):
 
   Sync to BC layer:
     - At /dflow:finish-feature, BR Snapshot is reconciled with the bounded
-      context's `specs/domain/{context}/rules.md` and `behavior.md`
+      context's `dflow/specs/domain/{context}/rules.md` and `behavior.md`
       (continues the existing Step 8.3 / Step 5.3 sync mechanism — no new
       flow is introduced).
     - rules.md is the SYSTEM-LEVEL truth across features; _index.md is the

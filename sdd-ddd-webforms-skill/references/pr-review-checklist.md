@@ -12,8 +12,8 @@ directory may contain multiple spec files; identify which ones this PR
 touches and read them all.
 
 - [ ] Locate the feature directory at
-      `specs/features/active/{SPEC-ID}-{slug}/` (or
-      `specs/features/completed/{SPEC-ID}-{slug}/` if the PR is the
+      `dflow/specs/features/active/{SPEC-ID}-{slug}/` (or
+      `dflow/specs/features/completed/{SPEC-ID}-{slug}/` if the PR is the
       closeout commit and the dir was already `git mv`d)
 - [ ] Read `_index.md` first — it gives you the feature-level overview,
       Current BR Snapshot, list of phase-specs, and Resume Pointer (where the
@@ -68,7 +68,7 @@ PR touches, not just one):
       match the diff against the prior phase-spec's BR set
 
 If the closeout commit is in this PR (`/dflow:finish-feature` was run):
-- [ ] **BC layer sync landed** — `specs/domain/{context}/rules.md` and
+- [ ] **BC layer sync landed** — `dflow/specs/domain/{context}/rules.md` and
       `behavior.md` reflect the feature's net effect (compare against
       `_index.md` Current BR Snapshot)
 - [ ] **Whole feature directory `git mv`'d** to `completed/` — git

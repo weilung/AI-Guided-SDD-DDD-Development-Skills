@@ -18,7 +18,7 @@
 
 ### 練習目標
 - 建立專案結構（Clean Architecture 四層）
-- 設定 specs/ 目錄
+- 設定 dflow/specs/ 目錄
 - 識別 Bounded Context
 - 建立初始術語表
 
@@ -29,14 +29,14 @@
 請讀取 sdd-ddd-core/SKILL.md 和所有 references/、templates/ 檔案，
 然後引導我：
 1. 建立 Clean Architecture 的方案結構
-2. 建立 specs/ 目錄和初始文件
+2. 建立 dflow/specs/ 目錄和初始文件
 3. 一起討論這個系統的 Bounded Contexts
 ```
 
 ### 預期產出
 - Solution 結構：4 個專案（Domain, Application, Infrastructure, WebAPI）
-- `specs/domain/context-map.md`：識別出 3 個 Context
-- `specs/domain/glossary.md`：初始 10-15 個術語
+- `dflow/specs/domain/context-map.md`：識別出 3 個 Context
+- `dflow/specs/domain/glossary.md`：初始 10-15 個術語
 
 ### 預期的 Bounded Contexts
 

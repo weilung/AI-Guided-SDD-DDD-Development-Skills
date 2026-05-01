@@ -14,6 +14,11 @@ All other step transitions are **step-internal**: announce "Step N complete, ent
 
 ## Step 1: Intake — Understand the Request
 
+Before producing any spec prose, read `dflow/specs/shared/_conventions.md`
+and apply the `## Prose Language` setting. If the setting is missing or not
+an explicit language tag, ask the developer to update `_conventions.md`
+before continuing.
+
 Ask these questions (naturally, not as a checklist dump):
 
 1. **What's the feature?** Get a plain-language description.
@@ -21,9 +26,9 @@ Ask these questions (naturally, not as a checklist dump):
 3. **Why now?** Understand priority and urgency (affects ceremony level).
 
 Then check existing assets:
-- Search `specs/domain/` for related concepts
-- Search `specs/features/` for related or overlapping features
-- Check `specs/domain/glossary.md` for relevant terms
+- Search `dflow/specs/domain/` for related concepts
+- Search `dflow/specs/features/` for related or overlapping features
+- Check `dflow/specs/domain/glossary.md` for relevant terms
 
 Share what you found: "I see we already have [X] documented. This new feature seems to extend
 that — is that right?"
@@ -42,7 +47,7 @@ your understanding?"
 
 If no matching context exists:
 1. Propose a new context name
-2. Create `specs/domain/{new-context}/context.md` using the context-definition template
+2. Create `dflow/specs/domain/{new-context}/context.md` using the context-definition template
 3. Get developer confirmation before proceeding
 
 **→ Transition (step-internal)**: Step 2 complete. Announce "Step 2 complete (BC identified). Entering Step 3: Domain Concept Discovery." and continue.
@@ -63,10 +68,10 @@ For each new concept:
 3. If entirely new, add to the appropriate context's models.md
 
 If foundational domain docs are missing, create them from templates before writing content:
-- `specs/domain/glossary.md` → `templates/glossary.md`
-- `specs/domain/{context}/models.md` → `templates/models.md`
-- `specs/domain/{context}/rules.md` → `templates/rules.md`
-- `specs/domain/{context}/behavior.md` → `templates/behavior.md`
+- `dflow/specs/domain/glossary.md` → `templates/glossary.md`
+- `dflow/specs/domain/{context}/models.md` → `templates/models.md`
+- `dflow/specs/domain/{context}/rules.md` → `templates/rules.md`
+- `dflow/specs/domain/{context}/behavior.md` → `templates/behavior.md`
 
 **→ Phase Gate: Step 3 → Step 3.5**
 
@@ -88,7 +93,7 @@ Example (中文 discussion):
 > 「依我們的討論：
 >  - SPEC-ID: `SPEC-20260424-001`
 >  - slug: `報表調整`（跟隨中文討論）
->  - feature 目錄: `specs/features/active/SPEC-20260424-001-報表調整/`
+>  - feature 目錄: `dflow/specs/features/active/SPEC-20260424-001-報表調整/`
 >  - git branch: `feature/SPEC-20260424-001-報表調整`
 >
 >  這樣可以嗎？或你想改 slug？」
@@ -98,7 +103,7 @@ Example (English discussion):
 > "Per our discussion:
 >  - SPEC-ID: `SPEC-20260424-002`
 >  - slug: `jpy-currency-support` (English following our discussion)
->  - feature directory: `specs/features/active/SPEC-20260424-002-jpy-currency-support/`
+>  - feature directory: `dflow/specs/features/active/SPEC-20260424-002-jpy-currency-support/`
 >  - git branch: `feature/SPEC-20260424-002-jpy-currency-support`
 >
 >  Sound good? Or would you prefer a different slug?"
@@ -117,12 +122,12 @@ If the developer asks to change the slug, re-propose and re-confirm.
 Create the **feature directory** + **`_index.md`** + **first phase-spec**:
 
 ```
-specs/features/active/{SPEC-ID}-{slug}/
+dflow/specs/features/active/{SPEC-ID}-{slug}/
 ├── _index.md
 └── phase-spec-{YYYY-MM-DD}-{slug}.md
 ```
 
-1. **Create the directory**: `specs/features/active/{SPEC-ID}-{slug}/`
+1. **Create the directory**: `dflow/specs/features/active/{SPEC-ID}-{slug}/`
 2. **Create `_index.md`** using `templates/_index.md`:
    - Metadata: fill `spec-id`, `slug`, `status: in-progress`, `created`, `branch`
    - Goals & Scope: 1-3 sentences capturing what / for whom / boundary
@@ -298,8 +303,8 @@ AI reports `✓` / `✗` for every item before touching docs. Items marked *(pos
 - [ ] Every `BR-*` business rule is covered by implementation or tests
 - [ ] Every `EC-*` edge case is handled
 - [ ] Domain layer has **no** `System.Web` references (grep `src/Domain/`)
-- [ ] *(post-8.3)* `specs/domain/{context}/behavior.md` contains a section anchor for every `BR-*` introduced by this spec (mechanical input for `/dflow:verify`)
-- [ ] *(post-8.3)* `specs/domain/{context}/behavior.md` `last-updated` is later than this spec's `created` date (mechanical drift guard)
+- [ ] *(post-8.3)* `dflow/specs/domain/{context}/behavior.md` contains a section anchor for every `BR-*` introduced by this spec (mechanical input for `/dflow:verify`)
+- [ ] *(post-8.3)* `dflow/specs/domain/{context}/behavior.md` `last-updated` is later than this spec's `created` date (mechanical drift guard)
 
 If any item fails, report the gap and pause — don't proceed to 8.2.
 
@@ -317,14 +322,14 @@ Ask these one-by-one; do not dump all five at once.
 
 ### 8.3 Documentation updates
 
-- [ ] `specs/domain/glossary.md` — new terms added
-- [ ] `specs/domain/{context}/models.md` — model definitions updated
-- [ ] `specs/domain/{context}/rules.md` — business rules updated
-- [ ] `specs/domain/{context}/behavior.md` — merge completed spec's Given/When/Then scenarios into consolidated behavior. Sub-steps:
+- [ ] `dflow/specs/domain/glossary.md` — new terms added
+- [ ] `dflow/specs/domain/{context}/models.md` — model definitions updated
+- [ ] `dflow/specs/domain/{context}/rules.md` — business rules updated
+- [ ] `dflow/specs/domain/{context}/behavior.md` — merge completed spec's Given/When/Then scenarios into consolidated behavior. Sub-steps:
       - Promote any Phase 3 draft sections (from B3 mid-sync) to formal sections
       - Update the corresponding `rules.md` anchor's `last-updated` date (B4)
 - [ ] `behavior.md` draft cleanup — if the spec was abandoned mid-way, keep the `## 提案中變更` section's history or explicitly REMOVE it
-- [ ] `specs/migration/tech-debt.md` — tech debt discovered during implementation recorded
+- [ ] `dflow/specs/migration/tech-debt.md` — tech debt discovered during implementation recorded
 
 ### 8.4 Archival
 
@@ -338,13 +343,13 @@ that matches the developer's habit.
 - [ ] `_index.md` `status` field changed to `completed`
 - [ ] All `phase-spec-*.md` files in the feature directory have `status:
       completed` in their frontmatter
-- [ ] **Whole feature directory** moved from `specs/features/active/`
-      to `specs/features/completed/` using `git mv` (preserves rename
+- [ ] **Whole feature directory** moved from `dflow/specs/features/active/`
+      to `dflow/specs/features/completed/` using `git mv` (preserves rename
       tracking — see `references/git-integration.md` § "Directory Moves
       Must Use git mv"):
       ```
-      git mv specs/features/active/{SPEC-ID}-{slug} \
-             specs/features/completed/{SPEC-ID}-{slug}
+      git mv dflow/specs/features/active/{SPEC-ID}-{slug} \
+             dflow/specs/features/completed/{SPEC-ID}-{slug}
       ```
 
 > **Recommended path for multi-phase features**: instead of doing

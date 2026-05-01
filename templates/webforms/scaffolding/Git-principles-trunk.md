@@ -37,7 +37,7 @@ within a week).
 
 The `feature/{SPEC-ID}-{slug}` pattern is a **Dflow requirement** (not
 a trunk-based requirement). It ties each feature branch to its
-corresponding `specs/features/active/{SPEC-ID}-{slug}/` directory.
+corresponding `dflow/specs/features/active/{SPEC-ID}-{slug}/` directory.
 
 ### Feature Branch Workflow
 
@@ -129,11 +129,11 @@ and circle the chosen one.
 - [ ] `/dflow:finish-feature` has run (or the equivalent Step 8.4
       manual archival is complete)
 - [ ] `_index.md` status = `completed`, feature directory moved to
-      `specs/features/completed/` via `git mv`
-- [ ] BC layer synced: `specs/domain/{context}/rules.md` and
+      `dflow/specs/features/completed/` via `git mv`
+- [ ] BC layer synced: `dflow/specs/domain/{context}/rules.md` and
       `behavior.md` reflect the feature's net BR changes
-- [ ] `specs/domain/glossary.md` updated with any new terms
-- [ ] `specs/migration/tech-debt.md` updated with any debt discovered
+- [ ] `dflow/specs/domain/glossary.md` updated with any new terms
+- [ ] `dflow/specs/migration/tech-debt.md` updated with any debt discovered
 - [ ] Domain layer (`src/Domain/`) has no `System.Web` references
 - [ ] CI green
 - [ ] PR has at least one review approval

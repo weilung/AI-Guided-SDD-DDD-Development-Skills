@@ -17,7 +17,7 @@ Template note (for AI):
   A feature can have 1..N phase-specs; the feature-level dashboard lives in
   the sibling `_index.md` (see templates/_index.md). The instance file name is
   `phase-spec-YYYY-MM-DD-{slug}.md` placed at
-  `specs/features/active/{SPEC-ID}-{slug}/`.
+  `dflow/specs/features/active/{SPEC-ID}-{slug}/`.
 
   Each section below carries an HTML comment indicating its fill-in phase (Phase 1-4).
   These phase markers let /dflow:status and the completion checklist track progress.
@@ -43,16 +43,16 @@ Template note (for AI):
 
 ## Domain Concepts <!-- Fill timing: Phase 2 -->
 
-涉及的 Domain 概念（引用 `specs/domain/{context}/models.md`）：
+涉及的 Domain 概念（引用 `dflow/specs/domain/{context}/models.md`）：
 
 | Concept | Type | Description |
 |---|---|---|
 | {Name} | Aggregate Root / Entity / Value Object / Domain Service | 角色 |
 
 更新檢查：
-- [ ] `specs/domain/glossary.md` — 新術語
-- [ ] `specs/domain/{context}/models.md` — 模型定義
-- [ ] `specs/domain/{context}/events.md` — Domain Events
+- [ ] `dflow/specs/domain/glossary.md` — 新術語
+- [ ] `dflow/specs/domain/{context}/models.md` — 模型定義
+- [ ] `dflow/specs/domain/{context}/events.md` — Domain Events
 
 <!-- dflow:section behavior-scenarios -->
 ## Behavior Scenarios <!-- Fill timing: Phase 3 -->
@@ -90,7 +90,7 @@ Scenario: {替代情境}
 
 > 本段僅記**本 phase 相對前一 phase 的變化**，不累積歷史。歷史由 feature 目錄下
 > 各 phase-spec 的本段串接閱讀；feature 層的當前累積狀態見 `_index.md` 的
-> Current BR Snapshot；BC 層當前狀態見 `specs/domain/{context}/rules.md` /
+> Current BR Snapshot；BC 層當前狀態見 `dflow/specs/domain/{context}/rules.md` /
 > `behavior.md`（在 `/dflow:finish-feature` 時同步）。
 >
 > **首 phase**：標註「首 phase，無前置 Delta」即可，不需逐項填。

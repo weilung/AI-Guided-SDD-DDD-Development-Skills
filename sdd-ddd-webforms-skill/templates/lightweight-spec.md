@@ -20,9 +20,9 @@ Template note (for AI):
 
   Instance file location and naming:
     Place the instantiated file inside the corresponding feature directory:
-      specs/features/active/{SPEC-ID}-{slug}/lightweight-{YYYY-MM-DD}-{slug}.md
+      dflow/specs/features/active/{SPEC-ID}-{slug}/lightweight-{YYYY-MM-DD}-{slug}.md
     or, when the lightweight change is a tracked bug:
-      specs/features/active/{SPEC-ID}-{slug}/BUG-{NUMBER}-{slug}.md
+      dflow/specs/features/active/{SPEC-ID}-{slug}/BUG-{NUMBER}-{slug}.md
 
     If the change is a standalone bug not yet attached to any existing
     feature, /dflow:bug-fix must first create a feature directory (with a

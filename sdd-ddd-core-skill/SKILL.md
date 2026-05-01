@@ -3,7 +3,7 @@ name: sdd-ddd-core
 description: >
   AI-guided Specification-Driven Development (SDD) and Domain-Driven Design (DDD) workflow guardian
   for ASP.NET Core projects with Clean Architecture.
-  PRIMARY TRIGGERS — /dflow: slash commands: /dflow:init-project, /dflow:new-feature,
+  PRIMARY TRIGGERS — /dflow: slash commands: /dflow:new-feature,
   /dflow:modify-existing, /dflow:bug-fix, /dflow:new-phase, /dflow:finish-feature,
   /dflow:pr-review, /dflow:verify, /dflow:status, /dflow:next, /dflow:cancel.
   SECONDARY TRIGGERS (auto-trigger safety net) — natural language:
@@ -60,9 +60,6 @@ pure .NET types. No EF Core attributes, no JSON serialization attributes, no fra
 Developer input arrives
     │
     ├─ /dflow: command (explicit entry — route directly to workflow)
-    │   ├─ /dflow:init-project    → INIT PROJECT WORKFLOW (references/init-project-flow.md)
-    │   │                             One-time project bootstrap: set up specs/ baseline +
-    │   │                             optional scaffolding. Safe to re-run (skips existing files).
     │   ├─ /dflow:new-feature     → NEW FEATURE WORKFLOW (references/new-feature-flow.md)
     │   ├─ /dflow:modify-existing → MODIFY EXISTING WORKFLOW (references/modify-existing-flow.md)
     │   ├─ /dflow:bug-fix         → Lightweight-ceremony modification of existing functionality.
@@ -89,7 +86,7 @@ Developer input arrives
     │   └─ → DDD MODELING GUIDE (read references/ddd-modeling-guide.md)
     │
     ├─ "Quick question about..." / "How does X work?"
-    │   └─ → Check specs/domain/ first, answer from domain knowledge
+    │   └─ → Check dflow/specs/domain/ first, answer from domain knowledge
     │
     ├─ "I'm creating a branch"
     │   └─ → GIT INTEGRATION (read references/git-integration.md)
@@ -106,8 +103,10 @@ The Skill uses a **Hybrid design**: slash commands as the primary entry, natural
 
 ### Slash Commands
 
-**Project-level commands** — one-time (or occasional) project-scope operations:
-- `/dflow:init-project` — **project bootstrap**. Inspect the repo, ask a short set of intake questions, and seed the `specs/` baseline (features / domain / architecture directories, including `context-map.md` + `architecture/decisions/`) plus any scaffolding templates the developer picks (`_overview.md` / `_conventions.md` / `Git-principles-*.md` / `CLAUDE.md` snippet). Existing files are **never overwritten**; re-running only fills in gaps.
+Project bootstrap is handled by the npm CLI, not by a skill slash command:
+run `npx dflow init` from the project root. The detailed bootstrap contract is
+kept in `references/init-project-flow.md` as a CLI internal flow spec and a
+manual reference for environments without Node.js/npm.
 
 **Flow entry commands** — start a workflow (build branch + feature directory):
 - `/dflow:new-feature` — enter new-feature-flow
@@ -224,10 +223,21 @@ If no workflow is active, reply: "No active workflow. Use `/dflow:new-feature`, 
 
 1. **Spec Before Code** — No implementation without at least a lightweight spec
 2. **Domain at the Center** — Business logic lives ONLY in the Domain layer
-3. **Ubiquitous Language** — All code uses terms from specs/domain/glossary.md
+3. **Ubiquitous Language** — All code uses terms from dflow/specs/domain/glossary.md
 4. **Aggregate Boundaries** — Each transaction modifies exactly ONE Aggregate
 5. **Dependency Inversion** — Domain defines interfaces, Infrastructure implements
 6. **Pragmatic, Not Dogmatic** — Scale ceremony to impact
+
+## Template Language
+
+Dflow templates keep canonical English structural language: headings, table
+headers, fixed labels, placeholders, IDs, anchors, and code-facing terms remain
+English. Free prose inside those sections follows the project prose language in
+`dflow/specs/shared/_conventions.md` under `## Prose Language`.
+
+Before producing or updating prose in a spec, read that section. If it is
+missing or not explicit, ask the developer to choose an explicit language tag
+and update `_conventions.md` before continuing.
 
 ## Ceremony Scaling
 
@@ -264,8 +274,8 @@ You can `git commit` directly without writing even a T3 inline row.
 ```
 ExpenseTracker/
 ├── CLAUDE.md
-├── specs/
-│   ├── shared/                         # Project-level governance docs (seeded by /dflow:init-project)
+├── dflow/specs/
+│   ├── shared/                         # Project-level governance docs (seeded by npx dflow init)
 │   │   ├── _overview.md
 │   │   └── _conventions.md
 │   ├── domain/
@@ -378,7 +388,7 @@ Each Bounded Context has two complementary files that together describe the syst
 - **`rules.md`** — declarative index: lists each BR-ID with a one-line summary. Quick lookup, easy to scan.
 - **`behavior.md`** — scenario-level detail: the full Given/When/Then scenarios for each BR-ID, including Aggregate state transitions and Domain Events. This is the consolidated source of truth for "what does the system actually do right now?"
 
-`specs/features/completed/` is a historical archive (individual change records). `behavior.md` is the **merged current state** — when a feature is completed, AI merges its scenarios into `behavior.md`; when behavior is modified, AI updates the corresponding section to reflect the new behavior (git preserves history). See `templates/behavior.md` for the template.
+`dflow/specs/features/completed/` is a historical archive (individual change records). `behavior.md` is the **merged current state** — when a feature is completed, AI merges its scenarios into `behavior.md`; when behavior is modified, AI updates the corresponding section to reflect the new behavior (git preserves history). See `templates/behavior.md` for the template.
 
 This is analogous to how OpenSpec's `specs/` directory serves as the system behavior source of truth, but organized by Bounded Context rather than by capability.
 
@@ -418,14 +428,14 @@ This is analogous to how OpenSpec's `specs/` directory serves as the system beha
 
 ## Glossary Maintenance
 
-Same as WebForms version — `specs/domain/glossary.md` is the single source of truth.
+Same as WebForms version — `dflow/specs/domain/glossary.md` is the single source of truth.
 Format: `| Term | Definition | Bounded Context | Code Mapping |`
 
 ## Reference Files
 
 | File | When to read |
 |---|---|
-| `references/init-project-flow.md` | `/dflow:init-project` — one-time project bootstrap (set up `specs/` baseline + optional scaffolding) |
+| `references/init-project-flow.md` | CLI internal init flow spec for `npx dflow init`; manual bootstrap reference when Node.js/npm is unavailable |
 | `references/new-feature-flow.md` | New feature development |
 | `references/modify-existing-flow.md` | Changing existing functionality |
 | `references/new-phase-flow.md` | `/dflow:new-phase` — add a new phase-spec to an active feature |
@@ -463,9 +473,9 @@ Maintenance contracts at repo root:
 
 These two files are not runtime inputs for workflows; use them during review, maintenance, and when adding new templates.
 
-### Scaffolding (used by `/dflow:init-project`)
+### Scaffolding (used by `npx dflow init`)
 
-The `scaffolding/` directory holds **project-level** templates seeded by `/dflow:init-project` into a project's `specs/shared/` directory (or repo root for `CLAUDE.md`). They are **not** read by AI during normal flows; they are written to the target project once, then owned and maintained by the project.
+The `scaffolding/` directory holds **project-level** templates seeded by `npx dflow init` into a project's `dflow/specs/shared/` directory (or repo root for `CLAUDE.md`). They are **not** read by AI during normal flows; they are written to the target project once, then owned and maintained by the project.
 
 | Scaffolding file | Purpose |
 |---|---|
@@ -474,6 +484,6 @@ The `scaffolding/` directory holds **project-level** templates seeded by `/dflow
 | `scaffolding/Git-principles-gitflow.md` | Git Flow edition of project Git conventions — includes Integration Commit Message Conventions that pair with `/dflow:finish-feature` output |
 | `scaffolding/Git-principles-trunk.md` | Trunk-based / GitHub Flow edition of project Git conventions — includes squash/rebase Integration Commit Message formats |
 | `scaffolding/CLAUDE-md-snippet.md` | Starter block for a project's root `CLAUDE.md`, preserving the `System Context` / `Development Workflow` H2 layout |
-| `scaffolding/architecture-decisions-README.md` | ADR directory README seeded into `specs/architecture/decisions/README.md` (mandatory baseline; per PROPOSAL-013 §5 baseline 比對表) |
+| `scaffolding/architecture-decisions-README.md` | ADR directory README seeded into `dflow/specs/architecture/decisions/README.md` (mandatory baseline; per PROPOSAL-013 §5 baseline 比對表) |
 
 See `references/init-project-flow.md` for how the scaffolding files are selected and written.

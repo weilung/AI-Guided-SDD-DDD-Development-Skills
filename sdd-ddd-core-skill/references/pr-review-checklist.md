@@ -9,8 +9,8 @@ directory may contain multiple spec files; identify which ones this PR
 touches and read them all.
 
 - [ ] Locate the feature directory at
-      `specs/features/active/{SPEC-ID}-{slug}/` (or
-      `specs/features/completed/{SPEC-ID}-{slug}/` if the PR is the
+      `dflow/specs/features/active/{SPEC-ID}-{slug}/` (or
+      `dflow/specs/features/completed/{SPEC-ID}-{slug}/` if the PR is the
       closeout commit and the dir was already `git mv`d)
 - [ ] Read `_index.md` first — it gives you the feature-level overview,
       Current BR Snapshot, list of phase-specs, and Resume Pointer (where the
@@ -31,7 +31,7 @@ touches and read them all.
       Delta; note any **UNCHANGED** scope declaration
 - [ ] State in one sentence: "This PR intends to {change} because
       {reason}." (If you can't, pause and ask the author.)
-- [ ] Cross-reference `specs/domain/{context}/behavior.md` if it exists
+- [ ] Cross-reference `dflow/specs/domain/{context}/behavior.md` if it exists
       — confirm the Delta has been reflected or is scheduled to be
       (draft vs finalized; finalisation usually happens at
       `/dflow:finish-feature` time)
@@ -72,7 +72,7 @@ PR touches, not just one):
       match the diff against the prior phase-spec's BR set
 
 If the closeout commit is in this PR (`/dflow:finish-feature` was run):
-- [ ] **BC layer sync landed** — `specs/domain/{context}/rules.md` /
+- [ ] **BC layer sync landed** — `dflow/specs/domain/{context}/rules.md` /
       `behavior.md` / `events.md` / `context-map.md` reflect the
       feature's net effect (compare against `_index.md` Current BR
       Snapshot)

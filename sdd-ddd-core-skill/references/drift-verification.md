@@ -26,7 +26,7 @@ Semantic verification (LLM reads the one-line summary in `rules.md` vs the Given
 ### This command does NOT do (feature-directory aggregation — explicitly excluded)
 
 After PROPOSAL-009 introduced the feature directory layout
-(`specs/features/active/{SPEC-ID}-{slug}/` containing `_index.md` plus
+(`dflow/specs/features/active/{SPEC-ID}-{slug}/` containing `_index.md` plus
 0..N `phase-spec-*.md` and 0..N `lightweight-*.md`), a tempting but
 **out-of-scope** extension would be: "make `/dflow:verify` aggregate BR
 state across all phase-spec files in a feature, then cross-check against
@@ -75,8 +75,8 @@ For each Bounded Context:
 
 ### Step 1: Locate files
 
-- Find `specs/domain/{context}/rules.md`
-- Find `specs/domain/{context}/behavior.md`
+- Find `dflow/specs/domain/{context}/rules.md`
+- Find `dflow/specs/domain/{context}/behavior.md`
 - If either is missing, report and stop for that context:
   ```
   ✗ Expense: rules.md exists but behavior.md is missing
@@ -176,9 +176,9 @@ Recommended trigger points (not enforced — developer's judgment):
 
 ## Path Assumptions (post-PROPOSAL-009)
 
-This command operates entirely within `specs/domain/{context}/` files
+This command operates entirely within `dflow/specs/domain/{context}/` files
 (`rules.md`, `behavior.md`, and the `events.md` bonus check). It does
-**not** read from `specs/features/active/{SPEC-ID}-{slug}/` directories
+**not** read from `dflow/specs/features/active/{SPEC-ID}-{slug}/` directories
 — the feature directory layout introduced by PROPOSAL-009 is not part
 of verify's input. The only effect of feature directory layout on this
 command is ensuring `last-updated` dates in `behavior.md` are bumped at

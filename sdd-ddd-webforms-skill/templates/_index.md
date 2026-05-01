@@ -10,7 +10,7 @@ branch: feature/{SPEC-ID}-{slug}
 <!--
 Template note (for AI):
   This is the **feature-level dashboard** (`_index.md`) for a feature
-  directory. Place at `specs/features/active/{SPEC-ID}-{slug}/_index.md`.
+  directory. Place at `dflow/specs/features/active/{SPEC-ID}-{slug}/_index.md`.
 
   Six required sections (see below):
     1. Metadata (YAML front matter above)

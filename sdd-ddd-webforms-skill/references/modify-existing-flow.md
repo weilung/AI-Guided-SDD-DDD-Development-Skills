@@ -21,6 +21,12 @@ and business logic. Treat every modification as a chance to:
 
 ## Step 1: Assess the Change — Ceremony Tier + Feature Linkage
 
+Before producing any spec prose, read `dflow/specs/shared/_conventions.md`
+and apply the `## Prose Language` setting. If the setting is missing or not
+an explicit language tag, ask the developer to update `_conventions.md`
+before continuing. This requirement also applies when this flow is entered
+through `/dflow:bug-fix`.
+
 This step has two parallel concerns:
 
 **Part A — Determine the Ceremony Tier (T1 / T2 / T3)**
@@ -45,11 +51,11 @@ doesn't track this and they can `git commit` directly.
 
 Walk through these in order:
 
-1. **Active features**: scan `specs/features/active/*/_index.md`. Does
+1. **Active features**: scan `dflow/specs/features/active/*/_index.md`. Does
    the change belong inside an existing active feature directory? If
    yes, use that as the host (T1 → `/dflow:new-phase`; T2 → place
    lightweight-spec inside; T3 → inline row in that `_index.md`).
-2. **Completed features**: scan `specs/features/completed/*/_index.md`
+2. **Completed features**: scan `dflow/specs/features/completed/*/_index.md`
    Goals & Scope sections. If the change description is semantically
    related to a completed feature, this becomes the **completed feature
    reopen** scenario — go to Step 1.5 below.
@@ -121,13 +127,13 @@ these follow-up-specific differences:
   > 完成於 `{date}`，詳見 `completed/{原 SPEC-ID}-{原 slug}/_index.md`。
   ```
 - **`_index.md` Current BR Snapshot baseline**: AI reads the BC's
-  `specs/domain/{context}/rules.md` and inherits the BRs that are
+  `dflow/specs/domain/{context}/rules.md` and inherits the BRs that are
   in-scope for this follow-up. Mark each inherited row with First Seen
   = `inherited from rules.md` and Last Updated = (empty until the new
   feature's first phase Delta touches it)
 
 **Reverse-link into the old `_index.md`**: AI also updates
-`specs/features/completed/{原 SPEC-ID}-{原 slug}/_index.md` —
+`dflow/specs/features/completed/{原 SPEC-ID}-{原 slug}/_index.md` —
 uncomment the Follow-up Tracking section (if not already present) and
 add a row:
 
@@ -161,15 +167,15 @@ Create a spec with status `in-progress` that includes:
 - The proposed change clearly marked — use the **Delta** format below
 
 If baseline domain docs are missing, create them from templates before filling content:
-- `specs/domain/glossary.md` → `templates/glossary.md`
-- `specs/domain/{context}/models.md` → `templates/models.md`
-- `specs/domain/{context}/rules.md` → `templates/rules.md`
-- `specs/domain/{context}/behavior.md` → `templates/behavior.md`
-- `specs/migration/tech-debt.md` (if missing) → `templates/tech-debt.md`
+- `dflow/specs/domain/glossary.md` → `templates/glossary.md`
+- `dflow/specs/domain/{context}/models.md` → `templates/models.md`
+- `dflow/specs/domain/{context}/rules.md` → `templates/rules.md`
+- `dflow/specs/domain/{context}/behavior.md` → `templates/behavior.md`
+- `dflow/specs/migration/tech-debt.md` (if missing) → `templates/tech-debt.md`
 
 ### Delta Spec Format (for modifications)
 
-Use ADDED / MODIFIED / REMOVED / RENAMED + an optional UNCHANGED section. Keep Given/When/Then for each rule; the Delta section lives inside the spec and does not accumulate into `specs/domain/{context}/behavior.md` (git history already covers the trail).
+Use ADDED / MODIFIED / REMOVED / RENAMED + an optional UNCHANGED section. Keep Given/When/Then for each rule; the Delta section lives inside the spec and does not accumulate into `dflow/specs/domain/{context}/behavior.md` (git history already covers the trail).
 
 ```markdown
 ## Behavior Delta
@@ -254,7 +260,7 @@ Look for:
 - Try/catch blocks swallowing exceptions silently
 - String concatenation for SQL (SQL injection risk)
 
-Record each finding in `specs/migration/tech-debt.md` with:
+Record each finding in `dflow/specs/migration/tech-debt.md` with:
 ```markdown
 - [ ] {File}:{Line} — {Description} — Severity: {High|Medium|Low}
 ```
@@ -349,8 +355,8 @@ Items marked *(post-6.3)* are re-verified after the documentation merge in 6.3 l
 - [ ] Domain layer has **no** `System.Web` references (grep `src/Domain/`)
 - [ ] Extracted logic (if Step 4 decided "extract now") lives under `src/Domain/` with pure C# only
 - [ ] `Implementation Tasks` section (`phase-spec.md` or `lightweight-spec.md`): all tasks checked, or unchecked items explicitly labelled as follow-up
-- [ ] *(post-6.3)* `specs/domain/{context}/behavior.md` has a section anchor for every `BR-*` in ADDED / MODIFIED entries; REMOVED entries' anchors have been deleted (mechanical input for `/dflow:verify`)
-- [ ] *(post-6.3)* `specs/domain/{context}/behavior.md` `last-updated` is later than this spec's `created` date (mechanical drift guard)
+- [ ] *(post-6.3)* `dflow/specs/domain/{context}/behavior.md` has a section anchor for every `BR-*` in ADDED / MODIFIED entries; REMOVED entries' anchors have been deleted (mechanical input for `/dflow:verify`)
+- [ ] *(post-6.3)* `dflow/specs/domain/{context}/behavior.md` `last-updated` is later than this spec's `created` date (mechanical drift guard)
 
 If any item fails, report the gap and pause — don't proceed to 6.2.
 
@@ -367,14 +373,14 @@ Ask these one-by-one.
 ### 6.3 Documentation updates
 
 - [ ] Update or create the feature / bug spec; set `status: completed`
-- [ ] `specs/domain/{context}/rules.md` — business rules updated
-- [ ] `specs/domain/{context}/models.md` — domain model updated
-- [ ] `specs/domain/glossary.md` — new / renamed terms (mirror any RENAMED delta entries here)
-- [ ] `specs/domain/{context}/behavior.md` — update scenarios to reflect Delta result (merge final state, not Delta markup). Sub-steps:
+- [ ] `dflow/specs/domain/{context}/rules.md` — business rules updated
+- [ ] `dflow/specs/domain/{context}/models.md` — domain model updated
+- [ ] `dflow/specs/domain/glossary.md` — new / renamed terms (mirror any RENAMED delta entries here)
+- [ ] `dflow/specs/domain/{context}/behavior.md` — update scenarios to reflect Delta result (merge final state, not Delta markup). Sub-steps:
       - Promote any Phase 3 draft sections (from B3 mid-sync) to formal sections
       - Update the corresponding `rules.md` anchor's `last-updated` date (B4)
 - [ ] `behavior.md` draft cleanup — if the Delta was abandoned mid-way, keep the `## 提案中變更` section's history or explicitly REMOVE it
-- [ ] `specs/migration/tech-debt.md` — findings recorded
+- [ ] `dflow/specs/migration/tech-debt.md` — findings recorded
 
 ### 6.4 Archival
 
@@ -384,7 +390,7 @@ do NOT move individual phase-spec files. Instead:
 
 - [ ] Mark this phase-spec's `status` field `completed` in its frontmatter
 - [ ] Keep the phase-spec inside its feature directory at
-      `specs/features/active/{SPEC-ID}-{slug}/` (it stays alongside
+      `dflow/specs/features/active/{SPEC-ID}-{slug}/` (it stays alongside
       sibling phase-specs)
 - [ ] When the developer is ready to wrap the whole feature, run
       `/dflow:finish-feature` — that command does the BC-layer sync,

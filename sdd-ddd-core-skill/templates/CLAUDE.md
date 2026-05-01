@@ -33,8 +33,8 @@ Presentation → Application → Domain ← Infrastructure
 ### Project Structure
 
 ```
-specs/
-├── shared/                   # 專案級治理文件（由 /dflow:init-project 寫入）
+dflow/specs/
+├── shared/                   # 專案級治理文件（由 npx dflow init 寫入）
 │   ├── _overview.md          # 系統現況與遷移策略
 │   └── _conventions.md       # 規格撰寫慣例
 ├── domain/
@@ -80,7 +80,7 @@ tests/
 ### Core Principles
 1. **Spec Before Code** — 沒有規格就不寫實作
 2. **Domain at the Center** — 業務邏輯只存在於 Domain 層
-3. **Ubiquitous Language** — 使用 `specs/domain/glossary.md` 中定義的術語
+3. **Ubiquitous Language** — 使用 `dflow/specs/domain/glossary.md` 中定義的術語
 4. **One Aggregate per Transaction** — 單一操作只修改一個 Aggregate
 5. **Dependency Inversion** — Domain 定義介面，Infrastructure 實作
 
@@ -100,7 +100,7 @@ tests/
 直接 `git commit`，不走 Dflow。
 
 ### New Feature
-1. 建 feature 目錄 `specs/features/active/{SPEC-ID}-{slug}/`
+1. 建 feature 目錄 `dflow/specs/features/active/{SPEC-ID}-{slug}/`
 2. 建 `_index.md`（feature dashboard）+ 第一份 `phase-spec-YYYY-MM-DD-{slug}.md`
 3. 設計 Aggregate（不變條件、狀態變更方法、Domain Events）
 4. 實作順序：Domain → Application → Infrastructure → Presentation

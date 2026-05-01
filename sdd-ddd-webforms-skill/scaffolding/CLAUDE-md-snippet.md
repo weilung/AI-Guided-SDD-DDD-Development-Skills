@@ -6,7 +6,7 @@
 > is to be merged into your project's root `CLAUDE.md`:
 >
 > - If your project does **not** yet have a `CLAUDE.md`, the
->   `/dflow:init-project` flow will create one using this snippet as
+>   `npx dflow init` flow will create one using this snippet as
 >   the starting content.
 > - If your project **already has** a `CLAUDE.md`, the init flow will
 >   copy this file into your repo and prompt you to merge the
@@ -41,13 +41,13 @@ when merging into an existing `CLAUDE.md`.
 ASP.NET Core 做準備。
 
 {選填：補上團隊規模、使用者規模、主要 stakeholders 等 context，
-1-3 行即可。完整內容放在 `specs/shared/_overview.md`。}
+1-3 行即可。完整內容放在 `dflow/specs/shared/_overview.md`。}
 
 ### Project Structure
 
 ```
-specs/
-├── shared/                   # 專案級治理文件（由 /dflow:init-project 寫入）
+dflow/specs/
+├── shared/                   # 專案級治理文件（由 npx dflow init 寫入）
 │   ├── _overview.md          # 系統現況與遷移策略
 │   ├── _conventions.md       # 規格撰寫慣例
 │   └── Git-principles-*.md   # Git 規範（gitflow 或 trunk 版）
@@ -86,7 +86,7 @@ src/
 
 1. **Spec Before Code** — 沒有規格就不寫實作（依 Ceremony Scaling 調整嚴謹度）
 2. **Domain Extraction** — 業務邏輯屬於 `src/Domain/`，不屬於 Code-Behind
-3. **Ubiquitous Language** — 使用 `specs/domain/glossary.md` 中定義的術語
+3. **Ubiquitous Language** — 使用 `dflow/specs/domain/glossary.md` 中定義的術語
 4. **Migration Awareness** — 每個決策都要考慮未來 ASP.NET Core 遷移
 
 ### Dflow Skill — Canonical Decision Logic Lives in the Skill
@@ -97,9 +97,9 @@ AI 的完整決策樹、Workflow Transparency、Ceremony Scaling 三層判準
 本 `CLAUDE.md` 不重述這些內容，避免雙份維護。
 
 當你作為 AI assistant 被呼叫時，若偵測到使用者需要 SDD/DDD 工作流
-引導，請參考 Dflow skill 的 Primary triggers：
+引導，請參考 Dflow entry points：
 
-- `/dflow:init-project` — 專案初始化（建立 `specs/` 結構）
+- `npx dflow init` — 專案初始化（建立 `dflow/specs/` 結構）
 - `/dflow:new-feature` — 新功能開發
 - `/dflow:new-phase` — 在 active feature 內新增階段
 - `/dflow:modify-existing` — 修改既有功能
@@ -113,9 +113,9 @@ AI 的完整決策樹、Workflow Transparency、Ceremony Scaling 三層判準
 
 （本 `CLAUDE.md` 只記這一層——Dflow skill 不管的專案決策）
 
-- **Git 分支策略**：見 `specs/shared/Git-principles-{gitflow|trunk}.md`
-- **規格撰寫慣例**：見 `specs/shared/_conventions.md`
-- **系統現況與遷移**：見 `specs/shared/_overview.md`
+- **Git 分支策略**：見 `dflow/specs/shared/Git-principles-{gitflow|trunk}.md`
+- **規格撰寫慣例**：見 `dflow/specs/shared/_conventions.md`
+- **系統現況與遷移**：見 `dflow/specs/shared/_overview.md`
 - {其他專案特有規則，例如「JPY 金額必須以最小貨幣單位（yen）儲存」/
   「所有費用報銷需主管審核」/「跨時區行程以 UTC 記錄」}
 
@@ -133,10 +133,10 @@ AI 的完整決策樹、Workflow Transparency、Ceremony Scaling 三層判準
 ### AI Collaboration Notes
 
 - 遇到開發需求時，優先引導使用 `/dflow:` 命令
-- 回答 Domain 相關問題時，優先參考 `specs/domain/` 中的文件
+- 回答 Domain 相關問題時，優先參考 `dflow/specs/domain/` 中的文件
 - 發現 Code-Behind 中的業務邏輯時，建議抽離到 `src/Domain/`
 - 建立分支前，確認命名符合規範且對應 spec 存在
-- 詳細 Git 操作規則見 `specs/shared/Git-principles-{gitflow|trunk}.md`
+- 詳細 Git 操作規則見 `dflow/specs/shared/Git-principles-{gitflow|trunk}.md`
 ```
 
 ---
@@ -151,7 +151,7 @@ When merging this snippet into an existing `CLAUDE.md`:
    these headings.
 2. **Under `System Context`**: merge the background paragraph and the
    directory tree. If your project already documents directory
-   structure elsewhere, keep the tree pointing to `specs/` and
+   structure elsewhere, keep the tree pointing to `dflow/specs/` and
    `src/Domain/` at minimum (those are Dflow-specific).
 3. **Under `Development Workflow`**: merge the core principles, the Dflow skill
    pointer, and the project-level supplementary rules. The Domain
@@ -163,5 +163,5 @@ When merging this snippet into an existing `CLAUDE.md`:
    duplicate it.
 
 If you are starting from scratch (no existing `CLAUDE.md`), the
-`/dflow:init-project` flow will install this snippet as-is and you
+`npx dflow init` flow will install this snippet as-is and you
 can refine from there.

@@ -17,7 +17,7 @@ Template note (for AI):
   A feature can have 1..N phase-specs; the feature-level dashboard lives in
   the sibling `_index.md` (see templates/_index.md). The instance file name is
   `phase-spec-YYYY-MM-DD-{slug}.md` placed at
-  `specs/features/active/{SPEC-ID}-{slug}/`.
+  `dflow/specs/features/active/{SPEC-ID}-{slug}/`.
 
   Each section below carries an HTML comment indicating its fill-in phase (Phase 1-4).
   These phase markers let /dflow:status and the completion checklist track progress.
@@ -44,15 +44,15 @@ Template note (for AI):
 
 ## Domain Concepts <!-- Fill timing: Phase 2 -->
 
-涉及的 Domain 概念（引用 `specs/domain/{context}/models.md`）：
+涉及的 Domain 概念（引用 `dflow/specs/domain/{context}/models.md`）：
 
 | Concept | Type | Description |
 |---|---|---|
 | {ConceptName} | Entity / Value Object / Domain Service | 簡述角色 |
 
 如有新概念，先更新：
-- [ ] `specs/domain/glossary.md` — 新增術語
-- [ ] `specs/domain/{context}/models.md` — 新增模型定義
+- [ ] `dflow/specs/domain/glossary.md` — 新增術語
+- [ ] `dflow/specs/domain/{context}/models.md` — 新增模型定義
 
 <!-- dflow:section behavior-scenarios -->
 ## Behavior Scenarios <!-- Fill timing: Phase 3 -->

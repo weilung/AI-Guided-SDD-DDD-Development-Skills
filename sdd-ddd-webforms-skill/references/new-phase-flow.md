@@ -23,18 +23,23 @@ Transparency for the full transparency protocol and confirmation signals.
 
 ## Step 1: Read Active Feature Context
 
+Before producing any spec prose, read `dflow/specs/shared/_conventions.md`
+and apply the `## Prose Language` setting. If the setting is missing or not
+an explicit language tag, ask the developer to update `_conventions.md`
+before continuing.
+
 AI must locate the target feature and load its current state:
 
 1. **Identify the target feature**
    - If the developer is on a `feature/{SPEC-ID}-{slug}` branch → infer the
-     feature directory at `specs/features/active/{SPEC-ID}-{slug}/`
+     feature directory at `dflow/specs/features/active/{SPEC-ID}-{slug}/`
    - Otherwise → ask the developer which feature this phase is for
 
 2. **Refuse if the feature is in `completed/`**
 
    `/dflow:new-phase` strictly applies to **active features only**. If the
-   target feature directory is found at `specs/features/completed/...`
-   instead of `specs/features/active/...`, refuse with:
+   target feature directory is found at `dflow/specs/features/completed/...`
+   instead of `dflow/specs/features/active/...`, refuse with:
 
    ```
    "Feature `{SPEC-ID}-{slug}` is in completed/ — completed features are
@@ -121,7 +126,7 @@ Wait for confirmation before entering Step 4.
 Create the file at:
 
 ```
-specs/features/active/{SPEC-ID}-{slug}/phase-spec-{YYYY-MM-DD}-{phase-slug}.md
+dflow/specs/features/active/{SPEC-ID}-{slug}/phase-spec-{YYYY-MM-DD}-{phase-slug}.md
 ```
 
 Use the `templates/phase-spec.md` template. Phase-2-onward specs **must**
@@ -145,7 +150,7 @@ detailed list).
 
 Announce to developer:
 > "Phase-spec drafted at
-> `specs/features/active/{SPEC-ID}-{slug}/phase-spec-{date}-{phase-slug}.md`.
+> `dflow/specs/features/active/{SPEC-ID}-{slug}/phase-spec-{date}-{phase-slug}.md`.
 > Ready to refresh `_index.md` (add Phase Specs row, regenerate Current BR
 > Snapshot from the Delta)? `/dflow:next` to proceed."
 

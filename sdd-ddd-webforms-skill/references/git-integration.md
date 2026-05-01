@@ -142,22 +142,22 @@ All of the following situations require `git mv`:
 
 ```bash
 # 1. /dflow:finish-feature: archive an entire feature directory
-git mv specs/features/active/{SPEC-ID}-{slug} \
-       specs/features/completed/{SPEC-ID}-{slug}
+git mv dflow/specs/features/active/{SPEC-ID}-{slug} \
+       dflow/specs/features/completed/{SPEC-ID}-{slug}
 
 # 2. Slug correction (rare — done right after Step 3.5 if the developer
 #    realises the agreed slug needs a tweak)
-git mv specs/features/active/{SPEC-ID}-{old-slug} \
-       specs/features/active/{SPEC-ID}-{new-slug}
+git mv dflow/specs/features/active/{SPEC-ID}-{old-slug} \
+       dflow/specs/features/active/{SPEC-ID}-{new-slug}
 
 # 3. Phase-spec rename inside a feature directory
 #    (e.g. fixing a wrong date in the filename)
-git mv specs/features/active/{SPEC-ID}-{slug}/phase-spec-2026-04-23-foo.md \
-       specs/features/active/{SPEC-ID}-{slug}/phase-spec-2026-04-24-foo.md
+git mv dflow/specs/features/active/{SPEC-ID}-{slug}/phase-spec-2026-04-23-foo.md \
+       dflow/specs/features/active/{SPEC-ID}-{slug}/phase-spec-2026-04-24-foo.md
 
 # 4. Lightweight-spec rename inside a feature directory
-git mv specs/features/active/{SPEC-ID}-{slug}/lightweight-2026-04-15-old.md \
-       specs/features/active/{SPEC-ID}-{slug}/lightweight-2026-04-15-new.md
+git mv dflow/specs/features/active/{SPEC-ID}-{slug}/lightweight-2026-04-15-old.md \
+       dflow/specs/features/active/{SPEC-ID}-{slug}/lightweight-2026-04-15-new.md
 
 # 5. Template-level renames (this proposal itself: feature-spec.md → phase-spec.md)
 git mv sdd-ddd-webforms-skill/templates/feature-spec.md \
@@ -185,14 +185,14 @@ holds via similarity index.
 
 ```bash
 # ❌ Wrong: produces delete + add, loses rename detection
-mv specs/features/active/{SPEC-ID}-{slug} specs/features/completed/
+mv dflow/specs/features/active/{SPEC-ID}-{slug} dflow/specs/features/completed/
 git add -A
 ```
 
 ```bash
 # ❌ Also wrong: deleting the source then later adding the destination
 #    in a separate commit prevents git rename detection across commits.
-git rm -r specs/features/active/{SPEC-ID}-{slug}
+git rm -r dflow/specs/features/active/{SPEC-ID}-{slug}
 # ... commit ...
 # ... later, add the destination: rename trail is now broken
 ```
@@ -203,8 +203,8 @@ After `git mv`, run `git status` — a successful rename shows:
 
 ```
 Changes to be committed:
-  renamed:    specs/features/active/{SPEC-ID}-{slug}/_index.md ->
-              specs/features/completed/{SPEC-ID}-{slug}/_index.md
+  renamed:    dflow/specs/features/active/{SPEC-ID}-{slug}/_index.md ->
+              dflow/specs/features/completed/{SPEC-ID}-{slug}/_index.md
   ...
 ```
 
@@ -216,8 +216,8 @@ edits in a follow-up commit).
 
 ### CI / hook automation (future)
 
-A pre-commit hook can refuse commits where `specs/features/active/` or
-`specs/features/completed/` show paired `D` + `A` instead of `R` for
+A pre-commit hook can refuse commits where `dflow/specs/features/active/` or
+`dflow/specs/features/completed/` show paired `D` + `A` instead of `R` for
 the same feature directory. Not part of Dflow today, but compatible
 with the rule.
 
@@ -226,7 +226,7 @@ with the rule.
 ### feature/ branch — Before Creating
 
 AI should verify:
-- [ ] Feature directory exists at `specs/features/active/{SPEC-ID}-{slug}/`
+- [ ] Feature directory exists at `dflow/specs/features/active/{SPEC-ID}-{slug}/`
       with `_index.md` and at least one phase-spec inside
 - [ ] `_index.md` has status: `in-progress`
 - [ ] Bounded Context is identified
@@ -249,7 +249,7 @@ AI should verify:
 - [ ] All `phase-spec-*.md` in the feature directory have `status: completed`
 - [ ] `_index.md` Current BR Snapshot has been synced to BC layer
       (`rules.md` / `behavior.md`) — typically by `/dflow:finish-feature`
-- [ ] Whole feature directory ready to `git mv` to `specs/features/completed/`
+- [ ] Whole feature directory ready to `git mv` to `dflow/specs/features/completed/`
       (or already moved if `/dflow:finish-feature` ran)
 - [ ] All new business logic is in `src/Domain/` (not Code-Behind only)
 - [ ] New terms added to `glossary.md`
@@ -268,7 +268,7 @@ AI should verify:
 
 - [ ] Spec has the fix documented
 - [ ] Tech debt recorded if the underlying issue is broader (record in
-      `specs/migration/tech-debt.md` if the bug reveals a systemic issue)
+      `dflow/specs/migration/tech-debt.md` if the bug reveals a systemic issue)
 - [ ] If business logic was touched, evaluate Domain extraction
 
 > The exact merge strategy (merge commit, squash, rebase, fast-forward)
@@ -301,7 +301,7 @@ Examples:
        → Remind: "Business logic goes in src/Domain/"
 
 3. During development
-   AI: Answer questions referencing specs/domain/ knowledge
+   AI: Answer questions referencing dflow/specs/domain/ knowledge
        → Flag if business logic is going into Code-Behind
        → Suggest Domain layer patterns when appropriate
        → Help maintain thin Code-Behind

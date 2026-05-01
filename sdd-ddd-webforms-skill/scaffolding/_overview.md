@@ -5,7 +5,7 @@
 > Created: {YYYY-MM-DD}
 > Scope: current state and migration direction of {System Name}
 > Audience: team members onboarding to the system + AI assistants reading
-> `specs/` for context.
+> `dflow/specs/` for context.
 
 This file is a **project-level starting point**. It does not duplicate
 Dflow's workflow rules (see `CLAUDE.md` and the Dflow skill for those) —

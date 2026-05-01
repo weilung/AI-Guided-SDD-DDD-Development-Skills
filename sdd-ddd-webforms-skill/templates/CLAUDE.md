@@ -16,8 +16,8 @@
 ### Project Structure
 
 ```
-specs/
-├── shared/                   # 專案級治理文件（由 /dflow:init-project 寫入）
+dflow/specs/
+├── shared/                   # 專案級治理文件（由 npx dflow init 寫入）
 │   ├── _overview.md          # 系統現況與遷移策略
 │   └── _conventions.md       # 規格撰寫慣例與模板
 ├── domain/                   # 領域知識
@@ -59,7 +59,7 @@ src/
 ### Core Principles
 1. **Spec Before Code** — 沒有規格就不寫實作
 2. **Domain Extraction** — 業務邏輯屬於 `src/Domain/`，不屬於 Code-Behind
-3. **Ubiquitous Language** — 使用 `specs/domain/glossary.md` 中定義的術語
+3. **Ubiquitous Language** — 使用 `dflow/specs/domain/glossary.md` 中定義的術語
 4. **Migration Awareness** — 每個決策都要考慮未來 ASP.NET Core 遷移
 
 ### Three Ceremony Tiers
@@ -78,9 +78,9 @@ src/
 直接 `git commit`，不走 Dflow。
 
 ### New Feature
-1. 建 feature 目錄 `specs/features/active/{SPEC-ID}-{slug}/`
+1. 建 feature 目錄 `dflow/specs/features/active/{SPEC-ID}-{slug}/`
 2. 建 `_index.md`（feature dashboard）+ 第一份 `phase-spec-YYYY-MM-DD-{slug}.md`
-3. 識別涉及的領域概念，更新 `specs/domain/` 下的對應文件
+3. 識別涉及的領域概念，更新 `dflow/specs/domain/` 下的對應文件
 4. 盡可能將業務邏輯實作在 `src/Domain/` 中（純 C# class，不依賴 WebForms）
 5. Code-Behind 僅負責 UI 綁定，呼叫 Domain 層處理邏輯
 6. 撰寫測試驗證 Domain 層行為符合規格
@@ -96,7 +96,7 @@ src/
    （follow-up 走新建 feature + `follow-up-of` 鏈回原 feature；不把 T2/T3
    寫回 completed 目錄）
 3. 如果該功能的邏輯還在 Code-Behind 中，評估是否值得先抽離到 Domain 層
-4. 在 `specs/migration/tech-debt.md` 記錄發現的技術債
+4. 在 `dflow/specs/migration/tech-debt.md` 記錄發現的技術債
 
 ### Bug Fix
 1. 建立輕量規格（問題 + 現有行為 + 預期行為 + 修復方式）
@@ -145,13 +145,13 @@ bugfix/{BUG-ID}-{short-description}      # Bug 修復（SDD 必須）
 
 ### Glossary
 
-所有業務術語必須使用 `specs/domain/glossary.md` 中定義的名稱。
+所有業務術語必須使用 `dflow/specs/domain/glossary.md` 中定義的名稱。
 遇到新術語時，先新增到術語表再使用。
 
 ### AI Collaboration Notes
 
 - 開發者提出任何功能需求時，先引導建立 spec
-- 在回答 Domain 相關問題時，優先參考 `specs/domain/` 中的文件
+- 在回答 Domain 相關問題時，優先參考 `dflow/specs/domain/` 中的文件
 - 發現 Code-Behind 中的業務邏輯時，建議抽離到 `src/Domain/`
 - 每次開發循環結束時，提醒更新術語表和技術債記錄
 - 建立分支前，確認命名符合規範且對應 spec 存在
