@@ -1,6 +1,6 @@
 ## PROPOSAL-015: Templates prose language 規範補完
 
-**狀態**: `approved`
+**狀態**: `implemented`
 
 **提出日期**: 2026-04-30
 
@@ -228,3 +228,13 @@ P015 在 shared-cut 中的切面如下：
 **理由**: P015 補完 R8b 結構英化後的 prose 語言缺口；revision 處理全部 5 finding。採 default (B) init CLI 必填 + (C) _conventions.md fallback；F-09 強制 explicit 避免 prose 漂移；F-07 五 prose-generating flow 改 mandatory 確保契約可靠；F-11 與 P014 同期 shared-cut implement。
 
 **如果 rejected**: N/A
+
+### 實施紀錄
+
+**實施日期**: 2026-05-01
+
+**結論**: implemented
+
+**實施摘要**: P015 已依 shared-cut 完成。`npx dflow init` 納入必填 explicit `prose-language` 問題並寫入 `dflow/specs/shared/_conventions.md`；雙版 `_conventions.md` scaffolding 新增 `## Prose Language` 段；五條 prose-generating flow 在 Step 1 讀取 project prose-language convention；README 補 structural English 與 free prose 的分工；`TEMPLATE-LANGUAGE-GLOSSARY.md` 補 Prose Language / free prose / structural language 等術語對照。
+
+**保留決策**: P015 V1 採 project-level `_conventions.md` convention，不新增 per-file prose directive；缺少 explicit prose language 時 workflow 應停止並要求補設定。

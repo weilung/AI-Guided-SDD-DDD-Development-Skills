@@ -4,7 +4,7 @@
 
 This file is a human reading aid and review reference for Dflow template terminology. It is not a second template set.
 
-Template headings, field labels, anchors, and placeholder names use canonical English. Developer-authored content inside those sections may use the project language.
+Template headings, field labels, anchors, and placeholder names use canonical English. Free prose inside those sections follows the project `Prose Language` convention.
 
 ## Inclusion Criteria
 
@@ -45,3 +45,8 @@ The "使用位置" column refers to file paths where the term appears structural
 | Before | 原本 | `lightweight-spec.md`, `phase-spec.md`, `references/modify-existing-flow.md` | Behavior Delta MODIFIED 段內描述變更前狀態的 inline bold label（per F-08 / DD-A Path A）|
 | After | 改為 | `lightweight-spec.md`, `phase-spec.md`, `references/modify-existing-flow.md` | Behavior Delta MODIFIED 段內描述變更後狀態的 inline bold label（per F-08 / DD-A Path A）|
 | Reason | 原因 | `lightweight-spec.md`, `phase-spec.md`, `references/modify-existing-flow.md` | Behavior Delta 段內描述變更原因的 inline bold label（per F-08 / DD-A Path A）|
+| Prose Language | prose 語言 / 自由文字語言 | `dflow/specs/shared/_conventions.md`, init flow, prose-generating references | 專案層級設定，規範 AI 生成自由 prose 時使用的 explicit BCP-47 language tag，例如 `zh-TW` 或 `en` |
+| Free prose | 自由 prose / 自由文字 | Templates, generated specs, workflow references | 由使用者或 AI 撰寫的段落內容，例如 task 描述、Root Cause、Fix Approach、Open Questions；遵循專案 `Prose Language` |
+| Structural language | 結構性語言 | Templates, generated specs, `TEMPLATE-COVERAGE.md` | 固定文件結構語言，例如 headings、table headers、labels、placeholders、IDs、anchors；Dflow 保持 canonical English |
+| Canonical English | 標準英文結構 | Templates, scaffolding, generated specs | Dflow 固定使用的英文結構詞彙，用於穩定 AI 導航、anchor 定位與跨檔維護 |
+| Code-facing terms | 面向程式碼的術語 | Templates, generated specs, `_conventions.md` | 不應只為符合 prose 語言而翻譯的內容，例如 code identifiers、DDD pattern names、BR IDs、SPEC IDs、file paths、branch names、anchors、inline code |

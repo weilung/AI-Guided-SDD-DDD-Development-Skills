@@ -1,6 +1,6 @@
 ## PROPOSAL-014: CLI init 與 Dflow root namespace
 
-**狀態**: `approved`
+**狀態**: `implemented`
 
 **提出日期**: 2026-04-30
 
@@ -212,3 +212,13 @@ grep -rn "specs/" --include="*.md" .
 **理由**: 兩議題（init CLI 化 + dflow/specs/ namespace）合併拍板避免 cascade 雙改；revision 已處理全部 7 finding。F-01 V1 npx-only 收斂入口拓撲；F-02 V1 clean cut 處理破壞性升級（無現存使用者前提）；F-11 sub-wave 重整為 W1 init contract + W2 repo-wide cascade，與 P015 共享切面。Implement 階段採 shared-cut 與 P015 同期。
 
 **如果 rejected**: N/A
+
+### 實施紀錄
+
+**實施日期**: 2026-05-01
+
+**結論**: implemented
+
+**實施摘要**: P014 已依 shared-cut 完成。W1 建立 `npx dflow init` 的 init contract 與 npm package skeleton；W2a 將 skill source、references、templates、scaffolding cascade 到 `dflow/specs/` 並移除 runtime `/dflow:init-project` 入口；W2b 將 Tutorial 對話與 outputs cascade 到 `dflow/specs/`；W2c 完成 root docs closeout，README adoption 改為 npm CLI first，`TEMPLATE-COVERAGE.md` generated / maintained paths 改為 `dflow/specs/...`，CHANGELOG 新增 R9 段。
+
+**保留決策**: V1 clean cut 維持不提供 legacy root `specs/` migration tool、dual-read 或自動搬移；既有 R7/R8 CHANGELOG 歷史條目不追溯改寫。

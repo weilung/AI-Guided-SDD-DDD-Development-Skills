@@ -6,6 +6,42 @@
 
 ---
 
+## 2026-05-01 — R9 Implement：PROPOSAL-014 CLI init + `dflow/specs/` namespace、PROPOSAL-015 prose language convention
+
+**前置**：PROPOSAL-014 / PROPOSAL-015 已於 2026-04-30 approved；實作採 shared-cut，避免 init flow、path namespace、prose-language convention 反覆 cascade
+**Proposal**：`proposals/PROPOSAL-014-cli-init-and-dflow-root-namespace.md`、`proposals/PROPOSAL-015-templates-prose-language-convention.md`（implemented）
+
+**W1 — init contract + npm package skeleton**
+- 新增 `planning/init-contract-spec.md` 作為 `npx dflow init` 的 authoritative contract
+- 新增 npm CLI skeleton：`package.json`、`bin/dflow.js`、`lib/init.js`
+- 打包 `templates/{core,webforms}/`；init 預設寫入 `dflow/specs/`
+- init Q&A 納入必填 `prose-language`，並寫入 `dflow/specs/shared/_conventions.md`
+
+**W2a — skill source cascade**
+- 雙版 `SKILL.md` 移除 `/dflow:init-project` runtime slash command 入口，init 改由 npm CLI 負責
+- 雙版 references、templates、scaffolding 路徑 cascade 到 `dflow/specs/`
+- 五條 prose-generating flow 在 Step 1 讀取 `dflow/specs/shared/_conventions.md` 的 `Prose Language`
+- 雙版 `_conventions.md` scaffolding 新增 `## Prose Language` 段
+
+**W2b — tutorial cascade**
+- Tutorial 對話與 outputs 改為 `npx dflow init` + `dflow/specs/`
+- Tutorial outputs 搬移到 `outputs/dflow/specs/**`
+- 補齊 brownfield WebForms init 段，承接後續 modify-existing / baseline-capture 劇情
+
+**W2c — root docs / closeout**
+- README adoption 改為 npm CLI first；V1 預設入口為 `npx dflow init`
+- `TEMPLATE-COVERAGE.md` generated / maintained paths 改為 `dflow/specs/...`
+- 明示 repo / project root `CLAUDE.md` 是特殊例外，維持在 root 供 AI tools 探測
+- `TEMPLATE-LANGUAGE-GLOSSARY.md` 補 `Prose Language`、`free prose`、`structural language` 等術語對照
+- P014 / P015 狀態更新為 `implemented`，保留原 user evaluation 決策紀錄語氣
+
+**V1 clean cut**
+- 新 baseline 是 `npx dflow init` + `dflow/specs/`
+- 不提供 legacy root `specs/` migration tool、dual-read 或自動搬移
+- R7 / R8 既有 CHANGELOG 歷史條目保留原樣，不追溯改寫
+
+---
+
 ## 2026-04-28 — R8b 實施：PROPOSAL-013 系統文件樣板覆蓋與 Template Coverage Matrix
 
 **前置**：R8a / PROPOSAL-012 已 implemented；R8b Review + Approve 處理 17 個 finding（accept: 11 / accept-with-choice: 6）；4 項設計決策拍板 per `reviews/round-8b-decisions.md`

@@ -98,12 +98,20 @@ AI 的決策樹和核心規範。定義了五個核心原則、流程嚴謹度�
 
 ## How to adopt Dflow in your project
 
-Dflow is the AI-guided SDD/DDD skill contained in this repo (see `sdd-ddd-webforms-skill/` and `sdd-ddd-core-skill/`). Adopting Dflow in a project takes 4 steps:
+Dflow is the AI-guided SDD/DDD workflow contained in this repo (see `sdd-ddd-webforms-skill/` and `sdd-ddd-core-skill/`). In V1, project bootstrap is npm CLI first: the default entry is `npx dflow init`, which seeds `dflow/specs/` and keeps Dflow-owned documents under the `dflow/` namespace.
 
-1. **Install the appropriate skill** (either the WebForms edition or the Core edition) using the current Claude Code skill-installation mechanism. Refer to Claude Code's official documentation for how skills are registered in your environment — installation paths and conventions change over time, so Dflow deliberately does **not** hardcode a specific directory.
-2. In your project root, run `/dflow:init-project`. Dflow will inspect the repo, ask a short set of intake questions (project type, tech stack, language, optional starter files), and seed the baseline `specs/` structure plus any scaffolding templates you pick.
-3. Follow the prompts to review the file-list preview and confirm the writes. Existing files are never overwritten.
-4. Start your first feature with `/dflow:new-feature`, or — for an existing codebase — `/dflow:modify-existing` to work from an incoming change request.
+Adopting Dflow in a project takes 4 steps:
+
+1. In your project root, run `npx dflow init`.
+2. Answer the intake questions. Dflow will ask for the edition, project context, optional starter files, and the required project prose language for generated spec content.
+3. Review the file-list preview and confirm the writes. Existing files are never overwritten.
+4. Start your first feature with `/dflow:new-feature`, or for an existing codebase, `/dflow:modify-existing` to work from an incoming change request.
+
+The generated baseline lives under `dflow/specs/`, for example `dflow/specs/shared/_conventions.md`, `dflow/specs/domain/glossary.md`, and `dflow/specs/features/active/`. The project AI guide is the one special root-level exception: `CLAUDE.md` stays at the project root so AI tools can discover it normally. If a root `CLAUDE.md` already exists, Dflow writes a mergeable snippet instead of overwriting it.
+
+Dflow keeps template structure stable in English: headings, table headers, labels, anchors, IDs, placeholders, file paths, and code-facing terms remain canonical English. Free prose inside those sections follows the project's `Prose Language` setting in `dflow/specs/shared/_conventions.md`.
+
+Advanced usage: `npm install -g dflow` may be useful for users who want a fixed global CLI, then run `dflow init`. This is not the V1 default. `npm create dflow` is not implemented in V1 and remains a V2 evaluation item.
 
 For what gets created at init time, how scaffolding templates are chosen, and how to re-run safely, see `sdd-ddd-webforms-skill/references/init-project-flow.md` (or the Core equivalent).
 
