@@ -100,6 +100,7 @@ Initial public publish 已於 2026-05-01 完成：`dflow-sdd-ddd@0.1.0` 可由 n
 - Contribution guidelines。
 - Versioning / release policy。
 - CHANGELOG 對公開使用者的整理方式。
+- Dist repo 切割策略已另記於 `planning/dist-repo-strategy.md`；目前建議 dev repo 保留設計/歷史材料，dist repo 只輸出 public source、skill source、runtime package 與 tutorial。
 
 ### 4. Template Language Glossary
 

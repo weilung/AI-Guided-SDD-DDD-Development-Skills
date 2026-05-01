@@ -299,3 +299,5 @@ Codex 適合「處理到完」型任務。Post-R8 適合派 Codex 的：
 | dev repo 名稱（保留現名 vs 改 `dflow-dev`）| 改名遷移策略 | 改名遷移啟動前拍板 |
 | dist repo 結構（單一 skill / 雙 skill / 含 scaffolding 與否）| 影響使用者首日體驗 | 改名遷移啟動前拍板 |
 | Dflow V1 是否同時兼容多 AI 工具（Claude Code / Codex / Gemini）| 影響 dist repo 結構 | V1 ships 前拍板（per backlog § 2）|
+
+> **2026-05-01 update**：dist repo 初步策略已整理於 `planning/dist-repo-strategy.md`。目前建議本 repo 維持 dev repo、不立即改名；dist repo 以手動 export 的 public projection 起步。
