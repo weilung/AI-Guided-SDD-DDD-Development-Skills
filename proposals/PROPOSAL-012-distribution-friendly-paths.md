@@ -1,6 +1,6 @@
 ## PROPOSAL-012: 目錄與檔名英文化的社群散佈預備調整
 
-**狀態**: `approved`
+**狀態**: `implemented`
 
 **提出日期**: 2026-04-25
 
@@ -218,4 +218,6 @@ feature/SPEC-20260421-001-報表調整
 
 **結論**: approved
 
-**理由**: 經 R8a Review（2026-04-27，Claude Opus 4.7）+ R8a Approve（2026-04-27，本 session）處理 10 個 finding（accept: 5、accept-with-choice: 3、reject: 2、defer: 0），所有需修訂部分已在 R8a Approve session 內完成。詳見 `reviews/round-8a-decisions.md`。下一步進入 R8a Implement 階段（建議啟動提示詞另起 `reviews/prompts/round-8a-implement.md`）。
+**理由**: 經 R8a Review（2026-04-27，Claude Opus 4.7）+ R8a Approve（2026-04-27，本 session）處理 10 個 finding（accept: 5、accept-with-choice: 3、reject: 2、defer: 0），所有需修訂部分已在 R8a Approve session 內完成。詳見 `reviews/round-8a-decisions.md`。
+
+**實施紀錄**: R8a Implement 已完成並記錄於 `CHANGELOG.md` 的「2026-04-27 — R8a Implement：PROPOSAL-012 路徑英文化（`specs/_共用/` → `specs/shared/`）」。R8a Implement Review 後的修正已收斂，見 `reviews/round-8a-implement-review-decisions.md`。

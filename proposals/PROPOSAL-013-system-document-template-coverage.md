@@ -1,6 +1,6 @@
 ## PROPOSAL-013: 系統文件樣板覆蓋與 Template Coverage Matrix
 
-**狀態**: `approved`
+**狀態**: `implemented`
 
 **提出日期**: 2026-04-25
 
@@ -433,6 +433,8 @@ DOMAIN / APP / INFRA / API / TEST / DOC
 
 **結論**: approved
 
-**理由**: 經 R8b review（2026-04-27，Cursor Claude Opus 4.7）+ R8b approve（2026-04-27 本 session）處理 17 個 finding（accept: 11，accept-with-choice: 6，reject: 0，defer: 0），所有需修訂部分已在 R8b approve session 內完成。4 項新概念設計決策全部拍板（canonical English structural language / `<!-- dflow:section X -->` anchor / TEMPLATE-COVERAGE.md / TEMPLATE-LANGUAGE-GLOSSARY.md）；anchor 機制補上「Design intent」說明其啟用 localized heading 的長期動機。下一步進入 R8b Implement 階段（見 `reviews/round-8b-decisions.md` 切分建議）；本 proposal 的 implement 需等 PROPOSAL-012 implemented 完成後才能啟動（路徑前提）。
+**理由**: 經 R8b review（2026-04-27，Cursor Claude Opus 4.7）+ R8b approve（2026-04-27 本 session）處理 17 個 finding（accept: 11，accept-with-choice: 6，reject: 0，defer: 0），所有需修訂部分已在 R8b approve session 內完成。4 項新概念設計決策全部拍板（canonical English structural language / `<!-- dflow:section X -->` anchor / TEMPLATE-COVERAGE.md / TEMPLATE-LANGUAGE-GLOSSARY.md）；anchor 機制補上「Design intent」說明其啟用 localized heading 的長期動機。
+
+**實施紀錄**: R8b Implement 已完成並記錄於 `CHANGELOG.md` 的「2026-04-28 — R8b 實施：PROPOSAL-013 系統文件樣板覆蓋與 Template Coverage Matrix」。R8b Implement Review Fix 已修訂 P013 anchor 表與相關 cascade，見 `reviews/round-8b-implement-review-decisions.md`。
 
 **如果 rejected**: n/a

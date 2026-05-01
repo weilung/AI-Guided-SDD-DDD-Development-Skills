@@ -1,6 +1,6 @@
 ## PROPOSAL-009: Feature 目錄化 + 多階段規格 + 新命令
 
-**狀態**: `approved`
+**狀態**: `implemented`
 
 **提出日期**: 2026-04-22
 
@@ -352,4 +352,4 @@ Obts 團隊針對候選 A 的背書結論：**採混血方案** —— V2 的 fe
 - § 關鍵假設 5 改為已確認項
 - § 驗證點同步調整
 
-下一步進入 R7 Implement 階段（見 `reviews/round-7-decisions.md` § 下一步 + `field-reference-candidates.md` Phase 3）。
+**實施紀錄**: R7 Wave 2 已完成實作並記錄於 `CHANGELOG.md` 的「2026-04-24 — R7 Wave 2 實施：PROPOSAL-009 Feature 目錄化 + 多階段規格 + 新命令」。後續 R7 Implement Review Fix 已修正 `new-phase-flow.md` / `_index.md` 的 phase slug 連結問題，見 `reviews/round-7-implement-review-decisions.md` 與 CHANGELOG R7 Implement Review Fix 段。

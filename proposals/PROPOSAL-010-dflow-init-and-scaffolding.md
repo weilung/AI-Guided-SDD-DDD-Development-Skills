@@ -1,6 +1,6 @@
 ## PROPOSAL-010: `dflow init` 機制 + Scaffolding 範本集
 
-**狀態**: `approved`
+**狀態**: `implemented`
 
 **提出日期**: 2026-04-22
 
@@ -269,4 +269,4 @@ sdd-ddd-core-skill/scaffolding/       ← 對應結構
 - § 關聯的 Proposal PROPOSAL-007a 那列：補「behavior.md 由此機制產生」說明（F-05）
 - § 關鍵假設 / 驗證點段：新增 WebForms / Core 雙版產出驗證條目（F-05）
 
-下一步進入 R7 Implement 階段（見 `reviews/round-7-decisions.md` § 下一步 + `field-reference-candidates.md` Phase 3）。
+**實施紀錄**: R7 Wave 3 已完成實作並記錄於 `CHANGELOG.md` 的「2026-04-24 — R7 Wave 3 實施：PROPOSAL-010 `dflow init` 機制 + Scaffolding 範本集」。後續 R7 Implement Review Fix 已修正 WebForms `CLAUDE-md-snippet.md` shared path 與 `templates/CLAUDE.md` Git-principles 檔名 drift；P014 已將 runtime init 入口收斂為 npm CLI `npx dflow init`，見 CHANGELOG R9 段。

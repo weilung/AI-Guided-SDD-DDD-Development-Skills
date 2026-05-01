@@ -1,6 +1,6 @@
 ## PROPOSAL-011: Git Flow Decoupling
 
-**狀態**: `approved`
+**狀態**: `implemented`
 
 **提出日期**: 2026-04-22
 
@@ -168,4 +168,4 @@ references/git-flow-integration.md  →  references/git-integration.md
 - § 影響範圍表：移除 `modify-existing-flow.md` 雙版 + `pr-review-checklist.md` 雙版共 4 行（F-06）；新增 `drift-verification.md` 雙版 2 行（F-06）；繁中版段同步修正
 - § 關聯的 Proposal PROPOSAL-009 那列：追加「009 的 `/dflow:finish-feature` Integration Summary 保持 Git-strategy-neutral」一致性備註（F-04）
 
-下一步進入 R7 Implement 階段（見 `reviews/round-7-decisions.md` § 下一步 + `field-reference-candidates.md` Phase 3）。
+**實施紀錄**: R7 Wave 1 已完成實作並記錄於 `CHANGELOG.md` 的「2026-04-24 — R7 Wave 1 實施：PROPOSAL-011 Git Flow Decoupling」。後續 R7 Implement Review Fix 已補 file history note，並記錄 `git mv` + 大幅重寫造成 rename detection 低於預設門檻的教訓；Post-R9 cleanup 另修正 root docs 的舊檔名引用。

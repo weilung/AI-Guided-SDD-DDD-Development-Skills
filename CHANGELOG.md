@@ -50,7 +50,7 @@
 ## 2026-04-28 — R8b 實施：PROPOSAL-013 系統文件樣板覆蓋與 Template Coverage Matrix
 
 **前置**：R8a / PROPOSAL-012 已 implemented；R8b Review + Approve 處理 17 個 finding（accept: 11 / accept-with-choice: 6）；4 項設計決策拍板 per `reviews/round-8b-decisions.md`
-**Proposal**：`proposals/PROPOSAL-013-system-document-template-coverage.md`（approved）
+**Proposal**：`proposals/PROPOSAL-013-system-document-template-coverage.md`（implemented）
 
 **Sub-wave 1 — 純新增**
 - 新增 `templates/glossary.md` / `models.md` / `rules.md` / `context-map.md` / `tech-debt.md` 雙版共 10 檔
@@ -163,7 +163,7 @@
 ## 2026-04-24 — R7 Wave 3 實施：PROPOSAL-010 `dflow init` 機制 + Scaffolding 範本集
 
 **前置**：R7 Wave 1（PROPOSAL-011 Git Flow Decoupling）+ Wave 2（PROPOSAL-009 Feature 目錄化 + 多階段規格 + 新命令）已完成（見下方兩段 CHANGELOG）；R7 Review + Approve 處理 3 個 PROPOSAL-010 相關 finding（accept-with-choice：F-04 Path B；accept：F-05、F-07）
-**Proposal**：`proposals/PROPOSAL-010-dflow-init-and-scaffolding.md`（approved）
+**Proposal**：`proposals/PROPOSAL-010-dflow-init-and-scaffolding.md`（implemented）
 **影響範圍**：
 
 **新增 Scaffolding 目錄**（雙版共 10 檔）
@@ -202,7 +202,7 @@
 ## 2026-04-24 — R7 Wave 2 實施：PROPOSAL-009 Feature 目錄化 + 多階段規格 + 新命令
 
 **前置**：R7 Wave 1（PROPOSAL-011 Git Flow Decoupling）已完成（見下段 CHANGELOG）；R7 Review + Approve 處理 4 個 finding（accept-with-choice：F-01 Path A-3 / F-02 Path C / F-04 Path B；accept：F-03）
-**Proposal**：`proposals/PROPOSAL-009-feature-directory-and-phases.md`（approved）
+**Proposal**：`proposals/PROPOSAL-009-feature-directory-and-phases.md`（implemented）
 **影響範圍**：
 
 **結構 + 命名 + 範本（Sub-wave 9a）**
@@ -238,7 +238,7 @@
 ## 2026-04-24 — R7 Wave 1 實施：PROPOSAL-011 Git Flow Decoupling
 
 **前置**：R7 Review（Codex，2026-04-22 產出 `reviews/round-7-report.md`）+ R7 Approve（2026-04-22）處理 2 個 finding（accept-with-choice：F-04 Path B；accept：F-06）
-**Proposal**：`proposals/PROPOSAL-011-git-flow-decoupling.md`（approved）
+**Proposal**：`proposals/PROPOSAL-011-git-flow-decoupling.md`（implemented）
 **影響範圍**：
 - 重命名：`references/git-flow-integration.md` → `references/git-integration.md`（雙版，**實際執行 `git mv`**；但因同 commit 內大幅內容重寫，git 預設 rename detection（`-M50`）無法識別為 rename，詳見下方 F-02 後記 —— R7 Implement Review F-02）
 - 內容重構：`git-integration.md`（雙版）—— 移除 Git Flow 專屬段（develop/release/hotfix 分支圖、release checklist、hotfix expedited process、24h 補 spec）、保留 SDD ↔ Git 核心耦合（feature branch per feature、`git mv` 規範總則、Gate Checks、Commit Message Convention、CI/CD Future Enhancement）
