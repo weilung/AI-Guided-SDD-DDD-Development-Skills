@@ -1,6 +1,6 @@
 # Public Distribution Backlog
 
-> 本文件記錄 Dflow 在公開散佈 / npm 發布前需要處理的議題。
+> 本文件記錄 Dflow 在公開散佈 / npm 發布前後需要處理的議題。
 > 這些事項刻意不塞進目前的 proposal，避免把當前設計修正擴大成發布工程。
 
 ---
@@ -17,7 +17,7 @@ Dflow 原本偏向公司內部使用，後續可能轉向社群散佈與 npm 安
 
 ---
 
-## 發布前待處理事項
+## 發布與後續待處理事項
 
 ### 1. 文件內容語言策略
 
@@ -89,7 +89,9 @@ Package name availability 已於 Post-R9 publish prep 確認：
 - V1 package name 採 `dflow-sdd-ddd`。
 - `package.json` 同時提供 `dflow` 與 `dflow-sdd-ddd` 兩個 bin alias；`npx dflow-sdd-ddd init` 是 public default，global install 後可執行 `dflow init`。
 
-仍待處理的是 npm publish pipeline、versioning / release policy，以及多 AI 工具安裝說明。
+Initial public publish 已於 2026-05-01 完成：`dflow-sdd-ddd@0.1.0` 可由 npm registry 透過 `npx dflow-sdd-ddd` 安裝執行。
+
+仍待處理的是 versioning / release policy、release automation，以及多 AI 工具安裝說明。
 
 ### 3. 公開版文件
 
@@ -138,7 +140,7 @@ Package name availability 已於 Post-R9 publish prep 確認：
 以下事項不納入 R9 / P014+P015 已完成的 V1 init cut：
 
 - 建立雙語 template 目錄或讓同一份 template 依語言切換標題。
-- npm publish / release pipeline。
+- release automation / versioning policy。
 - 設計完整 CLI surface（V1 只有 `init`、`--help`、`--version`）。
 - legacy root `specs/` migration tool / dual-read / 自動搬移。
 - 製作公開官網 / 文件站。

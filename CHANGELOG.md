@@ -6,6 +6,19 @@
 
 ---
 
+## 2026-05-01 — Public npm publish：`dflow-sdd-ddd@0.1.0`
+
+**發布**：`dflow-sdd-ddd@0.1.0` 已發布到 npm public registry。
+
+**驗證**：
+- `npx dflow-sdd-ddd --version` 回傳 `0.1.0`
+- `npx dflow-sdd-ddd --help` 顯示 `Dflow CLI 0.1.0`
+- `npx dflow-sdd-ddd init` 已在乾淨 temp project 寫出 Core greenfield baseline：`CLAUDE.md`、`dflow/specs/shared/*`、`dflow/specs/domain/*`、`dflow/specs/architecture/tech-debt.md`
+
+**備註**：npm publish 使用 npm Security Key / WebAuthn 2FA flow；不要使用 TOTP `--otp` 作為新帳號的預設發布路徑。
+
+---
+
 ## 2026-05-01 — Post-R9 Publish Prep：npm package name 與 metadata
 
 **背景**：npm 上 unscoped `dflow` package name 已被既有 package 使用；本 repo 不能直接以 `dflow` 發布。
